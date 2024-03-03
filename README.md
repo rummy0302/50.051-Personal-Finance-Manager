@@ -1,0 +1,3 @@
+Project Description 
+
+In today's diverse landscape of income sources and expenditure types, individuals face challenges in effectively managing their finances without the aid of a platform. The absence of a tool for handling income, expenses  and financial goal tracking can lead to difficulties in financial management. To address this issue, our focus will be on the development and optimization of a personal finance management system. This system aims to assist individuals in visualizing their cash flow and expense categories spent in different bank accounts, enabling better control and utilization of money.
