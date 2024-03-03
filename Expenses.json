@@ -1,0 +1,213 @@
+
+[
+  {
+    "account_id": 1,
+    "date": "2024-02-04",
+    "description": "Pizza Hut",
+    "currency": "USD",
+    "amount_spent": 50.00
+  },
+  {
+    "account_id": 2,
+    "date": "2024-01-03",
+    "description": "MRT",
+    "currency": "SGD",
+    "amount_spent": 2.20
+  },
+  {
+    "account_id": 3,
+    "date": "2024-02-08",
+    "description": "Jollibee",
+    "currency": "SGD",
+    "amount_spent": 10.00
+  },
+  {
+    "account_id": 4,
+    "date": "2024-02-15",
+    "description": "Starbucks",
+    "currency": "USD",
+    "amount_spent": 15.50
+  },
+  {
+    "account_id": 5,
+    "date": "2024-03-01",
+    "description": "Grocery Store",
+    "currency": "EUR",
+    "amount_spent": 30.00
+  },
+  {
+    "account_id": 1,
+    "date": "2024-02-10",
+    "description": "Movie Theater",
+    "currency": "USD",
+    "amount_spent": 25.00
+  },
+  {
+    "account_id": 2,
+    "date": "2024-01-20",
+    "description": "Cafeteria",
+    "currency": "SGD",
+    "amount_spent": 8.50
+  },
+  {
+    "account_id": 3,
+    "date": "2024-02-18",
+    "description": "Gas Station",
+    "currency": "SGD",
+    "amount_spent": 45.00
+  },
+  {
+    "account_id": 4,
+    "date": "2024-02-20",
+    "description": "Italian Restaurant",
+    "currency": "USD",
+    "amount_spent": 60.00
+  },
+  {
+    "account_id": 5,
+    "date": "2024-03-05",
+    "description": "Online Subscription",
+    "currency": "EUR",
+    "amount_spent": 12.00
+  },
+  {
+    "account_id": 1,
+    "date": "2024-02-18",
+    "description": "Taxi Service",
+    "currency": "USD",
+    "amount_spent": 35.25
+  },
+  {
+    "account_id": 2,
+    "date": "2024-01-28",
+    "description": "Convenience Store",
+    "currency": "SGD",
+    "amount_spent": 5.75
+  },
+  {
+    "account_id": 3,
+    "date": "2024-02-25",
+    "description": "Barbershop",
+    "currency": "SGD",
+    "amount_spent": 20.00
+  },
+  {
+    "account_id": 4,
+    "date": "2024-03-02",
+    "description": "Retail Store",
+    "currency": "USD",
+    "amount_spent": 120.00
+  },
+  {
+    "account_id": 5,
+    "date": "2024-03-10",
+    "description": "Utility Company",
+    "currency": "EUR",
+    "amount_spent": 75.00
+  },
+  {
+    "account_id": 1,
+    "date": "2024-02-22",
+    "description": "Gym",
+    "currency": "USD",
+    "amount_spent": 70.00
+  },
+  {
+    "account_id": 2,
+    "date": "2024-02-05",
+    "description": "Coffee Shop",
+    "currency": "SGD",
+    "amount_spent": 4.20
+  },
+  {
+    "account_id": 3,
+    "date": "2024-03-01",
+    "description": "Clinic",
+    "currency": "SGD",
+    "amount_spent": 80.00
+  },
+  {
+    "account_id": 4,
+    "date": "2024-03-07",
+    "description": "Music Store",
+    "currency": "USD",
+    "amount_spent": 90.00
+  },
+  {
+    "account_id": 5,
+    "date": "2024-03-15",
+    "description": "Clothing Store",
+    "currency": "EUR",
+    "amount_spent": 50.00
+  },
+  {
+    "account_id": 1,
+    "date": "2024-02-25",
+    "description": "Bookstore",
+    "currency": "USD",
+    "amount_spent": 20.50
+  },
+  {
+    "account_id": 2,
+    "date": "2024-02-10",
+    "description": "Family Restaurant",
+    "currency": "SGD",
+    "amount_spent": 40.00
+  },
+  {
+    "account_id": 3,
+    "date": "2024-03-05",
+    "description": "Fashion Store",
+    "currency": "SGD",
+    "amount_spent": 60.00
+  },
+  {
+    "account_id": 4,
+    "date": "2024-03-12",
+    "description": "Electronics Store",
+    "currency": "USD",
+    "amount_spent": 200.00
+  },
+  {
+    "account_id": 5,
+    "date": "2024-03-20",
+    "description": "Travel Agency",
+    "currency": "EUR",
+    "amount_spent": 150.00
+  },
+  {
+    "account_id": 1,
+    "date": "2024-03-01",
+    "description": "Auto Repair Shop",
+    "currency": "USD",
+    "amount_spent": 100.00
+  },
+  {
+    "account_id": 2,
+    "date": "2024-02-15",
+    "description": "Bus Station",
+    "currency": "SGD",
+    "amount_spent": 3.00
+  },
+  {
+    "account_id": 3,
+    "date": "2024-03-08",
+    "description": "Home Decor Store",
+    "currency": "SGD",
+    "amount_spent": 35.00
+  },
+  {
+    "account_id": 4,
+    "date": "2024-03-18",
+    "description": "Gift Shop",
+    "currency": "USD",
+    "amount_spent": 25.00
+  },
+  {
+    "account_id": 5,
+    "date": "2024-03-25",
+    "description": "Online Education Platform",
+    "currency": "EUR",
+    "amount_spent": 80.00
+  }
+]
