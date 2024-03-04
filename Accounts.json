@@ -1,0 +1,65 @@
+[
+  {
+    "account_id": 189,
+    "user_id": 001,
+    "name": "Savings Account",
+    "currency": "USD",
+    "balance": 5000.00
+  },
+  {
+    "account_id": 275,
+    "user_id": 001,
+    "name": "Checking Account",
+    "currency": "SGD",
+    "balance": 3000.00
+  },
+  {
+    "account_id": 364,
+    "user_id": 002,
+    "name": "Savings Account",
+    "currency": "SGD",
+    "balance": 4000.00
+  },
+  {
+    "account_id": 428,
+    "user_id": 002,
+    "name": "Checking Account",
+    "currency": "USD",
+    "balance": 4500.00
+  },
+  {
+    "account_id": 593,
+    "user_id": 002,
+    "name": "Credit Card",
+    "currency": "EUR",
+    "balance": -500.00
+  },
+  {
+    "account_id": 724,
+    "user_id": 003,
+    "name": "Savings Account",
+    "currency": "INR",
+    "balance": 90000.00
+  },
+  {
+    "account_id": 893,
+    "user_id": 003,
+    "name": "Checking Account",
+    "currency": "SGD",
+    "balance": 2500.00
+  },
+  {
+    "account_id": 306,
+    "user_id": 003,
+    "name": "Credit Card",
+    "currency": "GBP",
+    "balance": -1200.00
+  },
+  {
+    "account_id": 678,
+    "user_id": 003,
+    "name": "Business Account",
+    "currency": "USD",
+    "balance": 10000.00
+  }
+]
