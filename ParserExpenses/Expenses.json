@@ -278,6 +278,20 @@
       "description": "Park Entrance Fee",
       "currency": "EUR",
       "amount_spent": 10.00
+    },
+    {
+      "account_id": 333,
+      "date": "2024-04-10",
+      "description": "Bakery",
+      "currency": "USD",
+      "amount_spent": 15.00
+    },
+    {
+      "account_id": 333,
+      "date": "2024-04-10",
+      "description": "Pharmacy",
+      "currency": "USD",
+      "amount_spent": 35.00
     }
   ]
 

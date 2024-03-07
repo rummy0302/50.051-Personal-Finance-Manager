@@ -8,34 +8,6 @@
 cJSON *parseJSONfile(const char *filename);
 Expenses *processData(cJSON *json, int *numExpenses);
 
-int main(int argc, char **argv)
-{
-    int i;
-    int numExpenses;
-
-    /* Parse the JSON file */
-    cJSON *json = parseExpensesJSONfile("Expenses.json");
-
-    /* Process the JSON data into Expenses array */
-    Expenses *expenses = processExpensesData(json, &numExpenses);
-
-    /* Print the expenses */
-    for (i = 0; i < numExpenses; i++)
-    {
-        printf("Account ID: %d\n", expenses[i].account_id);
-        printf("Date: %s\n", expenses[i].date);
-        printf("Description: %s\n", expenses[i].description);
-        printf("Currency: %s\n", expenses[i].currency);
-        printf("Amount Spent: %.2f\n", expenses[i].amount_spent);
-        printf("\n");
-    }
-
-    /* Free allocated memory */
-    free(expenses);
-    cJSON_Delete(json);
-
-    return 0;
-}
 
 /* Function to parse JSON file and return cJSON object */
 cJSON *parseExpensesJSONfile(const char *filename)
