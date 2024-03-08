@@ -30,7 +30,6 @@ typedef struct {
     int account_id;
     int user_id;
     char name[50];  We use fixed-size arrays for name, currency because we assume there are only fixed set of account types and 3 characters for currency code
-    char currency[4];  Assuming 3 characters for country code + null terminator
     double balance;
 } Account; */
 
@@ -55,7 +54,6 @@ typedef struct {
 //         printf("Account ID: %d\n", accounts[i].account_id);
 //         printf("User ID: %d\n", accounts[i].user_id);
 //         printf("Name: %s\n", accounts[i].name);
-//         printf("Currency: %s\n", accounts[i].currency);
 //         printf("Balance: %.2f\n", accounts[i].balance);
 //         printf("\n");
 //     }
@@ -149,7 +147,6 @@ Account *processAccountsData(cJSON *json, int *numAccounts)
         accountsArray[i].account_id = cJSON_GetObjectItem(accountObject, "account_id")->valueint;
         accountsArray[i].user_id = cJSON_GetObjectItem(accountObject, "user_id")->valueint;
         strncpy(accountsArray[i].name, cJSON_GetObjectItem(accountObject, "name")->valuestring, sizeof(accountsArray[i].name));
-        strncpy(accountsArray[i].currency, cJSON_GetObjectItem(accountObject, "currency")->valuestring, sizeof(accountsArray[i].currency));
         accountsArray[i].balance = cJSON_GetObjectItem(accountObject, "balance")->valuedouble;
     }
 
