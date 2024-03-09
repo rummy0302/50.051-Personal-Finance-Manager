@@ -111,7 +111,7 @@ void printAllExpenses(Expenses *expenses, int numExpenses) {
 }
 
 
-int main() {
+int main(int argc, char **argv) {
     int numExpenses;
     Expenses *expenses;
 

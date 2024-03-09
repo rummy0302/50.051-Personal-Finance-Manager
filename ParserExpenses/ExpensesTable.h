@@ -1,7 +1,7 @@
 #ifndef EXPENSES_TABLE_H
 #define EXPENSES_TABLE_H
 #include "ParserExpenses.h"
-#define MAX_ACCOUNTS 10
+#define MAX_ACCOUNTS 11
 
 
 typedef struct {

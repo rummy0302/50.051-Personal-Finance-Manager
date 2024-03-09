@@ -85,3 +85,5 @@ Expenses *processExpensesData(cJSON *json, int *numExpenses)
 
     return expensesArray;
 }
+
+
