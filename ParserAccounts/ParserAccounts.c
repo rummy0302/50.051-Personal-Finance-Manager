@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "cJSON.h"
-#include "parseAccounts.h"
+#include "ParserAccounts.h"
 
 /* Parsing technique - Parse the Accounts.json file (containing information about user's multiple accounts) using the cJSON library
     1. Ensure the cJSON.h header file is imported to the project directory (downloaded from open source github repository)
@@ -30,40 +30,10 @@ typedef struct {
     int account_id;
     int user_id;
     char name[50];  We use fixed-size arrays for name, currency because we assume there are only fixed set of account types and 3 characters for currency code
+    char currency[4]; Assuming 3 characters for country code
     double balance;
 } Account; */
 
-// int main(int argc, char **argv)
-// {
-
-//     int i;
-
-//     int numAccounts;
-
-//     /* Call the helper function parseJSONfile() to get the json object for the Accounts.json file : */
-
-//     cJSON *json = parseAccountsJSONfile("Accounts.json");
-
-//     /* Call the helper function processData() to process the parsed data and store into the account struct : */
-
-//     Account *accounts = processAccountsData(json, &numAccounts);
-
-//     /* Print the individual attributes of each account : */
-//     for (i = 0; i < numAccounts; i++)
-//     {
-//         printf("Account ID: %d\n", accounts[i].account_id);
-//         printf("User ID: %d\n", accounts[i].user_id);
-//         printf("Name: %s\n", accounts[i].name);
-//         printf("Balance: %.2f\n", accounts[i].balance);
-//         printf("\n");
-//     }
-
-//     free(accounts); /* Free the space allocated for the accounts array */
-
-//     cJSON_Delete(json); /* Delete the json object after end of program */
-
-//     return 0;
-// }
 
 cJSON *parseAccountsJSONfile(const char *filename)
 {
@@ -147,6 +117,7 @@ Account *processAccountsData(cJSON *json, int *numAccounts)
         accountsArray[i].account_id = cJSON_GetObjectItem(accountObject, "account_id")->valueint;
         accountsArray[i].user_id = cJSON_GetObjectItem(accountObject, "user_id")->valueint;
         strncpy(accountsArray[i].name, cJSON_GetObjectItem(accountObject, "name")->valuestring, sizeof(accountsArray[i].name));
+        strncpy(accountsArray[i].default_currency, cJSON_GetObjectItem(accountObject, "default_currency")->valuestring, sizeof(accountsArray[i].default_currency));
         accountsArray[i].balance = cJSON_GetObjectItem(accountObject, "balance")->valuedouble;
     }
 
