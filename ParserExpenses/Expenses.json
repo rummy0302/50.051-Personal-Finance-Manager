@@ -1,615 +1,615 @@
 [
     {
-      "account_id": 189,
+      "account_id": 89,
       "date": "2021-02-04",
       "description": "Pizza Hut",
       "currency": "USD",
       "amount_spent": 50.00
     },
     {
-      "account_id": 275,
+      "account_id": 75,
       "date": "2021-01-03",
       "description": "MRT",
       "currency": "SGD",
       "amount_spent": 2.20
     },
     {
-      "account_id": 364,
+      "account_id": 64,
       "date": "2021-02-08",
       "description": "Jollibee",
       "currency": "SGD",
       "amount_spent": 10.00
     },
     {
-      "account_id": 428,
+      "account_id": 28,
       "date": "2021-02-15",
       "description": "Starbucks",
       "currency": "USD",
       "amount_spent": 15.50
     },
     {
-      "account_id": 593,
+      "account_id": 93,
       "date": "2021-03-01",
       "description": "Grocery Store",
       "currency": "EUR",
       "amount_spent": 30.00
     },
     {
-      "account_id": 724,
+      "account_id": 24,
       "date": "2021-01-10",
       "description": "Bakery",
       "currency": "USD",
       "amount_spent": 15.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2021-05-11",
       "description": "Clinic",
       "currency": "SGD",
       "amount_spent": 50.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2021-07-12",
       "description": "Car Wash",
       "currency": "EUR",
       "amount_spent": 35.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2021-07-22",
       "description": "Auto Repair Shop",
       "currency": "SGD",
       "amount_spent": 70.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2021-03-10",
       "description": "Travel Agency",
       "currency": "USD",
       "amount_spent": 65.00
     },
     {
-      "account_id": 678,
+      "account_id": 78,
       "date": "2021-12-01",
       "description": "Flower Shop",
       "currency": "SGD",
       "amount_spent": 86.00
     },
     {
-      "account_id": 189,
+      "account_id": 89,
       "date": "2022-02-10",
       "description": "Movie Theater",
       "currency": "USD",
       "amount_spent": 25.00
     },
     {
-      "account_id": 275,
+      "account_id": 75,
       "date": "2022-01-20",
       "description": "Cafeteria",
       "currency": "SGD",
       "amount_spent": 8.50
     },
     {
-      "account_id": 364,
+      "account_id": 64,
       "date": "2022-02-18",
       "description": "Gas Station",
       "currency": "USD",
       "amount_spent": 45.00
     },
     {
-      "account_id": 428,
+      "account_id": 28,
       "date": "2022-02-20",
       "description": "Italian Restaurant",
       "currency": "USD",
       "amount_spent": 60.00
     },
     {
-      "account_id": 593,
+      "account_id": 93,
       "date": "2022-03-05",
       "description": "Online Subscription",
       "currency": "EUR",
       "amount_spent": 12.00
     },
     {
-      "account_id": 724,
+      "account_id": 24,
       "date": "2022-04-10",
       "description": "Starbucks",
       "currency": "USD",
       "amount_spent": 60.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2022-04-10",
       "description": "Restaurant",
       "currency": "SGD",
       "amount_spent": 150.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2022-04-10",
       "description": "Music Store",
       "currency": "EUR",
       "amount_spent": 35.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2022-04-10",
       "description": "Clothing Store",
       "currency": "SGD",
       "amount_spent": 210.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2022-04-10",
       "description": "Pharmacy",
       "currency": "USD",
       "amount_spent": 50.00
     },
     {
-      "account_id": 678,
+      "account_id": 78,
       "date": "2022-04-10",
       "description": "Ice Cream Parlor",
       "currency": "SGD",
       "amount_spent": 35.00
     },
     {
-      "account_id": 189,
+      "account_id": 89,
       "date": "2023-02-18",
       "description": "Taxi Service",
       "currency": "USD",
       "amount_spent": 35.25
     },
     {
-      "account_id": 275,
+      "account_id": 75,
       "date": "2023-01-28",
       "description": "Convenience Store",
       "currency": "SGD",
       "amount_spent": 5.75
     },
     {
-      "account_id": 364,
+      "account_id": 64,
       "date": "2023-02-25",
       "description": "Barbershop",
       "currency": "SGD",
       "amount_spent": 20.00
     },
     {
-      "account_id": 428,
+      "account_id": 28,
       "date": "2023-03-02",
       "description": "Retail Store",
       "currency": "USD",
       "amount_spent": 120.00
     },
     {
-      "account_id": 593,
+      "account_id": 93,
       "date": "2023-03-10",
       "description": "Utility Company",
       "currency": "EUR",
       "amount_spent": 75.00
     },
     {
-      "account_id": 724,
+      "account_id": 24,
       "date": "2023-04-10",
       "description": "Gas Station",
       "currency": "USD",
       "amount_spent": 100.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2023-04-10",
       "description": "Gift Shop",
       "currency": "SGD",
       "amount_spent": 60.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2023-04-10",
       "description": "Pizza Hut",
       "currency": "EUR",
       "amount_spent": 55.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2023-04-10",
       "description": "Gym",
       "currency": "SGD",
       "amount_spent": 30.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2023-04-10",
       "description": "Barbershop",
       "currency": "USD",
       "amount_spent": 35.00
     },
     {
-      "account_id": 678,
+      "account_id": 78,
       "date": "2023-04-10",
       "description": "Pharmacy",
       "currency": "SGD",
       "amount_spent": 85.00
     },
     {
-      "account_id": 189,
+      "account_id": 89,
       "date": "2020-02-22",
       "description": "Gym",
       "currency": "USD",
       "amount_spent": 70.00
     },
     {
-      "account_id": 275,
+      "account_id": 75,
       "date": "2020-02-05",
       "description": "Coffee Shop",
       "currency": "EUR",
       "amount_spent": 4.20
     },
     {
-      "account_id": 364,
+      "account_id": 64,
       "date": "2020-03-01",
       "description": "Clinic",
       "currency": "USD",
       "amount_spent": 80.00
     },
     {
-      "account_id": 428,
+      "account_id": 28,
       "date": "2020-03-07",
       "description": "Music Store",
       "currency": "USD",
       "amount_spent": 90.00
     },
     {
-      "account_id": 593,
+      "account_id": 93,
       "date": "2020-03-15",
       "description": "Clothing Store",
       "currency": "EUR",
       "amount_spent": 50.00
     },
     {
-      "account_id": 724,
+      "account_id": 24,
       "date": "2020-04-10",
       "description": "Flower Shop",
       "currency": "USD",
       "amount_spent": 15.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2020-04-10",
       "description": "Barbershop",
       "currency": "SGD",
       "amount_spent": 20.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2020-04-10",
       "description": "Home Decor Store",
       "currency": "EUR",
       "amount_spent": 200.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2020-04-10",
       "description": "Jollibee",
       "currency": "SGD",
       "amount_spent": 80.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2020-04-10",
       "description": "Online Education Platform",
       "currency": "USD",
       "amount_spent": 70.00
     },
     {
-      "account_id": 678,
+      "account_id": 78,
       "date": "2020-04-10",
       "description": "Clinic",
       "currency": "SGD",
       "amount_spent": 85.00
     },
     {
-      "account_id": 189,
+      "account_id": 89,
       "date": "2019-02-25",
       "description": "Bookstore",
       "currency": "USD",
       "amount_spent": 20.50
     },
     {
-      "account_id": 275,
+      "account_id": 75,
       "date": "2019-02-10",
       "description": "Family Restaurant",
       "currency": "SGD",
       "amount_spent": 40.00
     },
     {
-      "account_id": 364,
+      "account_id": 64,
       "date": "2019-03-05",
       "description": "Fashion Store",
       "currency": "SGD",
       "amount_spent": 60.00
     },
     {
-      "account_id": 428,
+      "account_id": 28,
       "date": "2019-03-12",
       "description": "Electronics Store",
       "currency": "USD",
       "amount_spent": 200.00
     },
     {
-      "account_id": 593,
+      "account_id": 93,
       "date": "2019-03-20",
       "description": "Travel Agency",
       "currency": "EUR",
       "amount_spent": 150.00
     },
     {
-      "account_id": 724,
+      "account_id": 24,
       "date": "2019-04-10",
       "description": "Online Subscription",
       "currency": "USD",
       "amount_spent": 75.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2019-04-10",
       "description": "Clinic",
       "currency": "SGD",
       "amount_spent": 70.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2019-04-10",
       "description": "Taxi Service",
       "currency": "EUR",
       "amount_spent": 55.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2019-04-10",
       "description": "Starbucks",
       "currency": "SGD",
       "amount_spent": 30.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2019-04-10",
       "description": "Pharmacy",
       "currency": "USD",
       "amount_spent": 35.00
     },
     {
-      "account_id": 678,
+      "account_id": 78,
       "date": "2019-04-10",
       "description": "Park Entrance Fee",
       "currency": "SGD",
       "amount_spent": 45.00
     },
     {
-      "account_id": 189,
+      "account_id": 89,
       "date": "2024-03-01",
       "description": "Auto Repair Shop",
       "currency": "USD",
       "amount_spent": 100.00
     },
     {
-      "account_id": 275,
+      "account_id": 75,
       "date": "2024-02-15",
       "description": "Bus Station",
       "currency": "EUR",
       "amount_spent": 3.00
     },
     {
-      "account_id": 364,
+      "account_id": 64,
       "date": "2024-03-08",
       "description": "Home Decor Store",
       "currency": "SGD",
       "amount_spent": 35.00
     },
     {
-      "account_id": 428,
+      "account_id": 28,
       "date": "2024-03-18",
       "description": "Gift Shop",
       "currency": "USD",
       "amount_spent": 25.00
     },
     {
-      "account_id": 593,
+      "account_id": 93,
       "date": "2024-03-25",
       "description": "Online Education Platform",
       "currency": "EUR",
       "amount_spent": 80.00
     },
     {
-      "account_id": 724,
+      "account_id": 24,
       "date": "2024-04-10",
       "description": "Bakery",
       "currency": "USD",
       "amount_spent": 35.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2024-04-10",
       "description": "Family Restaurant",
       "currency": "SGD",
       "amount_spent": 90.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2024-04-10",
       "description": "Car Wash",
       "currency": "EUR",
       "amount_spent": 35.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2024-04-10",
       "description": "Movie Theater",
       "currency": "SGD",
       "amount_spent": 30.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2024-04-10",
       "description": "Pharmacy",
       "currency": "USD",
       "amount_spent": 35.00
     },
     {
-      "account_id": 678,
+      "account_id": 78,
       "date": "2024-04-10",
       "description": "Fashion Store",
       "currency": "SGD",
       "amount_spent": 47.00
     },
     {
-      "account_id": 189,
+      "account_id": 89,
       "date": "2024-03-10",
       "description": "Pet Store",
       "currency": "USD",
       "amount_spent": 35.00
     },
     {
-      "account_id": 275,
+      "account_id": 75,
       "date": "2024-03-20",
       "description": "Hardware Store",
       "currency": "SGD",
       "amount_spent": 65.00
     },
     {
-      "account_id": 364,
+      "account_id": 64,
       "date": "2024-03-25",
       "description": "Toy Store",
       "currency": "SGD",
       "amount_spent": 25.00
     },
     {
-      "account_id": 428,
+      "account_id": 28,
       "date": "2024-03-30",
       "description": "Pharmacy",
       "currency": "USD",
       "amount_spent": 40.00
     },
     {
-      "account_id": 593,
+      "account_id": 93,
       "date": "2024-04-05",
       "description": "Restaurant",
       "currency": "EUR",
       "amount_spent": 120.00
     },
     {
-      "account_id": 724,
+      "account_id": 24,
       "date": "2024-04-10",
       "description": "Taxi Service",
       "currency": "USD",
       "amount_spent": 40.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2024-04-10",
       "description": "Starbucks",
       "currency": "SGD",
       "amount_spent": 20.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2024-04-10",
       "description": "Coffee Shop",
       "currency": "EUR",
       "amount_spent": 35.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2024-04-10",
       "description": "Fashion Store",
       "currency": "SGD",
       "amount_spent": 45.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2024-04-10",
       "description": "Cafeteria",
       "currency": "USD",
       "amount_spent": 25.00
     },
     {
-      "account_id": 678,
+      "account_id": 78,
       "date": "2024-04-10",
       "description": "Gas Station",
       "currency": "SGD",
       "amount_spent": 125.00
     },
     {
-      "account_id": 189,
+      "account_id": 89,
       "date": "2022-04-10",
       "description": "Bakery",
       "currency": "USD",
       "amount_spent": 15.00
     },
     {
-      "account_id": 275,
+      "account_id": 75,
       "date": "2022-04-15",
       "description": "Flower Shop",
       "currency": "SGD",
       "amount_spent": 20.00
     },
     {
-      "account_id": 364,
+      "account_id": 64,
       "date": "2022-04-20",
       "description": "Ice Cream Parlor",
       "currency": "USD",
       "amount_spent": 12.00
     },
     {
-      "account_id": 428,
+      "account_id": 28,
       "date": "2022-04-25",
       "description": "Car Wash",
       "currency": "USD",
       "amount_spent": 25.00
     },
     {
-      "account_id": 593,
+      "account_id": 93,
       "date": "2022-05-01",
       "description": "Park Entrance Fee",
       "currency": "EUR",
       "amount_spent": 10.00
     },
     {
-      "account_id": 724,
+      "account_id": 24,
       "date": "2022-04-10",
       "description": "Fashion Store",
       "currency": "USD",
       "amount_spent": 45.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2022-04-10",
       "description": "Italian Restaurant",
       "currency": "SGD",
       "amount_spent": 80.00
     },
     {
-      "account_id": 293,
+      "account_id": 23,
       "date": "2022-04-10",
       "description": "Car Wash",
       "currency": "EUR",
       "amount_spent": 35.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2022-04-10",
       "description": "Movie Theater",
       "currency": "SGD",
       "amount_spent": 30.00
     },
     {
-      "account_id": 306,
+      "account_id": 30,
       "date": "2022-04-10",
       "description": "Pharmacy",
       "currency": "USD",
       "amount_spent": 35.00
     },
     {
-      "account_id": 678,
+      "account_id": 78,
       "date": "2022-04-10",
       "description": "Clinic",
       "currency": "SGD",

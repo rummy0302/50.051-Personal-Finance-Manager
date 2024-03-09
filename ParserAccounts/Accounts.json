@@ -1,62 +1,62 @@
 [
   {
-    "account_id": 189,
+    "account_id": 89,
     "user_id": 1,
     "name": "Savings Account",
     "default_currency": "SGD",
     "balance": 5000.00
   },
   {
-    "account_id": 275,
+    "account_id": 75,
     "user_id": 1,
     "name": "Checking Account",
     "default_currency": "SGD",
     "balance": 3000.00
   },
   {
-    "account_id": 364,
+    "account_id": 64,
     "user_id": 2,
     "name": "Savings Account",
     "default_currency": "SGD",
     "balance": 4000.00
   },
   {
-    "account_id": 428,
+    "account_id": 28,
     "user_id": 2,
     "name": "Checking Account",
     "default_currency": "SGD",
     "balance": 4500.00
   },
   {
-    "account_id": 593,
+    "account_id": 93,
     "user_id": 2,
     "name": "Credit Card",
     "default_currency": "SGD",
     "balance": -500.00
   },
   {
-    "account_id": 724,
+    "account_id": 24,
     "user_id": 3,
     "name": "Savings Account",
     "default_currency": "SGD",
     "balance": 90000.00
   },
   {
-    "account_id": 893,
+    "account_id": 23,
     "user_id": 3,
     "name": "Checking Account",
     "default_currency": "SGD",
     "balance": 2500.00
   },
   {
-    "account_id": 306,
+    "account_id": 30,
     "user_id": 3,
     "name": "Credit Card",
     "default_currency": "SGD",
     "balance": -1200.00
   },
   {
-    "account_id": 678,
+    "account_id": 78,
     "user_id": 3,
     "name": "Business Account",
     "default_currency": "SGD",
