@@ -1,18 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ExpensesTotal.h"
+#include "CurrencyConversion.h"
 #include "../ParserExpenses/ParserExpenses.h"
 #include "../ParserAccounts/ParserAccounts.h"
 
-/* This file is to find the total expense in the respective currency (SGD/USD/EUR) 
+/* This file is to convert the expense in EUR and USD to SGD to calculate total expense in default currency (SGD) 
 
-Therefore, this file will contain the total expense from each account separately for the 3 different currencies */
+Therefore, this file will contain the total expense in SGD for each account */
 
-CurrencyTotals currencytotals[MAX_ACCOUNTS];
+ExpenseTotalsSGD expensetotalsSGD[MAX_ACCOUNTS];
 
-void calculateCurrencyTotal(Expenses *expenses, int numExpenses) {
+void calculateExpenseTotal(Expenses *expenses, int numExpenses) {
     int i;
+
+    /* Uses the exchange rate at the time of writing this code (14.03.2024, 10:49am UTC) : */
+    double USD_TO_SGD_RATE = 1.33;
+
+    double EUR_TO_SGD_RATE = 1.46;
+
 
     for (i = 0; i < numExpenses; i++) {
         int accountID = expenses[i].account_id;
@@ -20,11 +26,11 @@ void calculateCurrencyTotal(Expenses *expenses, int numExpenses) {
         double amount = expenses[i].amount_spent;
         
         if (strcmp(currency, "SGD") == 0){
-            currencytotals[accountID].totalSGD += amount;
+            expensetotalsSGD[accountID].totalExpenseInSGD += amount;
         } else if (strcmp(currency, "USD") == 0){
-            currencytotals[accountID].totalUSD += amount;
+            expensetotalsSGD[accountID].totalExpenseInSGD += amount * USD_TO_SGD_RATE;
         } else if (strcmp(currency, "EUR") == 0){
-            currencytotals[accountID].totalEUR += amount;
+            expensetotalsSGD[accountID].totalExpenseInSGD += amount * EUR_TO_SGD_RATE;
         } else {
             printf("Error : This currency is not supported by this system\n");
         }
@@ -32,18 +38,15 @@ void calculateCurrencyTotal(Expenses *expenses, int numExpenses) {
     }
 }
 
-void printCurrencyTotal(int accountId, double totalSGD, double totalUSD, double totalEUR) {
+void printExpenseTotal(int accountId, double totalExpenseInSGD) {
     printf("Account ID: %d\n\n", accountId);
-    printf("Currency                Total Expense\n");
-    printf("%-24s%.2lf\n", "SGD", totalSGD);
-    printf("%-24s%.2lf\n", "USD", totalUSD);
-    printf("%-24s%.2lf\n", "EUR", totalEUR);
-    printf("\n");
+    printf("%-24s%.2lf\n", "Total Expense in SGD",totalExpenseInSGD);
+    printf("\n\n");
 }
 
-void printAllCurrencyTotals(Expenses *expenses, int numExpenses, Account *accounts, int numAccounts) {
+void printAllExpenseTotals(Expenses *expenses, int numExpenses, Account *accounts, int numAccounts) {
 
-    double totalSGD, totalUSD, totalEUR;
+    double totalExpenseInSGD;
 
     int i, j;
     int uniqueAccounts[MAX_ACCOUNTS] = {0}; 
@@ -131,20 +134,18 @@ void printAllCurrencyTotals(Expenses *expenses, int numExpenses, Account *accoun
         }
     }
 
-    /* For each user, print the different accounts held and their total expense in different currencies (SGD, USD, EUR) : */
+    /* For each user, print the different accounts held and their total expense in the deafult currency SGD (after currency conversion for USD and EUR) : */
 
     for (i = 0; i < numUniqueUsers; i++){
         printf("User ID: %d\n\n", uniqueUsers[i]);
 
         for (j = 0; j < accountsPerUser[i]; j++){
             int accountId = user_accounts[i][j];
-            totalSGD = currencytotals[accountId].totalSGD;
-            totalUSD = currencytotals[accountId].totalUSD;
-            totalEUR = currencytotals[accountId].totalEUR;
+            totalExpenseInSGD = expensetotalsSGD[accountId].totalExpenseInSGD;
 
 
-            if (totalSGD + totalUSD + totalEUR  > 0) {
-                printCurrencyTotal(accountId, totalSGD, totalUSD, totalEUR);
+            if (totalExpenseInSGD  > 0) {
+                printExpenseTotal(accountId, totalExpenseInSGD);
             }
         }
         printf("--------------------------------\n");
@@ -194,9 +195,9 @@ int main(int argc, char **argv) {
     accounts = processAccountsData(json_accounts, &numAccounts); 
     cJSON_Delete(json_accounts);
 
-    calculateCurrencyTotal(expenses, numExpenses);
+    calculateExpenseTotal(expenses, numExpenses);
 
-    printAllCurrencyTotals(expenses, numExpenses, accounts, numAccounts); 
+    printAllExpenseTotals(expenses, numExpenses, accounts, numAccounts); 
 
     free(expenses);
     free(accounts);
