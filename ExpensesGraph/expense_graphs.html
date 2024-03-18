@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Expense Graphs</title>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<h2>User ID: 1</h2>
+<div id="user1_graph"></div>
+<script>
+var data1 = [
+{
+x: ['Account 89'],
+y: [466.497500],
+type: 'bar',
+name: 'Account 89'
+},
+{
+x: ['Account 75'],
+y: [151.962000],
+type: 'bar',
+name: 'Account 75'
+},
+];
+var layout1 = {
+title: 'Expense Graph for User 1'
+};
+Plotly.newPlot('user1_graph', data1, layout1);
+</script>
+<h2>User ID: 2</h2>
+<div id="user2_graph"></div>
+<script>
+var data2 = [
+{
+x: ['Account 64'],
+y: [332.210000],
+type: 'bar',
+name: 'Account 64'
+},
+{
+x: ['Account 28'],
+y: [765.415000],
+type: 'bar',
+name: 'Account 28'
+},
+{
+x: ['Account 93'],
+y: [769.420000],
+type: 'bar',
+name: 'Account 93'
+},
+];
+var layout2 = {
+title: 'Expense Graph for User 2'
+};
+Plotly.newPlot('user2_graph', data2, layout2);
+</script>
+<h2>User ID: 3</h2>
+<div id="user3_graph"></div>
+<script>
+var data3 = [
+{
+x: ['Account 24'],
+y: [512.050000],
+type: 'bar',
+name: 'Account 24'
+},
+{
+x: ['Account 23'],
+y: [1248.100000],
+type: 'bar',
+name: 'Account 23'
+},
+{
+x: ['Account 30'],
+y: [990.500000],
+type: 'bar',
+name: 'Account 30'
+},
+{
+x: ['Account 78'],
+y: [593.000000],
+type: 'bar',
+name: 'Account 78'
+},
+];
+var layout3 = {
+title: 'Expense Graph for User 3'
+};
+Plotly.newPlot('user3_graph', data3, layout3);
+</script>
+</body>
+</html>

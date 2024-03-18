@@ -61,6 +61,8 @@ void printAllExpenseTotals(Expenses *expenses, int numExpenses, Account *account
     
     int accountIndex = 0;
 
+    FILE *htmlFile;
+
 
     /* Calculate number of unique user_ids from the Accounts.json file : */
 
@@ -152,6 +154,62 @@ void printAllExpenseTotals(Expenses *expenses, int numExpenses, Account *account
 
     }
 
+    /* Write HTML header */
+    htmlFile = fopen("expense_graphs.html", "w");
+    if (htmlFile == NULL) {
+        printf("Error: Unable to create HTML file\n");
+        exit(EXIT_FAILURE);
+    }
+
+    /* Write HTML header */
+    fprintf(htmlFile, "<!DOCTYPE html>\n<html>\n<head>\n");
+    fprintf(htmlFile, "<title>Expense Graphs</title>\n");
+    fprintf(htmlFile, "<script src=\"https://cdn.plot.ly/plotly-latest.min.js\"></script>\n");
+    fprintf(htmlFile, "</head>\n<body>\n");
+
+    
+    
+    for (i = 0; i < numUniqueUsers; i++) {
+        
+        fprintf(htmlFile, "<h2>User ID: %d</h2>\n", uniqueUsers[i]);
+
+        
+        fprintf(htmlFile, "<div id=\"user%d_graph\"></div>\n", uniqueUsers[i]);
+        fprintf(htmlFile, "<script>\n");
+        fprintf(htmlFile, "var data%d = [\n", uniqueUsers[i]);
+
+        
+        for (j = 0; j < accountsPerUser[i]; j++) {
+            int accountId = user_accounts[i][j];
+            double totalExpenseInSGD = expensetotalsSGD[accountId].totalExpenseInSGD;
+
+            
+            fprintf(htmlFile, "{\n");
+            fprintf(htmlFile, "x: ['Account %d'],\n", accountId);
+            fprintf(htmlFile, "y: [%lf],\n", totalExpenseInSGD);
+            fprintf(htmlFile, "type: 'bar',\n");
+            fprintf(htmlFile, "name: 'Account %d'\n", accountId);
+            fprintf(htmlFile, "},\n");
+        }
+
+        
+        fprintf(htmlFile, "];\n");
+
+        fprintf(htmlFile, "var layout%d = {\n", uniqueUsers[i]);
+        fprintf(htmlFile, "title: 'Expense Graph for User %d'\n", uniqueUsers[i]);
+        fprintf(htmlFile, "};\n");
+
+        fprintf(htmlFile, "Plotly.newPlot('user%d_graph', data%d, layout%d);\n", uniqueUsers[i], uniqueUsers[i], uniqueUsers[i]);
+
+        fprintf(htmlFile, "</script>\n");
+    }
+
+    /* Write HTML footer */
+    fprintf(htmlFile, "</body>\n</html>");
+
+    /* Close HTML file */
+    fclose(htmlFile);
+
 
 
     for (i = 0; i < numUniqueUsers; i++){
@@ -164,6 +222,8 @@ void printAllExpenseTotals(Expenses *expenses, int numExpenses, Account *account
 
 
 }
+
+
 
 
 
