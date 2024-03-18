@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>personal finance manager</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* headbar started*/
+  .headbar {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .appName {
+    font-size: 20px;
+    font-weight: bold;
+    color:#004F99;
+  }
+  
+  button {
+    display: flex;
+    border: none;
+    padding: 10px 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 14px;
+  }
+
+  .signOutBtn {
+    background-color:white;
+    color: #004F99;
+    border: 2px solid #004F99;
+    padding: 8px 38px;
+    
+  }
+
+  /* container started*/
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40vh;
+    background-color: rgba(217, 217, 217, 0.3);
+
+    /* box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); */
+    
+  }
+  .left {
+    width: 50%;
+    padding: 0 20px;
+  }
+  .slogan {
+    font-style: italic;
+    font-size: 24px;
+    margin-top:-50px;
+    margin-bottom: 30px;
+    font-weight: 600;
+    color:black;
+    border-radius: 20px;
+    padding:10px;
+  }
+
+  .balance {
+
+    display: flex;
+    align-items: center; 
+  }
+
+  .text {
+    margin-left: 10px;
+    width: fit-content;
+  }
+
+  .data {
+    margin-left: 10px;
+    width: fit-content;
+  }
+ 
+  .right {
+    width: 50%;
+    height:100px;
+    text-align: right;
+    margin-right:30px;
+    display: flex;
+    border-left: 1.8px solid gray; 
+  }
+
+  .right button {
+    margin:40px;
+    color:white;
+    background-color: #004F99;
+    border-radius: 10px;
+    font-weight: bold;
+    text-align: left;
+    padding:10px;
+  }
+
+
+
+
+  /* section part started */
+
+  .section {
+    margin:2px;
+    background-image: url('/Frontend/Images/image.png'); 
+    background-size: contain; 
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 75%;
+    height: 40vh;
+    
+  }
+
+
+</style>
+</head>
+<body>
+
+<div class="headbar">
+  <div class="appName">WealthWise</div>
+    <a href="mainPage.html">
+        <button class="signOutBtn" onclick="exitApp()" >Sign Out</button>
+      </a>
+  </div>
+</div>
+
+<div class="container" style="padding:20px;">
+    <div class="left">
+        <div class="slogan">
+            Hello! <br>
+            Welcome to our financial management platform. <br>
+            What services are you looking for today?
+        </div>
+
+        <div class="blance">
+            <div class="text">
+                Balance:
+            </div>
+    
+            <div class="data">
+                xxxSGD
+            </div>
+
+        </div>
+        
+        
+    
+    </div>
+
+    <div class="right">
+        <a>
+            <button class="graphBtn">View Expense Graph</button>
+        </a>
+       
+        <a>
+            <button class="tableBtn">View Expense Table</button>
+        </a>
+    </div>
+
+    </div>
+
+    <div class="section">
+        <img>
+    </div>
+
+</div>
+
+<script>
+    function exitApp() {
+        localStorage.removeItem("userID");
+    }
+
+</script>
+
+</body>
+</html>
