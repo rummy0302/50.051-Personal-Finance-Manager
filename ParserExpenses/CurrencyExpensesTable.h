@@ -41,7 +41,10 @@ typedef struct {
 
 void categorizeExpenses(Expenses *expenses, int numExpenses);
 void printAllExpenses(Expenses *expenses, int numExpenses);
-
+void printExpenses(int accountId, double totalFoodSGD, double totalFoodUSD, double totalFoodEUR,
+                   double totalTransportSGD, double totalTransportUSD, double totalTransportEUR,
+                   double totalShoppingSGD, double totalShoppingUSD, double totalShoppingEUR,
+                   double totalOthersSGD, double totalOthersUSD, double totalOthersEUR); 
 
 
 #endif /* EXPENSES_TABLE_H */

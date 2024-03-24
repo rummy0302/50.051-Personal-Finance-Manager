@@ -9,7 +9,8 @@ typedef enum {
     SGD,
     USD,
     EUR,
-    NUM_CURRENCIES
+    NUM_CURRENCIES,
+    UNKNOWN_CURRENCY
 } CurrencyType;
 
 const char* currencyStrings[NUM_CURRENCIES] = {
@@ -25,7 +26,7 @@ CurrencyType getCurrencyType(const char* currencyStr) {
             return (CurrencyType)i;
         }
     }
-    return -1;
+    return UNKNOWN_CURRENCY;
 }
 
 Shop shops[] = {
