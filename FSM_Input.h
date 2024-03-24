@@ -2,9 +2,9 @@
 #ifndef FSM_INPUT_H
 #define FSM_INPUT_H
 
-#include "cJSON.h"
-#include "ParserAccounts/parseAccounts.h"
-#include "Expenses.h"
+#include "ParserExpenses/cJSON.h"
+#include "ParserAccounts/parserAccounts.h"
+#include "ParserExpenses/ParserExpenses.h"
 
 typedef enum
 {
@@ -24,7 +24,7 @@ typedef struct
 } InputFSM;
 
 void initInputFSM(InputFSM *inputFsm);
-void processInputState(InputFSM *inputFSM);
-int runInputState(InputFSM *inputFSM);
+void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile);
+int runInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile);
 
 #endif // FSM_INPUT_H

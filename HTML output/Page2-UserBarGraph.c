@@ -1,16 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "CurrencyConversion.h"
+#include "Page2-UserBarGraph.h"
 #include "../ParserExpenses/ParserExpenses.h"
 #include "../ParserAccounts/ParserAccounts.h"
 
-/* This file is to generate the expense graphs - 
+/* This file is to generate the user expense graphs (total expense in SGD) for each account - 
     1. Calculates total expense in SGD (after currency conversion for expense in USD and EUR) for each account
-    2. Calculates total expense in SGD, EUR & USD separately for each account
+    2. Displays a bar graph showing the total expense in SGD for each account held by the user
 */
 
-CurrencyTotals currencytotals[MAX_ACCOUNTS];
 
 ExpenseTotalsSGD expensetotalsSGD[MAX_ACCOUNTS];
 
@@ -30,13 +29,13 @@ void calculateExpenseTotal(Expenses *expenses, int numExpenses) {
         
         if (strcmp(currency, "SGD") == 0){
             expensetotalsSGD[accountID].totalExpenseInSGD += amount;
-            currencytotals[accountID].totalSGD += amount;
+ 
         } else if (strcmp(currency, "USD") == 0){
             expensetotalsSGD[accountID].totalExpenseInSGD += amount * USD_TO_SGD_RATE;
-            currencytotals[accountID].totalUSD += amount;
+
         } else if (strcmp(currency, "EUR") == 0){
             expensetotalsSGD[accountID].totalExpenseInSGD += amount * EUR_TO_SGD_RATE;
-            currencytotals[accountID].totalEUR += amount;
+
         } else {
             printf("Error : This currency is not supported by this system\n");
         }
@@ -44,22 +43,15 @@ void calculateExpenseTotal(Expenses *expenses, int numExpenses) {
     }
 }
 
-void printExpenseTotal(int accountId, double totalExpenseInSGD, double totalSGD, double totalUSD, double totalEUR) {
+void printExpenseTotal(int accountId, double totalExpenseInSGD) {
     printf("Account ID: %d\n\n", accountId);
-    printf("Currency                Total Expense\n");
-    printf("%-24s%.2lf\n", "SGD", totalSGD);
-    printf("%-24s%.2lf\n", "USD", totalUSD);
-    printf("%-24s%.2lf\n", "EUR", totalEUR);
-    printf("\n");
     printf("%-24s%.2lf\n", "Total Expense in SGD: ",totalExpenseInSGD);
     printf("\n\n");
 }
 
-void printAllExpenseTotals(Expenses *expenses, int numExpenses, Account *accounts, int numAccounts) {
+void printAllExpenseTotals(int userIdInput, Expenses *expenses, int numExpenses, Account *accounts, int numAccounts) {
 
     double totalExpenseInSGD;
-
-    double totalSGD, totalUSD, totalEUR;
 
     int i, j;
     int uniqueAccounts[MAX_ACCOUNTS] = {0}; 
@@ -75,10 +67,6 @@ void printAllExpenseTotals(Expenses *expenses, int numExpenses, Account *account
     int accountIndex = 0;
 
     FILE *htmlFile;
-
-    /* Hardcode the userId for now (will be retrieved from user input later) : */
-
-    int userIdInput = 1;
 
     int userIndex = -1;
 
@@ -155,8 +143,7 @@ void printAllExpenseTotals(Expenses *expenses, int numExpenses, Account *account
         }
     }
 
-    /* For each user, print the different accounts held and their total expense in the deafult currency SGD (after currency conversion for USD and EUR) 
-       and the individual total expense in the different currencies (SGD, USD, EUR) : */
+    /* For each user, print the different accounts held and their total expense in the deafult currency SGD (after currency conversion for USD and EUR) : */
 
     for (i = 0; i < numUniqueUsers; i++){
         printf("User ID: %d\n\n", uniqueUsers[i]);
@@ -165,13 +152,9 @@ void printAllExpenseTotals(Expenses *expenses, int numExpenses, Account *account
             int accountId = user_accounts[i][j];
             totalExpenseInSGD = expensetotalsSGD[accountId].totalExpenseInSGD;
 
-            totalSGD = currencytotals[accountId].totalSGD;
-            totalUSD = currencytotals[accountId].totalUSD;
-            totalEUR = currencytotals[accountId].totalEUR;
 
-
-            if ((totalExpenseInSGD  > 0) && (totalSGD + totalUSD + totalEUR  > 0)) {
-                printExpenseTotal(accountId, totalExpenseInSGD, totalSGD, totalUSD, totalEUR);
+            if ((totalExpenseInSGD  > 0)) {
+                printExpenseTotal(accountId, totalExpenseInSGD);
             }
         }
         printf("--------------------------------\n");
@@ -181,7 +164,7 @@ void printAllExpenseTotals(Expenses *expenses, int numExpenses, Account *account
     /* Code to write the HTML page and render the corresponding expense graphs : */
 
     /* Open the html page in write mode : */
-    htmlFile = fopen("expense_graphs.html", "w");
+    htmlFile = fopen("page2_userBarGraph.html", "w");
     if (htmlFile == NULL) {
         printf("Error: Unable to create HTML file\n");
         exit(EXIT_FAILURE);
@@ -190,7 +173,7 @@ void printAllExpenseTotals(Expenses *expenses, int numExpenses, Account *account
     /* Write HTML header */
 
     fprintf(htmlFile, "<!DOCTYPE html>\n<html>\n<head>\n");
-    fprintf(htmlFile, "<title>Expense Graphs</title>\n");
+    fprintf(htmlFile, "<title>User Expense Graphs</title>\n");
 
     /* Call plotly library from js to render the graphs : */
     fprintf(htmlFile, "<script src=\"https://cdn.plot.ly/plotly-latest.min.js\"></script>\n");
@@ -218,7 +201,7 @@ void printAllExpenseTotals(Expenses *expenses, int numExpenses, Account *account
 
             fprintf(htmlFile, "{\n");
             fprintf(htmlFile, "x: ['Account %d'],\n", accountId);
-            fprintf(htmlFile, "y: [%lf],\n", totalExpenseInSGD);
+            fprintf(htmlFile, "y: [%.2lf],\n", totalExpenseInSGD);
             fprintf(htmlFile, "type: 'bar',\n"); /* Generate bar graph */
             fprintf(htmlFile, "name: 'Account %d'\n", accountId);
             fprintf(htmlFile, "},\n");
@@ -226,41 +209,11 @@ void printAllExpenseTotals(Expenses *expenses, int numExpenses, Account *account
 
         fprintf(htmlFile, "];\n");
         fprintf(htmlFile, "var layout_user_%d = {\n", userIdInput);
-        fprintf(htmlFile, "title: 'Expense Graph for User %d'\n", userIdInput);
+        fprintf(htmlFile, "title: 'Total Expense Graph in SGD'");
         fprintf(htmlFile, "};\n");
         fprintf(htmlFile, "Plotly.newPlot('user%d_graph', data_user_%d, layout_user_%d);\n", userIdInput, userIdInput, userIdInput);
         fprintf(htmlFile, "</script>\n");
         fprintf(htmlFile, "<hr />\n");
-    }
-
-    /* Generate additional graphs for each account showing expenses in SGD, EUR, and USD separately */
-    if (userIndex != -1) { /* UserId exists */
-        for (j = 0; j < accountsPerUser[userIndex]; j++) {
-            int accountId = user_accounts[userIndex][j];
-            double totalSGD = currencytotals[accountId].totalSGD;
-            double totalEUR = currencytotals[accountId].totalEUR;
-            double totalUSD = currencytotals[accountId].totalUSD;
-
-            fprintf(htmlFile, "<h4>Account ID: %d</h4>\n", accountId);
-            fprintf(htmlFile, "<div id=\"user%d_account%d_graph\"></div>\n", userIdInput, accountId);
-            fprintf(htmlFile, "<script>\n");
-            fprintf(htmlFile, "var data_%d = [\n", accountId);
-            fprintf(htmlFile, "{\n");
-            fprintf(htmlFile, "x: ['SGD', 'EUR', 'USD'],\n");
-            fprintf(htmlFile, "y: [%lf, %lf, %lf],\n", totalSGD, totalEUR, totalUSD);
-            fprintf(htmlFile, "type: 'bar',\n");
-            fprintf(htmlFile, "marker: {\n");
-            fprintf(htmlFile, "color: ['blue', 'green', 'red']\n");
-            fprintf(htmlFile, "}\n");
-            fprintf(htmlFile, "}\n");
-            fprintf(htmlFile, "];\n");
-            fprintf(htmlFile, "var layout_%d = {\n", accountId);
-            fprintf(htmlFile, "title: 'Expense Graph for Account %d'\n", accountId);
-            fprintf(htmlFile, "};\n");
-            fprintf(htmlFile, "Plotly.newPlot('user%d_account%d_graph', data_%d, layout_%d);\n", userIdInput, accountId, accountId, accountId);
-            fprintf(htmlFile, "</script>\n");
-            fprintf(htmlFile, "<hr />\n");
-        }
     }
 
     /* Write HTML footer */
@@ -295,6 +248,8 @@ int main(int argc, char **argv) {
     cJSON *json_expenses;
     cJSON *json_accounts;
 
+    int userIdInput;
+
     json_expenses = parseExpensesJSONfile("../ParserExpenses/Expenses.json"); 
     if (json_expenses == NULL) {
         printf("Error: Failed to parse Expenses.json\n");
@@ -316,7 +271,11 @@ int main(int argc, char **argv) {
 
     calculateExpenseTotal(expenses, numExpenses);
 
-    printAllExpenseTotals(expenses, numExpenses, accounts, numAccounts); 
+    /* Hardcoding the userId now : (can retrieve from input and then pass it as argument to printAllExpenseTotals function)*/
+
+    userIdInput = 3;
+
+    printAllExpenseTotals(userIdInput, expenses, numExpenses, accounts, numAccounts); 
 
     free(expenses);
     free(accounts);

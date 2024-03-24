@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>User Expense Graphs</title>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<h2>User ID: 3</h2>
+<div id="user3_graph"></div>
+<script>
+var data_user_3 = [
+{
+x: ['Account 24'],
+y: [911.70],
+type: 'bar',
+name: 'Account 24'
+},
+{
+x: ['Account 23'],
+y: [1505.69],
+type: 'bar',
+name: 'Account 23'
+},
+{
+x: ['Account 30'],
+y: [1333.87],
+type: 'bar',
+name: 'Account 30'
+},
+{
+x: ['Account 78'],
+y: [992.65],
+type: 'bar',
+name: 'Account 78'
+},
+];
+var layout_user_3 = {
+title: 'Total Expense Graph in SGD'};
+Plotly.newPlot('user3_graph', data_user_3, layout_user_3);
+</script>
+<hr />
+</body>
+</html>

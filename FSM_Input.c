@@ -3,28 +3,35 @@
 #include <string.h>
 #include "FSM_Input.h"
 
+/*This FSM parses and processes data from two input JSON files representing accounts and expenses respectively.
+It ensures that both files are successfully parsed and processed before moving to the COMPLETED state*/
+
 void initInputFSM(InputFSM *inputFsm)
 {
     inputFsm->currentState = INITIAL_STATE;
-    inputFsm->accountsJson = parseAccountsJSONfile("ParserAccounts/Accounts.json");
-    inputFsm->expensesJson = parseExpensesJSONfile("Expenses.json");
+    inputFsm->accountsJson = NULL;
+    inputFsm->expensesJson = NULL;
+    inputFsm->accounts = NULL;
+    inputFsm->expenses = NULL;
 }
 
-void processInputState(InputFSM *inputFSM)
+void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
 {
     while (inputFSM->currentState != COMPLETED)
     {
         switch (inputFSM->currentState)
         {
         case INITIAL_STATE:
+            inputFSM->accountsJson = parseAccountsJSONfile(accountFile);
+            inputFSM->expensesJson = parseExpensesJSONfile(expenseFile);
 
             if (inputFSM->accountsJson != NULL && inputFSM->expensesJson != NULL)
             {
-                printf("Successfully parsed Accounts.json and Expenses.json");
+                printf("Successfully parsed Accounts.json and Expenses.json\n");
                 // Transition to the next state
                 inputFSM->currentState = READING_ACCOUNT;
             }
-            // Stay in Idle state
+            // Else it would stay in Idle state
 
             break;
 
@@ -40,7 +47,7 @@ void processInputState(InputFSM *inputFSM)
             else
             {
                 printf("Error processing accounts\n");
-                // Stay in ReadingAccounts
+                inputFSM->currentState = INITIAL_STATE;
             }
             break;
 
@@ -57,7 +64,7 @@ void processInputState(InputFSM *inputFSM)
             else
             {
                 printf("Error processing expenses\n");
-                // Stay in ReadingExpenses
+                inputFSM->currentState = INITIAL_STATE;
             }
             break;
 
@@ -68,19 +75,63 @@ void processInputState(InputFSM *inputFSM)
     }
 }
 
-int runInputState(InputFSM *inputFSM)
+int runInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
 {
-    processInputState(inputFSM);
+    processInputState(inputFSM, accountFile, expenseFile);
     return inputFSM->currentState == COMPLETED;
+}
+
+// Print all the information from accounts and expenses
+void printAccountsAndExpenses(InputFSM *inputFSM)
+{
+    if (inputFSM->accounts != NULL)
+    {
+        printf("Accounts:\n");
+
+        int numAccounts;
+        numAccounts = cJSON_GetArraySize(inputFSM->accountsJson);
+        for (int i = 0; i < numAccounts; ++i)
+        {
+            printf("Account ID: %d\n", inputFSM->accounts[i].account_id);
+            printf("User ID: %d\n", inputFSM->accounts[i].user_id);
+            printf("Name: %s\n", inputFSM->accounts[i].name);
+            printf("Currency: %s\n", inputFSM->accounts[i].default_currency);
+            printf("Balance: %.2f\n", inputFSM->accounts[i].balance);
+            printf("\n");
+        }
+    }
+    if (inputFSM->expenses != NULL)
+    {
+        printf("Expenses:\n");
+
+        int numExpenses;
+        numExpenses = cJSON_GetArraySize(inputFSM->expensesJson);
+
+        for (int i = 0; i < numExpenses; i++)
+        {
+            printf("Account ID: %d\n", inputFSM->expenses[i].account_id);
+            printf("Date: %s\n", inputFSM->expenses[i].date);
+            printf("Description: %s\n", inputFSM->expenses[i].description);
+            printf("Currency: %s\n", inputFSM->expenses[i].currency);
+            printf("Amount Spent: %.2f\n", inputFSM->expenses[i].amount_spent);
+            printf("\n");
+        }
+    }
 }
 
 int main(int argc, char const *argv[])
 {
     InputFSM inputFSM;
-    initInputFSM(&inputFSM);
-    if (runInputState(&inputFSM))
+    initInputFSM(&inputFSM); // Initialize the fsm
+
+    char *accountFile = "ParserAccounts/Accounts.json";
+    char *expenseFile = "ParserExpenses/Expenses.json";
+
+    // Run the fsm to see if it is in the accepting state(successfully parsing the 2 files)
+    if (runInputState(&inputFSM, accountFile, expenseFile))
     {
         printf("Successfully processing Accounts and Expenses");
+        printAccountsAndExpenses(&inputFSM);
     }
     else
         printf("Failed in processing,please try again");
