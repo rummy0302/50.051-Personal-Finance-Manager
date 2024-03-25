@@ -5,6 +5,10 @@
 #include <stdio.h>
 #define MAX_ACCOUNTS 100
 
+#define MAX_YEARS 6 /* Expense data ranges from 2020 to 2024 */
+#define MIN_YEAR 2020 /* Expense data starts from year 2020 */
+
+
 
 
 typedef struct {
@@ -46,6 +50,6 @@ typedef struct {
 
 void categorizeExpenses(Expenses *expenses, int numExpenses);
 
-void generateHTMLTableForAccount(int accountId, FILE *htmlFile); 
+void generateHTMLForAccount(Expenses *expenses, int numExpenses,int accountId, FILE *htmlFile); 
 
 #endif /* CUR_EXP_TABLE_PAGE_H */

@@ -2,10 +2,12 @@
 <html>
 <head>
 <title>Expenses Table</title>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-<h1>Expenses Table for Account ID: 89</h1>
+<h1>Expenses Table & Graph for Account ID: 89</h1>
 <h2>Year: 2021</h2>
+<h3>Overall Expenses Table</h3>
 <table border="1">
 <tr>
 <th>Category</th>
@@ -15,9 +17,9 @@
 </tr>
 <tr>
 <td>Food</td>
-<td>0.00</td>
-<td>147.60</td>
-<td>25.50</td>
+<td>95.00</td>
+<td>247.60</td>
+<td>275.50</td>
 </tr>
 <tr>
 <td>Transport</td>
@@ -38,5 +40,47 @@
 <td>55.80</td>
 </tr>
 </table>
+<h2 style="margin-top: 100px;">Overall Expenses Graph</h2>
+<div id="plotly_graph"></div>
+<script>
+var data = [
+{
+x: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+y: [20.00, 145.00, 80.50, 45.25, 25.99, 55.75, 30.80, 18.45, 22.00, 65.30, 40.00, 120.00],
+mode: 'lines',
+name: 'SGD',
+line: {
+color: 'blue'
+}
+},
+{
+x: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+y: [50.00, 150.00, 75.00, 20.50, 15.99, 35.25, 45.75, 12.35, 200.00, 65.80, 30.00, 40.00],
+mode: 'lines',
+name: 'USD',
+line: {
+color: 'green'
+}
+},
+{
+x: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+y: [100.00, 150.00, 120.75, 25.50, 0.00, 0.00, 55.80, 30.45, 42.00, 0.00, 75.00, 90.00],
+mode: 'lines',
+name: 'EUR',
+line: {
+color: 'red'
+}
+}
+];
+var layout = {
+xaxis: {
+title: 'Month',
+},
+yaxis: {
+title: 'Expense',
+}
+};
+Plotly.newPlot('plotly_graph', data, layout);
+</script>
 </body>
 </html>

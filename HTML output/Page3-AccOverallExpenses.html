@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Expenses Table</title>
+<title>Overall Expenses Table and Graph</title>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-<h1>Expenses Table for Account ID: 89</h1>
+<h1>Expenses Table & Graph for Account ID: 89</h1>
 <h2>Overall Expenses Table</h2>
 <table border="1">
 <tr>
@@ -15,28 +16,78 @@
 </tr>
 <tr>
 <td>Food</td>
-<td>0.00</td>
-<td>162.60</td>
-<td>65.50</td>
+<td>2043.00</td>
+<td>2210.60</td>
+<td>755.50</td>
 </tr>
 <tr>
 <td>Transport</td>
-<td>0.00</td>
-<td>35.25</td>
-<td>0.00</td>
+<td>668.15</td>
+<td>727.35</td>
+<td>831.85</td>
 </tr>
 <tr>
 <td>Shopping</td>
-<td>231.24</td>
-<td>60.50</td>
-<td>589.44</td>
+<td>1550.39</td>
+<td>1405.15</td>
+<td>1757.89</td>
 </tr>
 <tr>
 <td>Others</td>
 <td>342.80</td>
 <td>683.04</td>
-<td>236.10</td>
+<td>636.10</td>
 </tr>
 </table>
+<h2 style="margin-top: 100px;">Overall Expenses Graph</h2>
+<div id="plotly_graph"></div>
+<script>
+var data = [
+{
+x: [2020, 2021, 2022, 2023, 2024],
+tickmode: 'linear',
+dtick: 1,
+y: [974.00, 669.04, 974.00, 971.05, 1016.25],
+mode: 'lines',
+name: 'SGD',
+line: {
+color: 'blue'
+}
+},
+{
+x: [2020, 2021, 2022, 2023, 2024],
+tickmode: 'linear',
+dtick: 1,
+y: [1044.00, 740.64, 1014.00,1021.00, 1206.50],
+mode: 'lines',
+name: 'USD',
+line: {
+color: 'green'
+}
+},
+{
+x: [2020, 2021, 2022, 2023, 2024],
+tickmode: 'linear',
+dtick: 1,
+y: [860.00, 689.50, 370.55, 1074.34, 986.95],
+mode: 'lines',
+name: 'EUR',
+line: {
+color: 'red'
+}
+}
+];
+var layout = {
+xaxis: {
+title: 'Year',
+tickmode: 'linear',
+dtick: 1,
+},
+yaxis: {
+title: 'Expense',
+}
+};
+Plotly.newPlot('plotly_graph', data, layout);
+</script>
 </body>
 </html>

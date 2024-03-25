@@ -6,6 +6,10 @@
 #include "../ParserExpenses/ParserExpenses.h"
 #include "../ParserAccounts/ParserAccounts.h"
 
+/* This file is to generate the account expense graphs (total expense in SGD, USD, EUR) for all years for each account - 
+    1. Calculates total expense in SGD, EUR, USD for each account for each year
+    2. Displays a scatter plot showing the total expense in SGD, EUR, USD for each account for each year 
+*/
 
 #ifdef _WIN32
 #include <windows.h>
@@ -104,6 +108,7 @@ Shop shops[] = {
 
 AccountExpenses accountTotals[MAX_ACCOUNTS];
 
+
 void categorizeExpenses(Expenses *expenses, int numExpenses) {
     int i, j;
 
@@ -187,19 +192,33 @@ void categorizeExpenses(Expenses *expenses, int numExpenses) {
     }
 }
 
-void generateHTMLTableForAccount(int accountId, FILE *htmlFile) {
+void generateHTMLForAccount(Expenses *expenses, int numExpenses,int accountId, FILE *htmlFile) {
     double totalFoodSGD, totalFoodUSD, totalFoodEUR;
     double totalTransportSGD, totalTransportUSD, totalTransportEUR;
     double totalShoppingSGD, totalShoppingUSD, totalShoppingEUR;
     double totalOthersSGD, totalOthersUSD, totalOthersEUR;
+
+    int i;
+
+    /* Define arrays to store the total expense of each year for each currency : */
+    double totalExpensesSGD[MAX_YEARS] = {0}; 
+    double totalExpensesUSD[MAX_YEARS] = {0};
+    double totalExpensesEUR[MAX_YEARS] = {0};
+
+    /* Write HTML header */
+
     fprintf(htmlFile, "<!DOCTYPE html>\n");
     fprintf(htmlFile, "<html>\n");
     fprintf(htmlFile, "<head>\n");
-    fprintf(htmlFile, "<title>Expenses Table</title>\n");
+    fprintf(htmlFile, "<title>Overall Expenses Table and Graph</title>\n");
+
+    /* Call plotly library from js to render the graphs : */
+    fprintf(htmlFile, "<script src=\"https://cdn.plot.ly/plotly-latest.min.js\"></script>\n");
+
     fprintf(htmlFile, "</head>\n");
     fprintf(htmlFile, "<body>\n");
 
-    fprintf(htmlFile, "<h1>Expenses Table for Account ID: %d</h1>\n", accountId);
+    fprintf(htmlFile, "<h1>Expenses Table & Graph for Account ID: %d</h1>\n", accountId);
     fprintf(htmlFile, "<h2>Overall Expenses Table</h2>\n");
     fprintf(htmlFile, "<table border=\"1\">\n");
     fprintf(htmlFile, "<tr>\n");
@@ -251,6 +270,95 @@ void generateHTMLTableForAccount(int accountId, FILE *htmlFile) {
     fprintf(htmlFile, "</tr>\n");
 
     fprintf(htmlFile, "</table>\n");
+
+    fprintf(htmlFile, "<h2 style=\"margin-top: 100px;\">Overall Expenses Graph</h2>\n");
+
+    fprintf(htmlFile, "<div id=\"plotly_graph\"></div>\n");
+
+    /* Iterate through the Expenses.json file and get the total expense for each year for each currency : */
+
+    for (i = 0; i < numExpenses; i++) {
+        int expenseYear = atoi(strtok(expenses[i].date, "-"));
+
+        CurrencyType currency = getCurrencyType(expenses[i].currency);
+
+        if (expenses[i].account_id == accountId){ /* Check if the account Id matches the account Id provided by the user */
+
+                    switch (currency) {
+                        case SGD:
+                            totalExpensesSGD[expenseYear - MIN_YEAR] += expenses[i].amount_spent;
+                            break;
+                        case USD:
+                            totalExpensesUSD[expenseYear - MIN_YEAR] += expenses[i].amount_spent;
+                            break;
+                        case EUR:
+                            totalExpensesEUR[expenseYear - MIN_YEAR] += expenses[i].amount_spent;
+                            break;
+                        default:
+                            break;
+                    }
+        }
+    }
+
+    
+    fprintf(htmlFile, "<script>\n");
+    fprintf(htmlFile, "var data = [\n");
+
+    /* Plot the scatter plot with Year vs Expense amount with 3 different lines for each currency : */
+
+    
+    fprintf(htmlFile, "{\n");
+    fprintf(htmlFile, "x: [%d, %d, %d, %d, %d],\n", MIN_YEAR, MIN_YEAR + 1, MIN_YEAR + 2, MIN_YEAR + 3, MIN_YEAR + 4); 
+    fprintf(htmlFile, "tickmode: 'linear',\n");
+    fprintf(htmlFile, "dtick: 1,\n");
+    fprintf(htmlFile, "y: [%.2f, %.2f, %.2f, %.2f, %.2f],\n", totalExpensesSGD[0], totalExpensesSGD[1], totalExpensesSGD[2], totalExpensesSGD[3], totalExpensesSGD[4]); 
+    fprintf(htmlFile, "mode: 'lines',\n");
+    fprintf(htmlFile, "name: 'SGD',\n");
+    fprintf(htmlFile, "line: {\n");
+    fprintf(htmlFile, "color: 'blue'\n");
+    fprintf(htmlFile, "}\n");
+    fprintf(htmlFile, "},\n");
+
+    
+    fprintf(htmlFile, "{\n");
+    fprintf(htmlFile, "x: [%d, %d, %d, %d, %d],\n", MIN_YEAR, MIN_YEAR + 1, MIN_YEAR + 2, MIN_YEAR + 3, MIN_YEAR + 4); 
+    fprintf(htmlFile, "tickmode: 'linear',\n");
+    fprintf(htmlFile, "dtick: 1,\n");
+    fprintf(htmlFile, "y: [%.2f, %.2f, %.2f,%.2f, %.2f],\n", totalExpensesUSD[0], totalExpensesUSD[1], totalExpensesUSD[2], totalExpensesUSD[3], totalExpensesUSD[4]); 
+    fprintf(htmlFile, "mode: 'lines',\n");
+    fprintf(htmlFile, "name: 'USD',\n");
+    fprintf(htmlFile, "line: {\n");
+    fprintf(htmlFile, "color: 'green'\n");
+    fprintf(htmlFile, "}\n");
+    fprintf(htmlFile, "},\n");
+
+    
+    fprintf(htmlFile, "{\n");
+    fprintf(htmlFile, "x: [%d, %d, %d, %d, %d],\n", MIN_YEAR, MIN_YEAR + 1, MIN_YEAR + 2, MIN_YEAR + 3, MIN_YEAR + 4); 
+    fprintf(htmlFile, "tickmode: 'linear',\n");
+    fprintf(htmlFile, "dtick: 1,\n");
+    fprintf(htmlFile, "y: [%.2f, %.2f, %.2f, %.2f, %.2f],\n", totalExpensesEUR[0], totalExpensesEUR[1], totalExpensesEUR[2],totalExpensesEUR[3], totalExpensesEUR[4] ); 
+    fprintf(htmlFile, "mode: 'lines',\n");
+    fprintf(htmlFile, "name: 'EUR',\n");
+    fprintf(htmlFile, "line: {\n");
+    fprintf(htmlFile, "color: 'red'\n");
+    fprintf(htmlFile, "}\n");
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, "];\n");
+    fprintf(htmlFile, "var layout = {\n");
+    fprintf(htmlFile, "xaxis: {\n");
+    fprintf(htmlFile, "title: 'Year',\n");
+    fprintf(htmlFile, "tickmode: 'linear',\n");
+    fprintf(htmlFile, "dtick: 1,\n");  
+    fprintf(htmlFile, "},\n");
+    fprintf(htmlFile, "yaxis: {\n");
+    fprintf(htmlFile, "title: 'Expense',\n");
+    fprintf(htmlFile, "}\n");
+    fprintf(htmlFile, "};\n");
+    fprintf(htmlFile, "Plotly.newPlot('plotly_graph', data, layout);\n");
+    fprintf(htmlFile, "</script>\n");
+
     fprintf(htmlFile, "</body>\n");
     fprintf(htmlFile, "</html>\n");
 
@@ -310,7 +418,7 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    generateHTMLTableForAccount(inputAccountId, htmlFile);
+    generateHTMLForAccount(expenses, numExpenses, inputAccountId, htmlFile);
 
     fclose(htmlFile);
 

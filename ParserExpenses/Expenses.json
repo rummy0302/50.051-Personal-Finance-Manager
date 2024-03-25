@@ -28,6 +28,216 @@
       "amount_spent": 15.50
     },
     {
+      "account_id": 89,
+      "date": "2024-03-04",
+      "description": "Gas Station",
+      "currency": "SGD",
+      "amount_spent": 48.75
+    },
+    {
+      "account_id": 89,
+      "date": "2024-04-04",
+      "description": "Flower Shop",
+      "currency": "SGD",
+      "amount_spent": 162.20
+    },
+    {
+      "account_id": 89,
+      "date": "2024-05-04",
+      "description": "Taxi Service",
+      "currency": "SGD",
+      "amount_spent": 56.30
+    },
+    {
+      "account_id": 89,
+      "date": "2024-06-04",
+      "description": "MRT",
+      "currency": "SGD",
+      "amount_spent": 85.40
+    },
+    {
+      "account_id": 89,
+      "date": "2024-07-04",
+      "description": "Gas Station",
+      "currency": "SGD",
+      "amount_spent": 50.60
+    },
+    {
+      "account_id": 89,
+      "date": "2024-08-04",
+      "description": "Flower Shop",
+      "currency": "SGD",
+      "amount_spent": 107.70
+    },
+    {
+      "account_id": 89,
+      "date": "2024-09-04",
+      "description": "MRT",
+      "currency": "SGD",
+      "amount_spent": 240.90
+    },
+    {
+      "account_id": 89,
+      "date": "2024-10-04",
+      "description": "Gas Station",
+      "currency": "SGD",
+      "amount_spent": 63.20
+    },
+    {
+      "account_id": 89,
+      "date": "2024-11-04",
+      "description": "Taxi Service",
+      "currency": "SGD",
+      "amount_spent": 31.80
+    },
+    {
+      "account_id": 89,
+      "date": "2024-12-04",
+      "description": "Flower Shop",
+      "currency": "SGD",
+      "amount_spent": 169.40
+    },
+    {
+      "account_id": 89,
+      "date": "2024-12-04",
+      "description": "Taxi Service",
+      "currency": "EUR",
+      "amount_spent": 47.85
+    },
+    {
+      "account_id": 89,
+      "date": "2024-06-04",
+      "description": "Gas Station",
+      "currency": "EUR",
+      "amount_spent": 156.20
+    },
+    {
+      "account_id": 89,
+      "date": "2024-04-04",
+      "description": "Flower Shop",
+      "currency": "EUR",
+      "amount_spent": 54.30
+    },
+    {
+      "account_id": 89,
+      "date": "2024-09-04",
+      "description": "MRT",
+      "currency": "EUR",
+      "amount_spent": 83.40
+    },
+    {
+      "account_id": 89,
+      "date": "2024-07-04",
+      "description": "Taxi Service",
+      "currency": "EUR",
+      "amount_spent": 49.60
+    },
+    {
+      "account_id": 89,
+      "date": "2024-02-04",
+      "description": "Gas Station",
+      "currency": "EUR",
+      "amount_spent": 102.30
+    },
+    {
+      "account_id": 89,
+      "date": "2024-07-04",
+      "description": "Flower Shop",
+      "currency": "EUR",
+      "amount_spent": 236.90
+    },
+    {
+      "account_id": 89,
+      "date": "2024-12-04",
+      "description": "MRT",
+      "currency": "EUR",
+      "amount_spent": 61.20
+    },
+    {
+      "account_id": 89,
+      "date": "2024-05-04",
+      "description": "Gas Station",
+      "currency": "EUR",
+      "amount_spent": 29.80
+    },
+    {
+      "account_id": 89,
+      "date": "2024-03-04",
+      "description": "Taxi Service",
+      "currency": "EUR",
+      "amount_spent": 165.40
+    },
+    {
+      "account_id": 89,
+      "date": "2024-12-04",
+      "description": "MRT",
+      "currency": "USD",
+      "amount_spent": 55.20
+    },
+    {
+      "account_id": 89,
+      "date": "2024-09-04",
+      "description": "Gas Station",
+      "currency": "USD",
+      "amount_spent": 175.80
+    },
+    {
+      "account_id": 89,
+      "date": "2024-08-04",
+      "description": "Flower Shop",
+      "currency": "USD",
+      "amount_spent": 58.90
+    },
+    {
+      "account_id": 89,
+      "date": "2024-07-04",
+      "description": "Taxi Service",
+      "currency": "USD",
+      "amount_spent": 87.40
+    },
+    {
+      "account_id": 89,
+      "date": "2024-06-04",
+      "description": "MRT",
+      "currency": "USD",
+      "amount_spent": 53.60
+    },
+    {
+      "account_id": 89,
+      "date": "2024-05-04",
+      "description": "Gas Station",
+      "currency": "USD",
+      "amount_spent": 112.30
+    },
+    {
+      "account_id": 89,
+      "date": "2024-04-04",
+      "description": "Flower Shop",
+      "currency": "USD",
+      "amount_spent": 246.90
+    },
+    {
+      "account_id": 89,
+      "date": "2024-03-04",
+      "description": "Taxi Service",
+      "currency": "USD",
+      "amount_spent": 67.20
+    },
+    {
+      "account_id": 89,
+      "date": "2024-02-04",
+      "description": "MRT",
+      "currency": "USD",
+      "amount_spent": 35.80
+    },
+    {
+      "account_id": 89,
+      "date": "2024-01-04",
+      "description": "Gas Station",
+      "currency": "USD",
+      "amount_spent": 178.40
+    },
+    {
       "account_id": 93,
       "date": "2021-03-01",
       "description": "Grocery Store",
@@ -54,6 +264,76 @@
       "description": "Car Wash",
       "currency": "EUR",
       "amount_spent": 35.00
+    },
+    {
+      "account_id": 89,
+      "date": "2023-03-04",
+      "description": "MRT",
+      "currency": "SGD",
+      "amount_spent": 48.25
+    },
+    {
+      "account_id": 89,
+      "date": "2023-04-04",
+      "description": "Gas Station",
+      "currency": "SGD",
+      "amount_spent": 178.50
+    },
+    {
+      "account_id": 89,
+      "date": "2023-05-04",
+      "description": "Flower Shop",
+      "currency": "SGD",
+      "amount_spent": 47.80
+    },
+    {
+      "account_id": 89,
+      "date": "2023-06-04",
+      "description": "Taxi Service",
+      "currency": "SGD",
+      "amount_spent": 74.30
+    },
+    {
+      "account_id": 89,
+      "date": "2023-07-04",
+      "description": "MRT",
+      "currency": "SGD",
+      "amount_spent": 51.20
+    },
+    {
+      "account_id": 89,
+      "date": "2023-08-04",
+      "description": "Flower Shop",
+      "currency": "SGD",
+      "amount_spent": 97.60
+    },
+    {
+      "account_id": 89,
+      "date": "2023-09-04",
+      "description": "Gas Station",
+      "currency": "SGD",
+      "amount_spent": 245.80
+    },
+    {
+      "account_id": 89,
+      "date": "2023-10-04",
+      "description": "MRT",
+      "currency": "SGD",
+      "amount_spent": 54.90
+    },
+    {
+      "account_id": 89,
+      "date": "2023-11-04",
+      "description": "Taxi Service",
+      "currency": "SGD",
+      "amount_spent": 25.10
+    },
+    {
+      "account_id": 89,
+      "date": "2023-12-04",
+      "description": "Gas Station",
+      "currency": "SGD",
+      "amount_spent": 147.60
     },
     {
       "account_id": 30,
@@ -112,6 +392,76 @@
       "amount_spent": 12.00
     },
     {
+      "account_id": 89,
+      "date": "2023-03-04",
+      "description": "Gas Station",
+      "currency": "USD",
+      "amount_spent": 43.75
+    },
+    {
+      "account_id": 89,
+      "date": "2023-04-04",
+      "description": "Flower Shop",
+      "currency": "USD",
+      "amount_spent": 156.20
+    },
+    {
+      "account_id": 89,
+      "date": "2023-05-04",
+      "description": "Taxi Service",
+      "currency": "USD",
+      "amount_spent": 52.40
+    },
+    {
+      "account_id": 89,
+      "date": "2023-06-04",
+      "description": "MRT",
+      "currency": "USD",
+      "amount_spent": 81.90
+    },
+    {
+      "account_id": 89,
+      "date": "2023-07-04",
+      "description": "Gas Station",
+      "currency": "USD",
+      "amount_spent": 47.60
+    },
+    {
+      "account_id": 89,
+      "date": "2023-02-04",
+      "description": "Flower Shop",
+      "currency": "USD",
+      "amount_spent": 102.30
+    },
+    {
+      "account_id": 89,
+      "date": "2023-01-04",
+      "description": "MRT",
+      "currency": "USD",
+      "amount_spent": 230.50
+    },
+    {
+      "account_id": 89,
+      "date": "2023-10-04",
+      "description": "Gas Station",
+      "currency": "USD",
+      "amount_spent": 59.80
+    },
+    {
+      "account_id": 89,
+      "date": "2023-11-04",
+      "description": "Taxi Service",
+      "currency": "USD",
+      "amount_spent": 28.10
+    },
+    {
+      "account_id": 89,
+      "date": "2023-12-04",
+      "description": "Flower Shop",
+      "currency": "USD",
+      "amount_spent": 162.70
+    },
+    {
       "account_id": 24,
       "date": "2022-04-10",
       "description": "Starbucks",
@@ -145,6 +495,76 @@
       "description": "Pharmacy",
       "currency": "USD",
       "amount_spent": 50.00
+    },
+    {
+      "account_id": 89,
+      "date": "2023-03-04",
+      "description": "Gas Station",
+      "currency": "EUR",
+      "amount_spent": 47.85
+    },
+    {
+      "account_id": 89,
+      "date": "2023-04-04",
+      "description": "Flower Shop",
+      "currency": "EUR",
+      "amount_spent": 159.20
+    },
+    {
+      "account_id": 89,
+      "date": "2023-05-04",
+      "description": "Taxi Service",
+      "currency": "EUR",
+      "amount_spent": 54.30
+    },
+    {
+      "account_id": 89,
+      "date": "2023-06-04",
+      "description": "MRT",
+      "currency": "EUR",
+      "amount_spent": 83.40
+    },
+    {
+      "account_id": 89,
+      "date": "2023-07-04",
+      "description": "Gas Station",
+      "currency": "EUR",
+      "amount_spent": 49.60
+    },
+    {
+      "account_id": 89,
+      "date": "2023-08-04",
+      "description": "Flower Shop",
+      "currency": "EUR",
+      "amount_spent": 105.70
+    },
+    {
+      "account_id": 89,
+      "date": "2023-09-04",
+      "description": "MRT",
+      "currency": "EUR",
+      "amount_spent": 236.90
+    },
+    {
+      "account_id": 89,
+      "date": "2023-02-04",
+      "description": "Gas Station",
+      "currency": "EUR",
+      "amount_spent": 61.20
+    },
+    {
+      "account_id": 89,
+      "date": "2023-01-04",
+      "description": "Taxi Service",
+      "currency": "EUR",
+      "amount_spent": 29.80
+    },
+    {
+      "account_id": 89,
+      "date": "2023-12-04",
+      "description": "Flower Shop",
+      "currency": "EUR",
+      "amount_spent": 165.40
     },
     {
       "account_id": 78,
@@ -222,6 +642,76 @@
       "description": "Barbershop",
       "currency": "USD",
       "amount_spent": 35.00
+    },
+    {
+      "account_id": 89,
+      "date": "2022-03-04",
+      "description": "Pizza Hut",
+      "currency": "SGD",
+      "amount_spent": 50.00
+    },
+    {
+      "account_id": 89,
+      "date": "2022-04-04",
+      "description": "Pizza Hut",
+      "currency": "SGD",
+      "amount_spent": 175.00
+    },
+    {
+      "account_id": 89,
+      "date": "2022-05-04",
+      "description": "Pizza Hut",
+      "currency": "SGD",
+      "amount_spent": 50.00
+    },
+    {
+      "account_id": 89,
+      "date": "2022-06-04",
+      "description": "Pizza Hut",
+      "currency": "SGD",
+      "amount_spent": 76.00
+    },
+    {
+      "account_id": 89,
+      "date": "2022-07-04",
+      "description": "Pizza Hut",
+      "currency": "SGD",
+      "amount_spent": 50.00
+    },
+    {
+      "account_id": 89,
+      "date": "2022-08-04",
+      "description": "Pizza Hut",
+      "currency": "SGD",
+      "amount_spent": 100.00
+    },
+    {
+      "account_id": 89,
+      "date": "2022-09-04",
+      "description": "Pizza Hut",
+      "currency": "SGD",
+      "amount_spent": 250.00
+    },
+    {
+      "account_id": 89,
+      "date": "2022-10-04",
+      "description": "Pizza Hut",
+      "currency": "SGD",
+      "amount_spent": 50.00
+    },
+    {
+      "account_id": 89,
+      "date": "2022-11-04",
+      "description": "Pizza Hut",
+      "currency": "SGD",
+      "amount_spent": 23.00
+    },
+    {
+      "account_id": 89,
+      "date": "2022-12-04",
+      "description": "Pizza Hut",
+      "currency": "SGD",
+      "amount_spent": 150.00
     },
     {
       "account_id": 78,
@@ -1334,6 +1824,76 @@
         "amount_spent": 40.00
       },
       {
+        "account_id": 89,
+        "date": "2020-03-04",
+        "description": "Pizza Hut",
+        "currency": "EUR",
+        "amount_spent": 40.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-04-04",
+        "description": "Pizza Hut",
+        "currency": "EUR",
+        "amount_spent": 75.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-05-04",
+        "description": "Auto Repair Shop",
+        "currency": "EUR",
+        "amount_spent": 174.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-06-04",
+        "description": "Pizza Hut",
+        "currency": "EUR",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-07-04",
+        "description": "Amazon",
+        "currency": "EUR",
+        "amount_spent": 150.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-08-04",
+        "description": "Pizza Hut",
+        "currency": "EUR",
+        "amount_spent": 75.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-09-04",
+        "description": "Pizza Hut",
+        "currency": "EUR",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-10-04",
+        "description": "MRT",
+        "currency": "EUR",
+        "amount_spent": 20.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-11-04",
+        "description": "McDonald's",
+        "currency": "EUR",
+        "amount_spent": 150.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-12-04",
+        "description": "Movie Theater",
+        "currency": "EUR",
+        "amount_spent": 76.00
+      },
+      {
         "account_id": 78,
         "date": "2020-01-10",
         "description": "Gas Station",
@@ -1362,6 +1922,76 @@
         "amount_spent": 20.00
       },
       {
+        "account_id": 89,
+        "date": "2022-12-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2022-11-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 175.00
+      },
+      {
+        "account_id": 89,
+        "date": "2022-10-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2022-09-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 76.00
+      },
+      {
+        "account_id": 89,
+        "date": "2022-08-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2022-07-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 100.00
+      },
+      {
+        "account_id": 89,
+        "date": "2022-06-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 250.00
+      },
+      {
+        "account_id": 89,
+        "date": "2022-05-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2022-04-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 23.00
+      },
+      {
+        "account_id": 89,
+        "date": "2022-03-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 150.00
+      },
+      {
         "account_id": 78,
         "date": "2024-05-30",
         "description": "Clothing Store",
@@ -1374,6 +2004,76 @@
         "description": "Coffee Shop",
         "currency": "EUR",
         "amount_spent": 5.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-03-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-04-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 175.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-05-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-06-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 76.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-07-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-08-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 100.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-09-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 250.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-10-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-11-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 23.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-12-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 150.00
       },
       {
         "account_id": 78,
@@ -1390,6 +2090,76 @@
         "amount_spent": 45.00
       },
       {
+        "account_id": 89,
+        "date": "2020-12-04",
+        "description": "Pizza Hut",
+        "currency": "SGD",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-11-04",
+        "description": "Pizza Hut",
+        "currency": "SGD",
+        "amount_spent": 175.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-10-04",
+        "description": "Pizza Hut",
+        "currency": "SGD",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-09-04",
+        "description": "Pizza Hut",
+        "currency": "SGD",
+        "amount_spent": 76.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-08-04",
+        "description": "Pizza Hut",
+        "currency": "SGD",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-07-04",
+        "description": "Pizza Hut",
+        "currency": "SGD",
+        "amount_spent": 100.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-06-04",
+        "description": "Pizza Hut",
+        "currency": "SGD",
+        "amount_spent": 250.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-05-04",
+        "description": "Pizza Hut",
+        "currency": "SGD",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-04-04",
+        "description": "Pizza Hut",
+        "currency": "SGD",
+        "amount_spent": 23.00
+      },
+      {
+        "account_id": 89,
+        "date": "2020-03-04",
+        "description": "Pizza Hut",
+        "currency": "SGD",
+        "amount_spent": 150.00
+      },
+      {
         "account_id": 78,
         "date": "2024-09-20",
         "description": "Electronics Store",
@@ -1402,6 +2172,49 @@
         "description": "Restaurant",
         "currency": "USD",
         "amount_spent": 35.00
+      },
+      {
+        "account_id": 89,
+        "date": "2021-01-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 50.00
+      },
+      {
+        "account_id": 89,
+        "date": "2021-01-04",
+        "description": "Pizza Hut",
+        "currency": "SGD",
+        "amount_spent": 20.00
+      },
+      {
+        "account_id": 89,
+        "date": "2021-01-04",
+        "description": "Pizza Hut",
+        "currency": "EUR",
+        "amount_spent": 100.00
+      },
+      {
+        "account_id": 89,
+        "date": "2021-02-04",
+        "description": "Pizza Hut",
+        "currency": "EUR",
+        "amount_spent": 150.00
+      },
+      {
+        "account_id": 89,
+        "date": "2021-02-04",
+        "description": "Pizza Hut",
+        "currency": "SGD",
+        "amount_spent": 75.00
+      },
+      {
+        "account_id": 89,
+        "date": "2021-02-04",
+        "description": "Pizza Hut",
+        "currency": "USD",
+        "amount_spent": 50.00
       }
+      
     ]
     

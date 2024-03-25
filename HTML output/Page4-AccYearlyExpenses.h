@@ -5,7 +5,7 @@
 #include <stdio.h>
 #define MAX_ACCOUNTS 100
 
-
+#define MAX_MONTHS 13 /* Expense data for 12 months of the year */
 
 
 typedef struct {
@@ -46,6 +46,6 @@ typedef struct {
 
 void categorizeExpensesByYear(Expenses *expenses, int numExpenses, int year) ;
 
-void generateHTMLTableForAccountYear(int accountId, FILE *htmlFile, int year);
+void generateHTMLForAccountYear(Expenses *expenses, int numExpenses, int accountId, FILE *htmlFile, int year);
 
 #endif /* CUR_EXP_TABLE_PAGE_H */
