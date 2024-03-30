@@ -3,8 +3,7 @@
 #include <string.h>
 #include "FSM_Input.h"
 
-/*This FSM parses and processes data from two input JSON files representing accounts and expenses respectively.
-It ensures that both files are successfully parsed and processed before moving to the COMPLETED state*/
+/*This file parses and processes data from two input JSON files representing accounts and expenses respectively.*/
 
 void initInputFSM(InputFSM *inputFsm)
 {
@@ -22,55 +21,61 @@ void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
         switch (inputFSM->currentState)
         {
         case INITIAL_STATE:
+        {
             inputFSM->accountsJson = parseAccountsJSONfile(accountFile);
             inputFSM->expensesJson = parseExpensesJSONfile(expenseFile);
 
             if (inputFSM->accountsJson != NULL && inputFSM->expensesJson != NULL)
             {
-                printf("Successfully parsed Accounts.json and Expenses.json\n");
-                // Transition to the next state
+                printf("Successfully parsed json files to cJSON objects \n");
+                /*Transition to the next state*/
                 inputFSM->currentState = READING_ACCOUNT;
             }
-            // Else it would stay in Idle state
+            /*Else stay in Initial state*/
 
             break;
+        }
 
         case READING_ACCOUNT:
+        {
             int numAccounts;
             inputFSM->accounts = processAccountsData(inputFSM->accountsJson, &numAccounts);
             if (inputFSM->accounts != NULL)
             {
-                printf("Successfully processed accounts\n");
-                // Transition to the next state
+                printf("Successfully processed Accounts cJSON object into Accounts array\n");
+                /*Transition to the next state*/
                 inputFSM->currentState = READING_EXPENSES;
             }
             else
             {
-                printf("Error processing accounts\n");
+                printf("Error processing Accounts\n");
                 inputFSM->currentState = INITIAL_STATE;
             }
             break;
+        }
 
         case READING_EXPENSES:
+        {
             int numExpenses;
             inputFSM->expenses = processExpensesData(inputFSM->expensesJson, &numExpenses);
 
             if (inputFSM->expenses != NULL)
             {
-                printf("Successfully processed expenses\n");
-                // Transition to the next state
+                printf("Successfully processed Expenses cJSON object into Expenses array\n");
+                /*Transition to the next state*/
                 inputFSM->currentState = COMPLETED;
             }
             else
             {
-                printf("Error processing expenses\n");
+                printf("Error processing Expenses\n");
                 inputFSM->currentState = INITIAL_STATE;
             }
             break;
 
         case COMPLETED:
-            // Accepting state,exiting the loop
+            /*Accepting state,exiting the loop*/
             break;
+        }
         }
     }
 }
@@ -81,16 +86,16 @@ int runInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
     return inputFSM->currentState == COMPLETED;
 }
 
-// Print all the information from accounts and expenses
+/* Print all the information from accounts and expenses */
 void printAccountsAndExpenses(InputFSM *inputFSM)
 {
     if (inputFSM->accounts != NULL)
     {
-        printf("Accounts:\n");
-
         int numAccounts;
+        int i;
+        printf("Accounts:\n");
         numAccounts = cJSON_GetArraySize(inputFSM->accountsJson);
-        for (int i = 0; i < numAccounts; ++i)
+        for (i = 0; i < numAccounts; ++i)
         {
             printf("Account ID: %d\n", inputFSM->accounts[i].account_id);
             printf("User ID: %d\n", inputFSM->accounts[i].user_id);
@@ -102,12 +107,13 @@ void printAccountsAndExpenses(InputFSM *inputFSM)
     }
     if (inputFSM->expenses != NULL)
     {
+        int numExpenses;
+        int i;
         printf("Expenses:\n");
 
-        int numExpenses;
         numExpenses = cJSON_GetArraySize(inputFSM->expensesJson);
 
-        for (int i = 0; i < numExpenses; i++)
+        for (i = 0; i < numExpenses; i++)
         {
             printf("Account ID: %d\n", inputFSM->expenses[i].account_id);
             printf("Date: %s\n", inputFSM->expenses[i].date);
@@ -121,17 +127,19 @@ void printAccountsAndExpenses(InputFSM *inputFSM)
 
 int main(int argc, char const *argv[])
 {
+    char *accountFile;
+    char *expenseFile;
     InputFSM inputFSM;
-    initInputFSM(&inputFSM); // Initialize the fsm
+    initInputFSM(&inputFSM); /*Initialize the fsm*/
 
-    char *accountFile = "ParserAccounts/Accounts.json";
-    char *expenseFile = "ParserExpenses/Expenses.json";
+    accountFile = "ParserAccounts/Accounts.json";
+    expenseFile = "ParserExpenses/Expenses.json";
 
-    // Run the fsm to see if it is in the accepting state(successfully parsing the 2 files)
+    /*Run the fsm to see if it is in the accepting state(successfully parsing the 2 files)*/
     if (runInputState(&inputFSM, accountFile, expenseFile))
     {
-        printf("Successfully processing Accounts and Expenses");
-        printAccountsAndExpenses(&inputFSM);
+        printf("Successfully processing %s and %s", accountFile, expenseFile);
+        /*printAccountsAndExpenses(&inputFSM);*/
     }
     else
         printf("Failed in processing,please try again");

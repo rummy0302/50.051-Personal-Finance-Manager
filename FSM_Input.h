@@ -11,7 +11,7 @@ typedef enum
     INITIAL_STATE,
     READING_ACCOUNT,
     READING_EXPENSES,
-    COMPLETED,
+    COMPLETED
 } InputState;
 
 typedef struct
@@ -27,4 +27,4 @@ void initInputFSM(InputFSM *inputFsm);
 void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile);
 int runInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile);
 
-#endif // FSM_INPUT_H
+#endif /* FSM_INPUT_H */
