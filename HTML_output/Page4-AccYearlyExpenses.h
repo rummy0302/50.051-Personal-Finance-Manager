@@ -1,35 +1,21 @@
-#ifndef CUR_EXP_TABLE_PAGE_H
-#define CUR_EXP_TABLE_PAGE_H
+#ifndef PAGE4_SOMEOTHERHEADER_H
+#define PAGE4_SOMEOTHERHEADER_H
 #include "../ParserExpenses/ParserExpenses.h"
 #include "../ParserAccounts/ParserAccounts.h"
 #include <stdio.h>
-#define MAX_ACCOUNTS 100
 
 #define MAX_MONTHS 13 /* Expense data for 12 months of the year */
 
-
-typedef struct {
+typedef struct
+{
     double totalFoodYear;
     double totalTransportYear;
     double totalShoppingYear;
     double totalOthersYear;
 } AccountTotalsYear;
 
-
-typedef struct {
-    char shopName[100];
-    char category[20];
-} Shop;
-
-
-typedef struct {
-    double totalSGD;
-    double totalUSD;
-    double totalEUR;
-} Currency;
-
-
-typedef struct {
+typedef struct
+{
     double totalFoodSGDYear;
     double totalTransportSGDYear;
     double totalShoppingSGDYear;
@@ -44,8 +30,12 @@ typedef struct {
     double totalOthersEURYear;
 } AccountExpensesYear;
 
-void categorizeExpensesByYear(Expenses *expenses, int numExpenses, int year) ;
+void categorizeExpensesByYear(Expenses *expenses, int numExpenses, int year);
 
 void generateHTMLForAccountYear(Expenses *expenses, int numExpenses, int accountId, FILE *htmlFile, int year);
 
-#endif /* CUR_EXP_TABLE_PAGE_H */
+int *getYearsFromExpenses(Expenses *expenses, int numExpenses, int accountId, int *numYears);
+
+int isYearInList(int *years, int numYears, int year);
+
+#endif /* PAGE4_SOMEOTHERHEADER_H */

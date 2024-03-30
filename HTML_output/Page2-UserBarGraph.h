@@ -3,21 +3,15 @@
 #include "../ParserExpenses/ParserExpenses.h"
 #include "../ParserAccounts/ParserAccounts.h"
 
-#define MAX_ACCOUNTS 10
 #define MAX_USERS 50
 
-
-typedef struct {
+typedef struct
+{
     double totalExpenseInSGD;
 } ExpenseTotalsSGD;
 
-
-
 void calculateExpenseTotal(Expenses *expenses, int numExpenses);
-void printAllExpenseTotals(int userIdInput, Expenses *expenses, int numExpenses, Account *accounts, int numAccounts);
+void printAllExpenseTotals(int userIdInput, Expenses *expenses, int numExpenses, Account *accounts, int numAccounts, FILE *htmlFile);
 void printExpenseTotal(int accountId, double totalExpenseInSGD);
 
-
 #endif /* PAGE2__USERBARGRAPH_H */
-
-

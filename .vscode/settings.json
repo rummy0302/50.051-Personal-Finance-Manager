@@ -1,9 +1,13 @@
 {
-    "files.associations": {
-        "cjson.h": "c",
-        "stdio.h": "c",
-        "parserexpenses.h": "c",
-        "parseraccounts.h": "c",
-        "page3-accoverallexpenses.h": "c"
-    }
+  "files.associations": {
+    "cjson.h": "c",
+    "stdio.h": "c",
+    "parserexpenses.h": "c",
+    "parseraccounts.h": "c",
+    "page3-accoverallexpenses.h": "c",
+    "page2-userbargraph.h": "c",
+    "page4-accyearlyexpenses.h": "c",
+    "page3and4-common.h": "c",
+    "unistd.h": "c"
+  }
 }

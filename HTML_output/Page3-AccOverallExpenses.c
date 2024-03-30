@@ -5,10 +5,11 @@
 #include "Page3-AccOverallExpenses.h"
 #include "../ParserExpenses/ParserExpenses.h"
 #include "../ParserAccounts/ParserAccounts.h"
+#include "Common.h"
 
-/* This file is to generate the account expense graphs (total expense in SGD, USD, EUR) for all years for each account - 
+/* This file is to generate the account expense graphs (total expense in SGD, USD, EUR) for all years for each account -
     1. Calculates total expense in SGD, EUR, USD for each account for each year
-    2. Displays a scatter plot showing the total expense in SGD, EUR, USD for each account for each year 
+    2. Displays a scatter plot showing the total expense in SGD, EUR, USD for each account for each year
 */
 
 #ifdef _WIN32
@@ -17,15 +18,11 @@
 #include <unistd.h>
 #endif
 
-typedef struct {
-    int account_id;
-    int user_id;
-} AccountInfo;
+AccountInfo accountInfoPage3[MAX_ACCOUNTS];
+int numAccountsPage3 = 0;
 
-AccountInfo accountInfo[MAX_ACCOUNTS];
-int numAccounts = 0;
-
-typedef enum {
+typedef enum
+{
     SGD,
     USD,
     EUR,
@@ -33,16 +30,18 @@ typedef enum {
     UNKNOWN_CURRENCY
 } CurrencyType;
 
-const char* currencyStrings[NUM_CURRENCIES] = {
+const char *currencyStrings[NUM_CURRENCIES] = {
     "SGD",
     "USD",
-    "EUR"
-};
+    "EUR"};
 
-CurrencyType getCurrencyType(const char* currencyStr) {
+CurrencyType getCurrencyType(const char *currencyStr)
+{
     int i;
-    for (i = 0; i < NUM_CURRENCIES; i++) {
-        if (strcmp(currencyStr, currencyStrings[i]) == 0) {
+    for (i = 0; i < NUM_CURRENCIES; i++)
+    {
+        if (strcmp(currencyStr, currencyStrings[i]) == 0)
+        {
             return (CurrencyType)i;
         }
     }
@@ -103,96 +102,122 @@ Shop shops[] = {
     {"Cosmetics Store", "Shopping"},
     {"Bus Fare", "Transport"},
     {"Taxi Ride", "Transport"},
-    {"Clothing Store", "Shopping"}
-};
+    {"Clothing Store", "Shopping"}};
 
 AccountExpenses accountTotals[MAX_ACCOUNTS];
 
-
-void categorizeExpenses(Expenses *expenses, int numExpenses) {
+void categorizeExpenses(Expenses *expenses, int numExpenses)
+{
     int i, j;
-
 
     memset(accountTotals, 0, sizeof(accountTotals));
 
-    for (i = 0; i < numExpenses; i++) {
+    for (i = 0; i < numExpenses; i++)
+    {
         double amount = expenses[i].amount_spent;
         int found = 0;
 
-   
-        for (j = 0; j < sizeof(shops) / sizeof(shops[0]); j++) {
-            if (strcmp(expenses[i].description, shops[j].shopName) == 0) {
+        for (j = 0; j < sizeof(shops) / sizeof(shops[0]); j++)
+        {
+            if (strcmp(expenses[i].description, shops[j].shopName) == 0)
+            {
                 found = 1;
                 break;
             }
         }
 
-     
-        if (!found) {
-      
+        if (!found)
+        {
+
             CurrencyType currency = getCurrencyType(expenses[i].currency);
 
-            switch (currency) {
-                case SGD:
+            switch (currency)
+            {
+            case SGD:
+                accountTotals[expenses[i].account_id].totalOthersSGD += amount;
+                break;
+            case USD:
+                accountTotals[expenses[i].account_id].totalOthersUSD += amount;
+                break;
+            case EUR:
+                accountTotals[expenses[i].account_id].totalOthersEUR += amount;
+                break;
+            default:
+                accountTotals[expenses[i].account_id].totalOthersSGD += amount;
+                break;
+            }
+        }
+        else
+        {
+
+            CurrencyType currency = getCurrencyType(expenses[i].currency);
+
+            switch (currency)
+            {
+            case SGD:
+                if (strcmp(shops[j].category, "Food") == 0)
+                {
+                    accountTotals[expenses[i].account_id].totalFoodSGD += amount;
+                }
+                else if (strcmp(shops[j].category, "Transport") == 0)
+                {
+                    accountTotals[expenses[i].account_id].totalTransportSGD += amount;
+                }
+                else if (strcmp(shops[j].category, "Shopping") == 0)
+                {
+                    accountTotals[expenses[i].account_id].totalShoppingSGD += amount;
+                }
+                else
+                {
                     accountTotals[expenses[i].account_id].totalOthersSGD += amount;
-                    break;
-                case USD:
+                }
+                break;
+            case USD:
+                if (strcmp(shops[j].category, "Food") == 0)
+                {
+                    accountTotals[expenses[i].account_id].totalFoodUSD += amount;
+                }
+                else if (strcmp(shops[j].category, "Transport") == 0)
+                {
+                    accountTotals[expenses[i].account_id].totalTransportUSD += amount;
+                }
+                else if (strcmp(shops[j].category, "Shopping") == 0)
+                {
+                    accountTotals[expenses[i].account_id].totalShoppingUSD += amount;
+                }
+                else
+                {
                     accountTotals[expenses[i].account_id].totalOthersUSD += amount;
-                    break;
-                case EUR:
+                }
+                break;
+            case EUR:
+                if (strcmp(shops[j].category, "Food") == 0)
+                {
+                    accountTotals[expenses[i].account_id].totalFoodEUR += amount;
+                }
+                else if (strcmp(shops[j].category, "Transport") == 0)
+                {
+                    accountTotals[expenses[i].account_id].totalTransportEUR += amount;
+                }
+                else if (strcmp(shops[j].category, "Shopping") == 0)
+                {
+                    accountTotals[expenses[i].account_id].totalShoppingEUR += amount;
+                }
+                else
+                {
                     accountTotals[expenses[i].account_id].totalOthersEUR += amount;
-                    break;
-                default:
-                    accountTotals[expenses[i].account_id].totalOthersSGD += amount;
-                    break;
-    }
-        } else {
- 
-            CurrencyType currency = getCurrencyType(expenses[i].currency);
-
-            switch (currency) {
-                case SGD:
-                    if (strcmp(shops[j].category, "Food") == 0) {
-                        accountTotals[expenses[i].account_id].totalFoodSGD += amount;
-                    } else if (strcmp(shops[j].category, "Transport") == 0) {
-                        accountTotals[expenses[i].account_id].totalTransportSGD += amount;
-                    } else if (strcmp(shops[j].category, "Shopping") == 0) {
-                        accountTotals[expenses[i].account_id].totalShoppingSGD += amount;
-                    } else {
-                        accountTotals[expenses[i].account_id].totalOthersSGD += amount;
-                    }
-                    break;
-                case USD:
-                    if (strcmp(shops[j].category, "Food") == 0) {
-                        accountTotals[expenses[i].account_id].totalFoodUSD += amount;
-                    } else if (strcmp(shops[j].category, "Transport") == 0) {
-                        accountTotals[expenses[i].account_id].totalTransportUSD += amount;
-                    } else if (strcmp(shops[j].category, "Shopping") == 0) {
-                        accountTotals[expenses[i].account_id].totalShoppingUSD += amount;
-                    } else {
-                        accountTotals[expenses[i].account_id].totalOthersUSD += amount;
-                    }
-                    break;
-                case EUR:
-                    if (strcmp(shops[j].category, "Food") == 0) {
-                        accountTotals[expenses[i].account_id].totalFoodEUR += amount;
-                    } else if (strcmp(shops[j].category, "Transport") == 0) {
-                        accountTotals[expenses[i].account_id].totalTransportEUR += amount;
-                    } else if (strcmp(shops[j].category, "Shopping") == 0) {
-                        accountTotals[expenses[i].account_id].totalShoppingEUR += amount;
-                    } else {
-                        accountTotals[expenses[i].account_id].totalOthersEUR += amount;
-                    }
-                    break;
-                default:
-                    accountTotals[expenses[i].account_id].totalOthersSGD += amount;
-                    break;
+                }
+                break;
+            default:
+                accountTotals[expenses[i].account_id].totalOthersSGD += amount;
+                break;
             }
         }
     }
 }
 
-void generateHTMLForAccount(Expenses *expenses, int numExpenses,int accountId, FILE *htmlFile) {
+void generateHTMLForAccount(Expenses *expenses, int numExpenses, int accountId, FILE *htmlFile)
+{
     double totalFoodSGD, totalFoodUSD, totalFoodEUR;
     double totalTransportSGD, totalTransportUSD, totalTransportEUR;
     double totalShoppingSGD, totalShoppingUSD, totalShoppingEUR;
@@ -201,7 +226,7 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses,int accountId, F
     int i;
 
     /* Define arrays to store the total expense of each year for each currency : */
-    double totalExpensesSGD[MAX_YEARS] = {0}; 
+    double totalExpensesSGD[MAX_YEARS] = {0};
     double totalExpensesUSD[MAX_YEARS] = {0};
     double totalExpensesEUR[MAX_YEARS] = {0};
 
@@ -243,30 +268,30 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses,int accountId, F
 
     fprintf(htmlFile, "<tr>\n");
     fprintf(htmlFile, "<td>Food</td>\n");
-    fprintf(htmlFile, "<td>%.2lf</td>\n", totalFoodSGD);
-    fprintf(htmlFile, "<td>%.2lf</td>\n", totalFoodUSD);
-    fprintf(htmlFile, "<td>%.2lf</td>\n", totalFoodEUR);
+    fprintf(htmlFile, "<td>%.2f</td>\n", totalFoodSGD);
+    fprintf(htmlFile, "<td>%.2f</td>\n", totalFoodUSD);
+    fprintf(htmlFile, "<td>%.2f</td>\n", totalFoodEUR);
     fprintf(htmlFile, "</tr>\n");
 
     fprintf(htmlFile, "<tr>\n");
     fprintf(htmlFile, "<td>Transport</td>\n");
-    fprintf(htmlFile, "<td>%.2lf</td>\n", totalTransportSGD);
-    fprintf(htmlFile, "<td>%.2lf</td>\n", totalTransportUSD);
-    fprintf(htmlFile, "<td>%.2lf</td>\n", totalTransportEUR);
+    fprintf(htmlFile, "<td>%.2f</td>\n", totalTransportSGD);
+    fprintf(htmlFile, "<td>%.2f</td>\n", totalTransportUSD);
+    fprintf(htmlFile, "<td>%.2f</td>\n", totalTransportEUR);
     fprintf(htmlFile, "</tr>\n");
 
     fprintf(htmlFile, "<tr>\n");
     fprintf(htmlFile, "<td>Shopping</td>\n");
-    fprintf(htmlFile, "<td>%.2lf</td>\n", totalShoppingSGD);
-    fprintf(htmlFile, "<td>%.2lf</td>\n", totalShoppingUSD);
-    fprintf(htmlFile, "<td>%.2lf</td>\n", totalShoppingEUR);
+    fprintf(htmlFile, "<td>%.2f</td>\n", totalShoppingSGD);
+    fprintf(htmlFile, "<td>%.2f</td>\n", totalShoppingUSD);
+    fprintf(htmlFile, "<td>%.2f</td>\n", totalShoppingEUR);
     fprintf(htmlFile, "</tr>\n");
 
     fprintf(htmlFile, "<tr>\n");
     fprintf(htmlFile, "<td>Others</td>\n");
-    fprintf(htmlFile, "<td>%.2lf</td>\n", totalOthersSGD);
-    fprintf(htmlFile, "<td>%.2lf</td>\n", totalOthersUSD);
-    fprintf(htmlFile, "<td>%.2lf</td>\n", totalOthersEUR);
+    fprintf(htmlFile, "<td>%.2f</td>\n", totalOthersSGD);
+    fprintf(htmlFile, "<td>%.2f</td>\n", totalOthersUSD);
+    fprintf(htmlFile, "<td>%.2f</td>\n", totalOthersEUR);
     fprintf(htmlFile, "</tr>\n");
 
     fprintf(htmlFile, "</table>\n");
@@ -277,41 +302,42 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses,int accountId, F
 
     /* Iterate through the Expenses.json file and get the total expense for each year for each currency : */
 
-    for (i = 0; i < numExpenses; i++) {
+    for (i = 0; i < numExpenses; i++)
+    {
         int expenseYear = atoi(strtok(expenses[i].date, "-"));
 
         CurrencyType currency = getCurrencyType(expenses[i].currency);
 
-        if (expenses[i].account_id == accountId){ /* Check if the account Id matches the account Id provided by the user */
+        if (expenses[i].account_id == accountId)
+        { /* Check if the account Id matches the account Id provided by the user */
 
-                    switch (currency) {
-                        case SGD:
-                            totalExpensesSGD[expenseYear - MIN_YEAR] += expenses[i].amount_spent;
-                            break;
-                        case USD:
-                            totalExpensesUSD[expenseYear - MIN_YEAR] += expenses[i].amount_spent;
-                            break;
-                        case EUR:
-                            totalExpensesEUR[expenseYear - MIN_YEAR] += expenses[i].amount_spent;
-                            break;
-                        default:
-                            break;
-                    }
+            switch (currency)
+            {
+            case SGD:
+                totalExpensesSGD[expenseYear - MIN_YEAR] += expenses[i].amount_spent;
+                break;
+            case USD:
+                totalExpensesUSD[expenseYear - MIN_YEAR] += expenses[i].amount_spent;
+                break;
+            case EUR:
+                totalExpensesEUR[expenseYear - MIN_YEAR] += expenses[i].amount_spent;
+                break;
+            default:
+                break;
+            }
         }
     }
 
-    
     fprintf(htmlFile, "<script>\n");
     fprintf(htmlFile, "var data = [\n");
 
     /* Plot the scatter plot with Year vs Expense amount with 3 different lines for each currency : */
 
-    
     fprintf(htmlFile, "{\n");
-    fprintf(htmlFile, "x: [%d, %d, %d, %d, %d],\n", MIN_YEAR, MIN_YEAR + 1, MIN_YEAR + 2, MIN_YEAR + 3, MIN_YEAR + 4); 
+    fprintf(htmlFile, "x: [%d, %d, %d, %d, %d],\n", MIN_YEAR, MIN_YEAR + 1, MIN_YEAR + 2, MIN_YEAR + 3, MIN_YEAR + 4);
     fprintf(htmlFile, "tickmode: 'linear',\n");
     fprintf(htmlFile, "dtick: 1,\n");
-    fprintf(htmlFile, "y: [%.2f, %.2f, %.2f, %.2f, %.2f],\n", totalExpensesSGD[0], totalExpensesSGD[1], totalExpensesSGD[2], totalExpensesSGD[3], totalExpensesSGD[4]); 
+    fprintf(htmlFile, "y: [%.2f, %.2f, %.2f, %.2f, %.2f],\n", totalExpensesSGD[0], totalExpensesSGD[1], totalExpensesSGD[2], totalExpensesSGD[3], totalExpensesSGD[4]);
     fprintf(htmlFile, "mode: 'lines',\n");
     fprintf(htmlFile, "name: 'SGD',\n");
     fprintf(htmlFile, "line: {\n");
@@ -319,12 +345,11 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses,int accountId, F
     fprintf(htmlFile, "}\n");
     fprintf(htmlFile, "},\n");
 
-    
     fprintf(htmlFile, "{\n");
-    fprintf(htmlFile, "x: [%d, %d, %d, %d, %d],\n", MIN_YEAR, MIN_YEAR + 1, MIN_YEAR + 2, MIN_YEAR + 3, MIN_YEAR + 4); 
+    fprintf(htmlFile, "x: [%d, %d, %d, %d, %d],\n", MIN_YEAR, MIN_YEAR + 1, MIN_YEAR + 2, MIN_YEAR + 3, MIN_YEAR + 4);
     fprintf(htmlFile, "tickmode: 'linear',\n");
     fprintf(htmlFile, "dtick: 1,\n");
-    fprintf(htmlFile, "y: [%.2f, %.2f, %.2f,%.2f, %.2f],\n", totalExpensesUSD[0], totalExpensesUSD[1], totalExpensesUSD[2], totalExpensesUSD[3], totalExpensesUSD[4]); 
+    fprintf(htmlFile, "y: [%.2f, %.2f, %.2f,%.2f, %.2f],\n", totalExpensesUSD[0], totalExpensesUSD[1], totalExpensesUSD[2], totalExpensesUSD[3], totalExpensesUSD[4]);
     fprintf(htmlFile, "mode: 'lines',\n");
     fprintf(htmlFile, "name: 'USD',\n");
     fprintf(htmlFile, "line: {\n");
@@ -332,12 +357,11 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses,int accountId, F
     fprintf(htmlFile, "}\n");
     fprintf(htmlFile, "},\n");
 
-    
     fprintf(htmlFile, "{\n");
-    fprintf(htmlFile, "x: [%d, %d, %d, %d, %d],\n", MIN_YEAR, MIN_YEAR + 1, MIN_YEAR + 2, MIN_YEAR + 3, MIN_YEAR + 4); 
+    fprintf(htmlFile, "x: [%d, %d, %d, %d, %d],\n", MIN_YEAR, MIN_YEAR + 1, MIN_YEAR + 2, MIN_YEAR + 3, MIN_YEAR + 4);
     fprintf(htmlFile, "tickmode: 'linear',\n");
     fprintf(htmlFile, "dtick: 1,\n");
-    fprintf(htmlFile, "y: [%.2f, %.2f, %.2f, %.2f, %.2f],\n", totalExpensesEUR[0], totalExpensesEUR[1], totalExpensesEUR[2],totalExpensesEUR[3], totalExpensesEUR[4] ); 
+    fprintf(htmlFile, "y: [%.2f, %.2f, %.2f, %.2f, %.2f],\n", totalExpensesEUR[0], totalExpensesEUR[1], totalExpensesEUR[2], totalExpensesEUR[3], totalExpensesEUR[4]);
     fprintf(htmlFile, "mode: 'lines',\n");
     fprintf(htmlFile, "name: 'EUR',\n");
     fprintf(htmlFile, "line: {\n");
@@ -350,7 +374,7 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses,int accountId, F
     fprintf(htmlFile, "xaxis: {\n");
     fprintf(htmlFile, "title: 'Year',\n");
     fprintf(htmlFile, "tickmode: 'linear',\n");
-    fprintf(htmlFile, "dtick: 1,\n");  
+    fprintf(htmlFile, "dtick: 1,\n");
     fprintf(htmlFile, "},\n");
     fprintf(htmlFile, "yaxis: {\n");
     fprintf(htmlFile, "title: 'Expense',\n");
@@ -361,48 +385,44 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses,int accountId, F
 
     fprintf(htmlFile, "</body>\n");
     fprintf(htmlFile, "</html>\n");
-
 }
 
-
-
-int main(int argc, char **argv) {
+/* int main(int argc, char **argv)
+{
     int numExpenses;
     Expenses *expenses;
     cJSON *json;
     FILE *htmlFile;
     int inputAccountId, userId;
     int i;
-    cJSON *accountsJson ;
+    cJSON *accountsJson;
     Account *accountsData;
 
-
     accountsJson = parseAccountsJSONfile("../ParserAccounts/Accounts.json");
-    if (accountsJson == NULL) {
+    if (accountsJson == NULL)
+    {
         printf("Error: Failed to parse Accounts.json\n");
         return 1;
     }
 
-
-    accountsData = processAccountsData(accountsJson, &numAccounts);
+    accountsData = processAccountsData(accountsJson, &numAccountsPage3);
     cJSON_Delete(accountsJson);
 
-   
-    for (i = 0; i < numAccounts; i++) {
-        accountInfo[i].account_id = accountsData[i].account_id;
-        accountInfo[i].user_id = accountsData[i].user_id;
+    for (i = 0; i < numAccountsPage3; i++)
+    {
+        accountInfoPage3[i].account_id = accountsData[i].account_id;
+        accountInfoPage3[i].user_id = accountsData[i].user_id;
     }
     free(accountsData);
 
-    
     printf("Enter the user ID: ");
     scanf("%d", &userId);
     printf("Enter the account ID: ");
     scanf("%d", &inputAccountId);
 
- 
     json = parseExpensesJSONfile("../ParserExpenses/Expenses.json");
-    if (json == NULL) {
+    if (json == NULL)
+    {
         printf("Error: Failed to parse Expenses.json\n");
         return 1;
     }
@@ -413,7 +433,8 @@ int main(int argc, char **argv) {
     categorizeExpenses(expenses, numExpenses);
 
     htmlFile = fopen("Page3-AccOverallExpenses.html", "w");
-    if (htmlFile == NULL) {
+    if (htmlFile == NULL)
+    {
         printf("Error: Unable to create HTML file\n");
         return 1;
     }
@@ -427,12 +448,12 @@ int main(int argc, char **argv) {
 #ifdef _WIN32
     system("start Page3-AccOverallExpenses.html");
 #elif __linux__ || __APPLE__
-    #ifdef __linux__
+#ifdef __linux__
     system("xdg-open Page3-AccOverallExpenses.html");
-    #elif __APPLE__
+#elif __APPLE__
     system("open Page3-AccOverallExpenses.html");
-    #endif
+#endif
 #endif
 
     return 0;
-}
+}*/
