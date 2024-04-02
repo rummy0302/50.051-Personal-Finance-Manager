@@ -191,7 +191,61 @@ void printAllExpenseTotals(int userIdInput, Expenses *expenses, int numExpenses,
 
     /* Call plotly library from js to render the graphs : */
     fprintf(htmlFile, "<script src=\"https://cdn.plot.ly/plotly-latest.min.js\"></script>\n");
+
+    /* CSS of head bar */
+    fprintf(htmlFile, "<style>\n");
+    fprintf(htmlFile, "body {\n");
+    fprintf(htmlFile, "    font-family: Arial, sans-serif;\n");
+    fprintf(htmlFile, "    margin: 0;\n");
+    fprintf(htmlFile, "    padding: 0;\n");
+    fprintf(htmlFile, "}\n");
+    fprintf(htmlFile, "\n");
+    fprintf(htmlFile, ".headbar {\n");
+    fprintf(htmlFile, "    padding: 10px 20px;\n");
+    fprintf(htmlFile, "    display: flex;\n");
+    fprintf(htmlFile, "    justify-content: space-between;\n");
+    fprintf(htmlFile, "    align-items: center;\n");
+    fprintf(htmlFile, "    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);\n");
+    fprintf(htmlFile, "}\n");
+    fprintf(htmlFile, "\n");
+    fprintf(htmlFile, ".appName {\n");
+    fprintf(htmlFile, "    font-size: 20px;\n");
+    fprintf(htmlFile, "    font-weight: bold;\n");
+    fprintf(htmlFile, "    color:#004F99;\n");
+    fprintf(htmlFile, "}\n");
+    fprintf(htmlFile, "\n");
+
+    fprintf(htmlFile, ".main-header {\n");
+    fprintf(htmlFile, "    font-size: 28px; \n");
+    fprintf(htmlFile, "    font-weight: bold;\n");
+    fprintf(htmlFile, "    padding: 10px 20px;\n");
+    fprintf(htmlFile, "    margin-top: 20px;\n");
+    fprintf(htmlFile, "    font-style: italic;\n");
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, ".account-overview {\n");
+    fprintf(htmlFile, "    font-size: 16px;\n");
+    fprintf(htmlFile, "    color: rgba(0,0,0,0.6);\n");
+    fprintf(htmlFile, "    padding-left: 20px;\n");
+    fprintf(htmlFile, "    margin-bottom: 40px;\n");
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, ".user-id {\n");
+    fprintf(htmlFile, "    font-weight: bold;\n");
+    fprintf(htmlFile, "    color: #004F99;\n");
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, "</style>\n");
+
     fprintf(htmlFile, "</head>\n<body>\n");
+
+    fprintf(htmlFile, "<div class=\"headbar\">\n");
+    fprintf(htmlFile, "  <div class=\"appName\">WealthWise</div>\n");
+    fprintf(htmlFile, "  </div>\n");
+    fprintf(htmlFile, "</div>\n");
+
+    fprintf(htmlFile, "<h1 class=\"main-header\">Welcome to your financial overview!</h1>\n");
+    fprintf(htmlFile, "<p class=\"account-overview\">Here's an overview of accounts linked to <span class=\"user-id\">User ID %d</span>, providing a quick view of expenses per account.</p>\n", userIdInput);
 
     /* Find the index of the user with the specified userIdInput */
     for (i = 0; i < numUniqueUsers; i++)
@@ -206,9 +260,9 @@ void printAllExpenseTotals(int userIdInput, Expenses *expenses, int numExpenses,
     /* Generate overall user graphs with different accounts and their total expenses in SGD */
     if (userIndex != -1)
     { /* UserId exists */
-        fprintf(htmlFile, "<h2>User ID: %d</h2>\n", userIdInput);
         fprintf(htmlFile, "<div id=\"user%d_graph\"></div>\n", userIdInput);
         fprintf(htmlFile, "<script>\n");
+        fprintf(htmlFile, "var colors = ['#76D7C4', '#F7DC6F', '#85C1E9', '#2370F7','#D2B4DE', '#F0B27A',  '#F5B7B1'];\n");
         fprintf(htmlFile, "var data_user_%d = [\n", userIdInput);
 
         for (j = 0; j < accountsPerUser[userIndex]; j++)
@@ -220,17 +274,22 @@ void printAllExpenseTotals(int userIdInput, Expenses *expenses, int numExpenses,
             fprintf(htmlFile, "x: ['Account %d'],\n", accountId);
             fprintf(htmlFile, "y: [%.2f],\n", totalExpenseInSGD);
             fprintf(htmlFile, "type: 'bar',\n"); /* Generate bar graph */
-            fprintf(htmlFile, "name: 'Account %d'\n", accountId);
+            fprintf(htmlFile, "name: 'Account %d',\n", accountId);
+            fprintf(htmlFile, "marker: {color: colors[%d %% colors.length]},\n", j);
             fprintf(htmlFile, "},\n");
         }
 
         fprintf(htmlFile, "];\n");
         fprintf(htmlFile, "var layout_user_%d = {\n", userIdInput);
-        fprintf(htmlFile, "title: 'Total Expense Graph in SGD'");
+        fprintf(htmlFile, "    title: {\n");
+        fprintf(htmlFile, "        text: 'Total Expense Graph in SGD',\n");
+        fprintf(htmlFile, "        font: {\n");
+        fprintf(htmlFile, "            size: 14,\n");
+        fprintf(htmlFile, "        }\n");
+        fprintf(htmlFile, "    }\n");
         fprintf(htmlFile, "};\n");
         fprintf(htmlFile, "Plotly.newPlot('user%d_graph', data_user_%d, layout_user_%d);\n", userIdInput, userIdInput, userIdInput);
         fprintf(htmlFile, "</script>\n");
-        fprintf(htmlFile, "<hr />\n");
     }
 
     /* Write HTML footer */

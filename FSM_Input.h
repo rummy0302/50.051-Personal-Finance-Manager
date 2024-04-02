@@ -11,7 +11,8 @@ typedef enum
     INITIAL_STATE,
     READING_ACCOUNT,
     READING_EXPENSES,
-    COMPLETED
+    COMPLETED,
+    ERROR
 } InputState;
 
 typedef struct

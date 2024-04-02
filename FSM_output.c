@@ -185,7 +185,7 @@ void handleInput(OutputFSM *OutputFSM, int input)
         {
             /*else stay at current state and current page(UserId graph Page)*/
             printf("The account ID %d does not exist!\n", input);
-            printf("Please enter the account ID anagin: ");
+            printf("Please enter the account ID again: ");
         }
 
         break;
@@ -205,7 +205,25 @@ void handleInput(OutputFSM *OutputFSM, int input)
 
         years = getYearsFromExpenses(expenses, numExpenses, OutputFSM->accountID, &numYears);
 
-        if (isYearInList(years, numYears, input))
+        if ((input > 999 && input < 2000) || (input > 2024 && input <= 9999))
+        {
+            printf("Year is not within the valid range of 2000-2024. \n");
+            printf("Please enter the year again (eg.2024): ");
+        }
+
+        else if (input > 9999)
+        {
+            printf("Year should not exceed four digits. \n");
+            printf("Please enter the year again (eg.2024): ");
+        }
+
+        else if (input <= 999)
+        {
+            printf("Year should not be less than four digits. \n");
+            printf("Please enter the year again (eg.2024): ");
+        }
+
+        else if (isYearInList(years, numYears, input))
         {
             FILE *htmlFile;
             htmlFile = fopen("HTML_output/Page4-AccYearlyExpenses.html", "w");
@@ -256,7 +274,7 @@ int main(int argc, char const *argv[])
         {
             int input;
             char *endPtr;
-            /*heck if the user enter the 'exit' command*/
+            /*check if the user enter the 'exit' command*/
             if (strncmp(inputStr, "exit", 4) == 0)
             {
                 break;

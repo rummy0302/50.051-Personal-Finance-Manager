@@ -16,7 +16,7 @@ void initInputFSM(InputFSM *inputFsm)
 
 void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
 {
-    while (inputFSM->currentState != COMPLETED)
+    while ((inputFSM->currentState != COMPLETED) && (inputFSM->currentState != ERROR))
     {
         switch (inputFSM->currentState)
         {
@@ -27,11 +27,16 @@ void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
 
             if (inputFSM->accountsJson != NULL && inputFSM->expensesJson != NULL)
             {
-                printf("Successfully parsed json files to cJSON objects \n");
+                printf("Successfully parsed %s file and %s file to cJSON objects. \n", accountFile, expenseFile);
                 /*Transition to the next state*/
                 inputFSM->currentState = READING_ACCOUNT;
             }
-            /*Else stay in Initial state*/
+
+            else
+            {
+                printf("Failed in parsed json files to cJSON objects, please try again.\n");
+                inputFSM->currentState = ERROR;
+            }
 
             break;
         }
@@ -42,14 +47,14 @@ void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
             inputFSM->accounts = processAccountsData(inputFSM->accountsJson, &numAccounts);
             if (inputFSM->accounts != NULL)
             {
-                printf("Successfully processed Accounts cJSON object into Accounts array\n");
+                printf("Successfully processed Accounts cJSON object into Accounts array.\n");
                 /*Transition to the next state*/
                 inputFSM->currentState = READING_EXPENSES;
             }
             else
             {
-                printf("Error processing Accounts\n");
-                inputFSM->currentState = INITIAL_STATE;
+                printf("Error: Unable to process Accounts cJSON object into Accounts array, please try again.\n");
+                inputFSM->currentState = ERROR;
             }
             break;
         }
@@ -61,14 +66,14 @@ void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
 
             if (inputFSM->expenses != NULL)
             {
-                printf("Successfully processed Expenses cJSON object into Expenses array\n");
+                printf("Successfully processed Expenses cJSON object into Expenses array.\n");
                 /*Transition to the next state*/
                 inputFSM->currentState = COMPLETED;
             }
             else
             {
-                printf("Error processing Expenses\n");
-                inputFSM->currentState = INITIAL_STATE;
+                printf("Error: Unable to process Expenses cJSON object into Expenses array, please try again.\n");
+                inputFSM->currentState = ERROR;
             }
             break;
 
@@ -76,6 +81,10 @@ void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
             /*Accepting state,exiting the loop*/
             break;
         }
+
+        case ERROR:
+            /*Error state, exiting the loop*/
+            break;
         }
     }
 }
@@ -125,6 +134,30 @@ void printAccountsAndExpenses(InputFSM *inputFSM)
     }
 }
 
+void cleanupInputFSM(InputFSM *inputFSM)
+{
+    if (inputFSM->accountsJson != NULL)
+    {
+        cJSON_Delete(inputFSM->accountsJson);
+        inputFSM->accountsJson = NULL;
+    }
+    if (inputFSM->expensesJson != NULL)
+    {
+        cJSON_Delete(inputFSM->expensesJson);
+        inputFSM->expensesJson = NULL;
+    }
+    if (inputFSM->accounts != NULL)
+    {
+        free(inputFSM->accounts);
+        inputFSM->accounts = NULL;
+    }
+    if (inputFSM->expenses != NULL)
+    {
+        free(inputFSM->expenses);
+        inputFSM->expenses = NULL;
+    }
+}
+
 int main(int argc, char const *argv[])
 {
     char *accountFile;
@@ -136,12 +169,13 @@ int main(int argc, char const *argv[])
     expenseFile = "ParserExpenses/Expenses.json";
 
     /*Run the fsm to see if it is in the accepting state(successfully parsing the 2 files)*/
+
     if (runInputState(&inputFSM, accountFile, expenseFile))
     {
-        printf("Successfully processing %s and %s", accountFile, expenseFile);
+        printf("Successfully processed %s and %s.", accountFile, expenseFile);
         /*printAccountsAndExpenses(&inputFSM);*/
     }
-    else
-        printf("Failed in processing,please try again");
+
+    cleanupInputFSM(&inputFSM);
     return 0;
 }

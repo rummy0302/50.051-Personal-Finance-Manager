@@ -240,11 +240,100 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses, int accountId, 
     /* Call plotly library from js to render the graphs : */
     fprintf(htmlFile, "<script src=\"https://cdn.plot.ly/plotly-latest.min.js\"></script>\n");
 
+    fprintf(htmlFile, "<style>\n");
+    fprintf(htmlFile, "body {\n");
+    fprintf(htmlFile, "    font-family: Arial, sans-serif;\n");
+    fprintf(htmlFile, "    margin: 0;\n");
+    fprintf(htmlFile, "    padding: 0;\n");
+    fprintf(htmlFile, "}\n");
+    fprintf(htmlFile, "\n");
+    fprintf(htmlFile, ".headbar {\n");
+    fprintf(htmlFile, "    padding: 10px 20px;\n");
+    fprintf(htmlFile, "    display: flex;\n");
+    fprintf(htmlFile, "    justify-content: space-between;\n");
+    fprintf(htmlFile, "    align-items: center;\n");
+    fprintf(htmlFile, "    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);\n");
+    fprintf(htmlFile, "}\n");
+    fprintf(htmlFile, "\n");
+    fprintf(htmlFile, ".appName {\n");
+    fprintf(htmlFile, "    font-size: 20px;\n");
+    fprintf(htmlFile, "    font-weight: bold;\n");
+    fprintf(htmlFile, "    color:#004F99;\n");
+    fprintf(htmlFile, "}\n");
+    fprintf(htmlFile, "\n");
+
+    fprintf(htmlFile, "h2 {\n");
+    fprintf(htmlFile, "    font-size: 18px;\n");
+    fprintf(htmlFile, "    padding: 10px 20px;\n");
+    fprintf(htmlFile, "    padding-bottom: 5px;\n");
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, "h3 {\n");
+    fprintf(htmlFile, "    font-size: 16px;\n");
+    fprintf(htmlFile, "    padding: 5px 20px;\n");
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, ".lineGraphTitle {\n");
+    fprintf(htmlFile, "    padding-bottom:0px ;\n");
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, "table {\n");
+    fprintf(htmlFile, "    border-collapse: collapse;\n");
+    fprintf(htmlFile, "    padding: 5px 20px;\n");
+    fprintf(htmlFile, "    margin-left: 20px;\n");
+    fprintf(htmlFile, "    font-size: 14px;\n");
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, "th, td {\n");
+    fprintf(htmlFile, "    border: 1px solid #ddd;\n");
+    fprintf(htmlFile, "    padding: 5px 10px;\n");
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, "th {\n");
+    fprintf(htmlFile, "    background-color: #f2f2f2;\n");
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, ".plotly-graph-container {\n");
+    fprintf(htmlFile, "    padding: 0px;\n");
+    fprintf(htmlFile, "    width: 90%%; \n");
+    fprintf(htmlFile, "    height: 400px !important;\n");
+
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, ".main-header {\n");
+    fprintf(htmlFile, "    font-size: 28px; \n");
+    fprintf(htmlFile, "    font-weight: bold;\n");
+    fprintf(htmlFile, "    padding: 10px 20px;\n");
+    fprintf(htmlFile, "    margin-top: 20px;\n");
+    fprintf(htmlFile, "    font-style: italic;\n");
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, ".account-overview {\n");
+    fprintf(htmlFile, "    font-size: 16px;\n");
+    fprintf(htmlFile, "    color: rgba(0,0,0,0.6);\n");
+    fprintf(htmlFile, "    padding-left: 20px;\n");
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, ".account-id {\n");
+    fprintf(htmlFile, "    font-weight: bold;\n");
+    fprintf(htmlFile, "    color: #004F99;\n");
+    fprintf(htmlFile, "}\n");
+
+    fprintf(htmlFile, "</style>\n");
+
+    fprintf(htmlFile, "</head>\n<body>\n");
+
+    fprintf(htmlFile, "<div class=\"headbar\">\n");
+    fprintf(htmlFile, "  <div class=\"appName\">WealthWise</div>\n");
+    fprintf(htmlFile, "</div>\n");
+
     fprintf(htmlFile, "</head>\n");
     fprintf(htmlFile, "<body>\n");
 
-    fprintf(htmlFile, "<h1>Expenses Table & Graph for Account ID: %d</h1>\n", accountId);
-    fprintf(htmlFile, "<h2>Overall Expenses Table</h2>\n");
+    fprintf(htmlFile, "<h1 class=\"main-header\">Welcome to your financial overview!</h1>\n");
+    fprintf(htmlFile, "<p class=\"account-overview\">Here's the overall expenses for <span class=\"account-id\"> Account ID %d</span>, offering a breakdown of expenditures across different currencies.</p>\n", accountId);
+
+    fprintf(htmlFile, "<h3>Overall Expenses Table</h3>\n");
     fprintf(htmlFile, "<table border=\"1\">\n");
     fprintf(htmlFile, "<tr>\n");
     fprintf(htmlFile, "<th>Category</th>\n");
@@ -296,9 +385,9 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses, int accountId, 
 
     fprintf(htmlFile, "</table>\n");
 
-    fprintf(htmlFile, "<h2 style=\"margin-top: 100px;\">Overall Expenses Graph</h2>\n");
+    fprintf(htmlFile, "<h3 class=\"lineGraphTitle\">Overall Expenses Graph</h3>\n");
 
-    fprintf(htmlFile, "<div id=\"plotly_graph\"></div>\n");
+    fprintf(htmlFile, "<div id=\"plotly_graph\" class=\"plotly-graph-container\"></div>\n");
 
     /* Iterate through the Expenses.json file and get the total expense for each year for each currency : */
 
@@ -341,7 +430,7 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses, int accountId, 
     fprintf(htmlFile, "mode: 'lines',\n");
     fprintf(htmlFile, "name: 'SGD',\n");
     fprintf(htmlFile, "line: {\n");
-    fprintf(htmlFile, "color: 'blue'\n");
+    fprintf(htmlFile, "color: '#2370F7'\n");
     fprintf(htmlFile, "}\n");
     fprintf(htmlFile, "},\n");
 
@@ -353,7 +442,7 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses, int accountId, 
     fprintf(htmlFile, "mode: 'lines',\n");
     fprintf(htmlFile, "name: 'USD',\n");
     fprintf(htmlFile, "line: {\n");
-    fprintf(htmlFile, "color: 'green'\n");
+    fprintf(htmlFile, "color: '#76D7C4'\n");
     fprintf(htmlFile, "}\n");
     fprintf(htmlFile, "},\n");
 
@@ -365,7 +454,7 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses, int accountId, 
     fprintf(htmlFile, "mode: 'lines',\n");
     fprintf(htmlFile, "name: 'EUR',\n");
     fprintf(htmlFile, "line: {\n");
-    fprintf(htmlFile, "color: 'red'\n");
+    fprintf(htmlFile, "color: '#F7DC6F'\n");
     fprintf(htmlFile, "}\n");
     fprintf(htmlFile, "}\n");
 
@@ -456,4 +545,4 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses, int accountId, 
 #endif
 
     return 0;
-}*/
+} */
