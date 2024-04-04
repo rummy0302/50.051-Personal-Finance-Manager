@@ -18,5 +18,7 @@ typedef struct
 /* Function prototypes */
 cJSON *parseExpensesJSONfile(const char *filename);
 Expenses *processExpensesData(cJSON *json, int *numExpenses);
+int validateExpensesJSON(cJSON *json);
+int validateDateFormat(const char *date);
 
 #endif /* PARSER_EXPENSES_H */
