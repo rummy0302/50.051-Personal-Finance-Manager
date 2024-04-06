@@ -14,6 +14,7 @@ typedef struct
 cJSON *parseAccountsJSONfile(const char *filename); /* Helper function to get the json object for the Accounts.json file */
 
 Account *processAccountsData(cJSON *json, int *numAccounts); /* Helper function to process the parsed data and store into the account struct */
+int validateAccountsJSON(cJSON *json); /* Helper function to ensure the inputted fields in Accounts.json are in the correct format */
 
 #endif /* PARSER_ACCOUNTS_H */
 

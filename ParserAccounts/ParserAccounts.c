@@ -91,9 +91,139 @@ cJSON *parseAccountsJSONfile(const char *filename)
         return NULL;
     }
 
+    /* Validate JSON format */
+    if (!validateAccountsJSON(json))
+    {
+        
+        cJSON_Delete(json);
+        free(jsonContent);
+        return NULL;
+    }
+
     free(jsonContent); /* Free the space used to store the JSON string */
 
     return json; /* Return the json object*/
+}
+
+/* Function to validate the format of Accounts JSON */
+int validateAccountsJSON(cJSON *json)
+{
+    int i, numAccounts;
+    int lineNumber;
+    
+
+    /* Check if JSON is an array */
+    if (!cJSON_IsArray(json))
+    {
+        printf("Error in Accounts.json : JSON is not an array.\n");
+        return 0;
+    }
+
+    /* Get the number of elements in the array */
+    numAccounts = cJSON_GetArraySize(json);
+
+    lineNumber = 1; /* Starting [ */
+    /* Each element in the json spans 7 lines (including {}) */
+
+    /* Iterate over each element to validate its format */
+    for (i = 0; i < numAccounts; i++)
+    {
+        
+        cJSON *accountObject = cJSON_GetArrayItem(json, i);
+        lineNumber++; /* Starting { */
+
+        /* Check if all required fields are present and are in the correct format */
+
+        if (!cJSON_HasObjectItem(accountObject, "account_id")){
+                printf("Error in Accounts.json : Missing required account_id field at entry number: %d and line number: %d.\n", i+1, lineNumber);
+                return 0;
+            }
+            else{
+                /* Check format of account_id */
+                if (!cJSON_IsNumber(cJSON_GetObjectItem(accountObject, "account_id")) ||
+                    cJSON_GetObjectItem(accountObject, "account_id")->valuedouble < 10 ||
+                    cJSON_GetObjectItem(accountObject, "account_id")->valuedouble >= 100)
+                {
+                    printf("Error in Accounts.json : Invalid account_id format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Please ensure that the account_id is of type int and is within the range of 1-90.\n");
+                    return 0;
+                }
+            }
+            lineNumber++;
+            if (!cJSON_HasObjectItem(accountObject, "user_id")){
+                printf("Error in Accounts.json : Missing required user_id field at entry number: %d and line number: %d.\n", i+1, lineNumber);
+                return 0;
+            }
+            else{
+                /* Check format of user_id  */
+                if (!cJSON_IsNumber(cJSON_GetObjectItem(accountObject, "user_id")) ||
+                    cJSON_GetObjectItem(accountObject, "user_id")->valuedouble >= 50)
+                {
+                    printf("Error in Accounts.json : Invalid user_id format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Please ensure that the user_id is of type int and is within the range of 1-50.\n");
+                    return 0;
+                }
+            }
+            lineNumber++;
+            if (!cJSON_HasObjectItem(accountObject, "name")){
+                printf("Error in Accounts.json : Missing required name field at entry number: %d and line number: %d.\n", i+1, lineNumber);
+                return 0;
+            }
+            else{
+                /* Check format of name */
+                if (!cJSON_IsString(cJSON_GetObjectItem(accountObject, "name")))
+                {
+                    printf("Error in Accounts.json : Invalid name format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Please ensure that the name is a string.\n");
+                    return 0;
+                }
+            }
+            lineNumber++;
+            if (!cJSON_HasObjectItem(accountObject, "default_currency")){
+                printf("Error in Accounts.json : Missing required default_currency field at entry number: %d and line number: %d.\n", i+1, lineNumber);
+                return 0;
+            }
+            else{
+                /* Check format of default_currency */
+                if (!cJSON_IsString(cJSON_GetObjectItem(accountObject, "default_currency")))
+                {
+                    printf("Error in Accounts.json : Invalid default_currency format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Please ensure that the currency is a string.\n");
+                    return 0;
+                }
+            }
+            lineNumber++;
+            if (!cJSON_HasObjectItem(accountObject, "balance")){
+                printf("Error in Accounts.json : Missing required balance field at entry number: %d and line number: %d.\n", i+1, lineNumber);
+                return 0;
+            }
+            else{
+                /* Check format of balance */
+                if (!cJSON_IsNumber(cJSON_GetObjectItem(accountObject, "balance")))
+                {
+                    printf("Error in Accounts.json : Invalid balance format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Please ensure that the balance is a float.\n");
+                    return 0;
+                }
+            }
+            lineNumber++;
+
+        /* Check if there are extra fields */
+        if (cJSON_GetArraySize(accountObject) > 5)
+        {
+            
+            lineNumber += (cJSON_GetArraySize(accountObject) - 5);
+            printf("Error in Accounts.json : Extra fields at entry number %d and line number %d.\n", i+1, lineNumber);
+            return 0;
+        }
+
+
+        lineNumber++; /* Ending } */
+        
+    }
+    lineNumber++; /* Ending ] */
+
+    return 1; /* JSON format is valid */
 }
 
 Account *processAccountsData(cJSON *json, int *numAccounts)
