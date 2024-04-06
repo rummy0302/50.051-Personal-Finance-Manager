@@ -76,11 +76,11 @@ void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
                 inputFSM->currentState = ERROR;
             }
             break;
+        }
 
         case COMPLETED:
             /*Accepting state,exiting the loop*/
             break;
-        }
 
         case ERROR:
             /*Error state, exiting the loop*/
