@@ -201,11 +201,11 @@ int validateAccountsJSON(cJSON *json)
             }
             else{
                 /* Check format of default_currency */
-                currencyItem = cJSON_GetObjectItem(accountObject, "currency");
+                currencyItem = cJSON_GetObjectItem(accountObject, "default_currency");
                 if (!cJSON_IsString(currencyItem)) {
                     printf("\n");
                     printf("Error in Accounts.json : Invalid currency format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
-                    printf("Please ensure that the currency is a 3-letter string. \n");
+                    printf("Please ensure that the currency is a string. \n");
                     printf("\n");
                     return 0;
                 }
