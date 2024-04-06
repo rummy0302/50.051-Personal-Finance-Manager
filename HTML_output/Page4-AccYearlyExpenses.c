@@ -7,7 +7,14 @@
 #include "../ParserAccounts/ParserAccounts.h"
 #include "Common.h"
 
-/* This file is to generate the account expense graphs (total expense in SGD, USD, EUR) for 1 particular year for each account -
+/* This file is to generate the categorization table by account for a particular year and display account expense graphs (total expense in SGD, USD, EUR) for 1 particular year for each account -
+    
+    Yearly Categorization Table
+    1. Categorizes the expenses according to the Shop dictionary
+    2. Updates the total value for each category according to year
+    3. Displays the final total for each category in a table format
+    
+    Account Yearly Expenses Graph
     1. Calculates total expense in SGD, EUR, USD for each account for that particular year
     2. Displays a scatter plot showing the total expense in SGD, EUR, USD for each account for each month in that year
 */
@@ -71,6 +78,7 @@ int *getYearsFromExpenses(Expenses *expenses, int numExpenses, int accountId, in
     return years;
 }
 
+/* Define the types of currencies */
 typedef enum
 {
     SGD,
@@ -80,24 +88,31 @@ typedef enum
     UNKNOWN_CURRENCY
 } CurrencyType;
 
+/* Array to store currency strings */
 const char *currencyStrings_[NUM_CURRENCIES] = {
     "SGD",
     "USD",
     "EUR"};
 
+/* Function to get the currency type based on its string representation */
 CurrencyType getCurrencyType_(const char *currencyStr)
 {
     int i;
+    /* Iterate through each currency string in the currencyStrings array */
     for (i = 0; i < NUM_CURRENCIES; i++)
     {
+        /* Compare the input currency string with the current currency string */
         if (strcmp(currencyStr, currencyStrings_[i]) == 0)
         {
+            /* If a match is found, return the corresponding CurrencyType */
             return (CurrencyType)i;
         }
     }
+    /* If no match is found, return UNKNOWN_CURRENCY */
     return UNKNOWN_CURRENCY;
 }
 
+/* Array of shops and categorization */
 Shop shops_[] = {
     {"Pizza Hut", "Food"},
     {"Jollibee", "Food"},
@@ -156,24 +171,33 @@ Shop shops_[] = {
 
 AccountExpensesYear accountTotalsYear[MAX_ACCOUNTS];
 
+/* Function: categorizeExpensesByYear
+ * -----------------------------------
+ * This function categorizes expenses for a specific year based on the provided list of expenses
+ * and updates account totals accordingly.
+ *
+ * expenses:    Pointer to the array of Expenses structures containing expense data.
+ * numExpenses: Number of expenses in the array.
+ * year:        The year to categorize expenses for.
+ */
 void categorizeExpensesByYear(Expenses *expenses, int numExpenses, int year)
 {
     int i, j;
 
-    memset(accountTotalsYear, 0, sizeof(accountTotalsYear));
+    memset(accountTotalsYear, 0, sizeof(accountTotalsYear)); /* Reset accountTotalsYear array to zero */
 
-    for (i = 0; i < numExpenses; i++)
+    for (i = 0; i < numExpenses; i++) /* Loop through each expense */
     {
         double amount = expenses[i].amount_spent;
         int found = 0;
 
-        int expenseYear = atoi(strtok(expenses[i].date, "-"));
+        int expenseYear = atoi(strtok(expenses[i].date, "-"));         /* Extract the year from the expense date and compare with the specified year */
         if (expenseYear != year)
         {
-            continue;
+            continue; /* Skip the expense if it doesn't belong to the specified year*/
         }
 
-        for (j = 0; j < sizeof(shops_) / sizeof(shops_[0]); j++)
+        for (j = 0; j < sizeof(shops_) / sizeof(shops_[0]); j++)  /* Check if the expense matches any shop */
         {
             if (strcmp(expenses[i].description, shops_[j].shopName) == 0)
             {
@@ -182,11 +206,12 @@ void categorizeExpensesByYear(Expenses *expenses, int numExpenses, int year)
             }
         }
 
-        if (!found)
+        if (!found)    /* If the expense is not from a shop, categorize it as 'Others' */
+
         {
 
-            CurrencyType currency = getCurrencyType_(expenses[i].currency);
-            switch (currency)
+            CurrencyType currency = getCurrencyType_(expenses[i].currency); /* Get the currency type */
+            switch (currency) /* Update account totals based on currency */
             {
             case SGD:
                 accountTotalsYear[expenses[i].account_id].totalOthersSGDYear += amount;
@@ -205,8 +230,8 @@ void categorizeExpensesByYear(Expenses *expenses, int numExpenses, int year)
         else
         {
 
-            CurrencyType currency = getCurrencyType_(expenses[i].currency);
-            switch (currency)
+            CurrencyType currency = getCurrencyType_(expenses[i].currency); /* Get the currency type */
+            switch (currency)   /* Categorize the expense based on the shop's category and update account totals */
             {
             case SGD:
                 if (strcmp(shops_[j].category, "Food") == 0)
