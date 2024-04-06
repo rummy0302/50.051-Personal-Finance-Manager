@@ -355,9 +355,10 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses, int accountId, 
     fprintf(htmlFile, "<body>\n");
 
     fprintf(htmlFile, "<h1 class=\"main-header\">Welcome to your financial overview!</h1>\n");
-    fprintf(htmlFile, "<p class=\"account-overview\">Here's the overall expenses for <span class=\"account-id\"> Account ID %d</span>, offering a breakdown of expenditures across different currencies.</p>\n", accountId);
+    fprintf(htmlFile, "<p class=\"account-overview\">Here's the overall expenses for <span class=\"account-id\"> Account ID %d</span>.</p>\n", accountId);
 
     fprintf(htmlFile, "<h3>Overall Expenses Table</h3>\n");
+    fprintf(htmlFile, "<p class=\"account-overview\"> The Overall Expenses Table shows a breakdown of the expenses according to different categories over the various currencies.</p>\n");
     fprintf(htmlFile, "<table border=\"1\">\n");
     fprintf(htmlFile, "<tr>\n");
     fprintf(htmlFile, "<th>Category</th>\n");
@@ -410,6 +411,7 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses, int accountId, 
     fprintf(htmlFile, "</table>\n");
 
     fprintf(htmlFile, "<h3 class=\"lineGraphTitle\">Overall Expenses Graph</h3>\n");
+    fprintf(htmlFile, "<p class=\"account-overview\"> The Overall Expenses Graph shows a breakdown of the expenses according to different currencies over the years.</p>\n");
 
     fprintf(htmlFile, "<div id=\"plotly_graph\" class=\"plotly-graph-container\"></div>\n");
 

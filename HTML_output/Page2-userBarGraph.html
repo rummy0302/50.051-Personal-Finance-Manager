@@ -3,41 +3,81 @@
 <head>
 <title>User Expense Graphs</title>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.headbar {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.appName {
+    font-size: 20px;
+    font-weight: bold;
+    color:#004F99;
+}
+
+.main-header {
+    font-size: 28px; 
+    font-weight: bold;
+    padding: 10px 20px;
+    margin-top: 20px;
+    font-style: italic;
+}
+.account-overview {
+    font-size: 16px;
+    color: rgba(0,0,0,0.6);
+    padding-left: 20px;
+    margin-bottom: 40px;
+}
+.user-id {
+    font-weight: bold;
+    color: #004F99;
+}
+</style>
 </head>
 <body>
-<h2>User ID: 3</h2>
-<div id="user3_graph"></div>
+<div class="headbar">
+  <div class="appName">WealthWise</div>
+  </div>
+</div>
+<h1 class="main-header">Welcome to your financial overview!</h1>
+<p class="account-overview">Here's an overview of expenses in the Accounts belonging to <span class="user-id">User ID 1</span>.</p>
+<div id="user1_graph"></div>
 <script>
-var data_user_3 = [
+var colors = ['#76D7C4', '#F7DC6F', '#85C1E9', '#2370F7','#D2B4DE', '#F0B27A',  '#F5B7B1'];
+var data_user_1 = [
 {
-x: ['Account 24'],
-y: [911.70],
+x: ['Account 89'],
+y: [17101.86],
 type: 'bar',
-name: 'Account 24'
+name: 'Account 89',
+marker: {color: colors[0 % colors.length]},
 },
 {
-x: ['Account 23'],
-y: [1505.69],
+x: ['Account 75'],
+y: [495.33],
 type: 'bar',
-name: 'Account 23'
-},
-{
-x: ['Account 30'],
-y: [1333.87],
-type: 'bar',
-name: 'Account 30'
-},
-{
-x: ['Account 78'],
-y: [992.65],
-type: 'bar',
-name: 'Account 78'
+name: 'Account 75',
+marker: {color: colors[1 % colors.length]},
 },
 ];
-var layout_user_3 = {
-title: 'Total Expense Graph in SGD'};
-Plotly.newPlot('user3_graph', data_user_3, layout_user_3);
+var layout_user_1 = {
+    title: {
+        text: 'Total Expense Graph in SGD',
+        font: {
+            size: 14,
+        }
+    }
+};
+Plotly.newPlot('user1_graph', data_user_1, layout_user_1);
 </script>
-<hr />
 </body>
 </html>

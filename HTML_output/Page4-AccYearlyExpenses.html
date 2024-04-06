@@ -3,11 +3,84 @@
 <head>
 <title>Expenses Table</title>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.headbar {
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.appName {
+    font-size: 20px;
+    font-weight: bold;
+    color:#004F99;
+}
+
+h2 {
+    font-size: 18px;
+    padding: 10px 20px;
+    padding-bottom: 5px;
+}
+h3 {
+    font-size: 16px;
+    padding: 5px 20px;
+}
+.lineGraphTitle {
+    padding-bottom:0px ;
+}
+table {
+    border-collapse: collapse;
+    padding: 5px 20px;
+    margin-left: 20px;
+    font-size: 14px;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 5px 10px;
+}
+th {
+    background-color: #f2f2f2;
+}
+.plotly-graph-container {
+    width: 80%; 
+}
+.main-header {
+    font-size: 28px; 
+    font-weight: bold;
+    padding: 10px 20px;
+    margin-top: 20px;
+    font-style: italic;
+}
+.account-overview {
+    font-size: 16px;
+    color: rgba(0,0,0,0.6);
+    padding-left: 20px;
+}
+.year {
+    font-weight: bold;
+    color: #004F99;
+}
+</style>
 </head>
 <body>
-<h1>Expenses Table & Graph for Account ID: 30</h1>
-<h2>Year: 2022</h2>
+<div class="headbar">
+  <div class="appName">WealthWise</div>
+  </div>
+</div>
+</head>
+<body>
+<h1 class="main-header">Welcome to your financial overview!</h1>
+<p class="account-overview"> Here's a detailed breakdown of expenses for  <span class="year"> Account ID 89</span> in <span class="year"> Year 2021</span>.</p>
 <h3>Overall Expenses Table</h3>
+<p class="account-overview"> The Overall Expenses Table shows a breakdown of the expenses according to different categories over the various currencies for a particular year.</p>
 <table border="1">
 <tr>
 <th>Category</th>
@@ -17,58 +90,59 @@
 </tr>
 <tr>
 <td>Food</td>
-<td>0.00</td>
-<td>0.00</td>
-<td>0.00</td>
+<td>95.00</td>
+<td>247.60</td>
+<td>275.50</td>
 </tr>
 <tr>
 <td>Transport</td>
-<td>15.00</td>
+<td>0.00</td>
 <td>0.00</td>
 <td>0.00</td>
 </tr>
 <tr>
 <td>Shopping</td>
-<td>240.00</td>
-<td>85.00</td>
-<td>0.00</td>
+<td>231.24</td>
+<td>60.50</td>
+<td>358.20</td>
 </tr>
 <tr>
 <td>Others</td>
-<td>30.00</td>
-<td>50.00</td>
-<td>0.00</td>
+<td>342.80</td>
+<td>432.54</td>
+<td>55.80</td>
 </tr>
 </table>
-<h2 style="margin-top: 100px;">Overall Expenses Graph</h2>
-<div id="plotly_graph"></div>
+<h3 class="lineGraphTitle">Overall Expenses Graph</h3>
+<p class="account-overview"> The Overall Expenses Graph shows a breakdown of the expenses according to different currencies for a particular year.</p>
+<div id="plotly_graph" class="plotly-graph-container"></div>
 <script>
 var data = [
 {
 x: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-y: [0.00, 0.00, 0.00, 270.00, 0.00, 0.00, 15.00, 0.00, 0.00, 0.00, 0.00, 0.00],
+y: [20.00, 145.00, 80.50, 45.25, 25.99, 55.75, 30.80, 18.45, 22.00, 65.30, 40.00, 120.00],
 mode: 'lines',
 name: 'SGD',
 line: {
-color: 'blue'
+color: '#2370F7'
 }
 },
 {
 x: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-y: [0.00, 0.00, 50.00, 85.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00],
+y: [50.00, 150.00, 75.00, 20.50, 15.99, 35.25, 45.75, 12.35, 200.00, 65.80, 30.00, 40.00],
 mode: 'lines',
 name: 'USD',
 line: {
-color: 'green'
+color: '#76D7C4'
 }
 },
 {
 x: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-y: [0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00],
+y: [100.00, 150.00, 120.75, 25.50, 0.00, 0.00, 55.80, 30.45, 42.00, 0.00, 75.00, 90.00],
 mode: 'lines',
 name: 'EUR',
 line: {
-color: 'red'
+color: '#F7DC6F'
 }
 }
 ];

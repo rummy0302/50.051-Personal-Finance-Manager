@@ -245,7 +245,7 @@ void printAllExpenseTotals(int userIdInput, Expenses *expenses, int numExpenses,
     fprintf(htmlFile, "</div>\n");
 
     fprintf(htmlFile, "<h1 class=\"main-header\">Welcome to your financial overview!</h1>\n");
-    fprintf(htmlFile, "<p class=\"account-overview\">Here's an overview of accounts linked to <span class=\"user-id\">User ID %d</span>, providing a quick view of expenses per account.</p>\n", userIdInput);
+    fprintf(htmlFile, "<p class=\"account-overview\">Here's an overview of expenses in the Accounts belonging to <span class=\"user-id\">User ID %d</span>.</p>\n", userIdInput);
 
     /* Find the index of the user with the specified userIdInput */
     for (i = 0; i < numUniqueUsers; i++)

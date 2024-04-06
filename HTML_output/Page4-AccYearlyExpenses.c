@@ -413,9 +413,12 @@ void generateHTMLForAccountYear(Expenses *expenses, int numExpenses, int account
     fprintf(htmlFile, "<body>\n");
 
     fprintf(htmlFile, "<h1 class=\"main-header\">Welcome to your financial overview!</h1>\n");
-    fprintf(htmlFile, "<p class=\"account-overview\"> Here's a detailed breakdown of expenses for  <span class=\"year\"> Account ID %d</span> in <span class=\"year\"> Year %d</span>, showcasing spending patterns across different currencies.</p>\n", accountId, year);
+    fprintf(htmlFile, "<p class=\"account-overview\"> Here's a detailed breakdown of expenses for  <span class=\"year\"> Account ID %d</span> in <span class=\"year\"> Year %d</span>.</p>\n", accountId, year);
+
 
     fprintf(htmlFile, "<h3>Overall Expenses Table</h3>\n");
+    fprintf(htmlFile, "<p class=\"account-overview\"> The Overall Expenses Table shows a breakdown of the expenses according to different categories over the various currencies for a particular year.</p>\n");
+
     fprintf(htmlFile, "<table border=\"1\">\n");
     fprintf(htmlFile, "<tr>\n");
     fprintf(htmlFile, "<th>Category</th>\n");
@@ -468,6 +471,8 @@ void generateHTMLForAccountYear(Expenses *expenses, int numExpenses, int account
     fprintf(htmlFile, "</table>\n");
 
     fprintf(htmlFile, "<h3 class=\"lineGraphTitle\">Overall Expenses Graph</h3>\n");
+    fprintf(htmlFile, "<p class=\"account-overview\"> The Overall Expenses Graph shows a breakdown of the expenses according to different currencies for a particular year.</p>\n");
+
 
     fprintf(htmlFile, "<div id=\"plotly_graph\" class=\"plotly-graph-container\"></div>\n");
 
