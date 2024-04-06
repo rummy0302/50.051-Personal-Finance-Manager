@@ -165,7 +165,7 @@ int validateExpensesJSON(cJSON *json)
                 if (!cJSON_IsString(cJSON_GetObjectItem(expenseObject, "description")))
                 {
                     printf("\n");
-                    printf("Error in Accounts.json : Invalid description format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Error in Expenses.json : Invalid description format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
                     printf("Please ensure that the description is a string.\n");
                     printf("\n");
                     return 0;
@@ -176,7 +176,7 @@ int validateExpensesJSON(cJSON *json)
 
             if (!cJSON_HasObjectItem(expenseObject, "currency")){
                 printf("\n");
-                printf("Error in Accounts.json : Missing required currency field at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                printf("Error in Expenses.json : Missing required currency field at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
                 printf("\n");
                 return 0;
             }
@@ -185,7 +185,7 @@ int validateExpensesJSON(cJSON *json)
                 currencyItem = cJSON_GetObjectItem(expenseObject, "currency");
                 if (!cJSON_IsString(currencyItem)) {
                     printf("\n");
-                    printf("Error in Accounts.json : Invalid currency format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Error in Expenses.json : Invalid currency format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
                     printf("Please ensure that the currency is a 3-letter string. \n");
                     printf("\n");
                     return 0;
@@ -194,7 +194,7 @@ int validateExpensesJSON(cJSON *json)
                 currency = currencyItem->valuestring;
                 if (strlen(currency) != 3) {
                     printf("\n");
-                    printf("Error in Accounts.json : Invalid currency format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Error in Expenses.json : Invalid currency format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
                     printf("Please ensure that the currency is a 3-letter string. \n");
                     printf("\n");
                     return 0;
@@ -205,7 +205,7 @@ int validateExpensesJSON(cJSON *json)
 
             if (!cJSON_HasObjectItem(expenseObject, "amount_spent")){
                 printf("\n");
-                printf("Error in Accounts.json : Missing required amount_spent field at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                printf("Error in Expenses.json : Missing required amount_spent field at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
                 printf("\n");
                 return 0;
             }
@@ -214,7 +214,7 @@ int validateExpensesJSON(cJSON *json)
                 if (!cJSON_IsNumber(cJSON_GetObjectItem(expenseObject, "amount_spent")))
                 {
                     printf("\n");
-                    printf("Error in Accounts.json : Invalid amount_spent format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Error in Expenses.json : Invalid amount_spent format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
                     printf("Please ensure that the amount_spent is a float or an integer value.\n");
                     printf("\n");
                     return 0;
@@ -228,7 +228,7 @@ int validateExpensesJSON(cJSON *json)
             
             lineNumber += (cJSON_GetArraySize(expenseObject) - 5);
             printf("\n");
-            printf("Error in Accounts.json : Extra fields at entry number %d and line number %d.\n", i+1, lineNumber);
+            printf("Error in Expenses.json : Extra fields at entry number %d and line number %d.\n", i+1, lineNumber);
             printf("\n");
             return 0;
         }
