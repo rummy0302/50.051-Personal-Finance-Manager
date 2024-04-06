@@ -12,7 +12,7 @@
     Categorization Table
     1. Categorizes the expenses according to the Shop dictionary
     2. Updates the total value for each category
-    3. Displays the final total for each category in a table foramt
+    3. Displays the final total for each category in a table format
     
     Account Expenses Graph
     1. Calculates total expense in SGD, EUR, USD for each account for each year
