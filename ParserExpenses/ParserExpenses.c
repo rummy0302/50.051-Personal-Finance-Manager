@@ -81,7 +81,7 @@ int validateExpensesJSON(cJSON *json)
     /* Check if JSON is an array */
     if (!cJSON_IsArray(json))
     {
-        printf("Error: JSON is not an array.\n");
+        printf("Error in Expenses.json : JSON is not an array.\n");
         return 0;
     }
 
