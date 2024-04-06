@@ -7,7 +7,14 @@
 #include "../ParserAccounts/ParserAccounts.h"
 #include "Common.h"
 
-/* This file is to generate the account expense graphs (total expense in SGD, USD, EUR) for all years for each account -
+/* This file is to generate the categorization table by account and display account expense graphs (total expense in SGD, USD, EUR) for all years for each account -
+    
+    Categorization Table
+    1. Categorizes the expenses according to the Shop dictionary
+    2. Updates the total value for each category
+    3. Displays the final total for each category in a table foramt
+    
+    Account Expenses Graph
     1. Calculates total expense in SGD, EUR, USD for each account for each year
     2. Displays a scatter plot showing the total expense in SGD, EUR, USD for each account for each year
 */
@@ -21,6 +28,7 @@
 AccountInfo accountInfoPage3[MAX_ACCOUNTS];
 int numAccountsPage3 = 0;
 
+/* Define the types of currencies */
 typedef enum
 {
     SGD,
@@ -30,24 +38,31 @@ typedef enum
     UNKNOWN_CURRENCY
 } CurrencyType;
 
+/* Array to store currency strings */
 const char *currencyStrings[NUM_CURRENCIES] = {
     "SGD",
     "USD",
     "EUR"};
 
+/* Function to get the currency type based on its string representation */
 CurrencyType getCurrencyType(const char *currencyStr)
 {
     int i;
+    /* Iterate through each currency string in the currencyStrings array */
     for (i = 0; i < NUM_CURRENCIES; i++)
     {
+        /* Compare the input currency string with the current currency string */
         if (strcmp(currencyStr, currencyStrings[i]) == 0)
         {
+            /* If a match is found, return the corresponding CurrencyType */
             return (CurrencyType)i;
         }
     }
+    /* If no match is found, return UNKNOWN_CURRENCY */
     return UNKNOWN_CURRENCY;
 }
 
+/* Array of shops and categorization */
 Shop shops[] = {
     {"Pizza Hut", "Food"},
     {"Jollibee", "Food"},
@@ -106,18 +121,27 @@ Shop shops[] = {
 
 AccountExpenses accountTotals[MAX_ACCOUNTS];
 
+/* Function: categorizeExpenses
+ * ----------------------------
+ * This function categorizes expenses based on the provided list of expenses
+ * and updates account totals accordingly.
+ *
+ * expenses:  Pointer to the array of Expenses structures containing expense data.
+ * numExpenses: Number of expenses in the array.
+ */
+
 void categorizeExpenses(Expenses *expenses, int numExpenses)
 {
     int i, j;
 
-    memset(accountTotals, 0, sizeof(accountTotals));
+    memset(accountTotals, 0, sizeof(accountTotals));    /* Reset accountTotals array to zero */
 
-    for (i = 0; i < numExpenses; i++)
+    for (i = 0; i < numExpenses; i++)  /* Loop through each expense */
     {
         double amount = expenses[i].amount_spent;
         int found = 0;
 
-        for (j = 0; j < sizeof(shops) / sizeof(shops[0]); j++)
+        for (j = 0; j < sizeof(shops) / sizeof(shops[0]); j++)  /* Check if the expense matches any shop */
         {
             if (strcmp(expenses[i].description, shops[j].shopName) == 0)
             {
@@ -126,12 +150,12 @@ void categorizeExpenses(Expenses *expenses, int numExpenses)
             }
         }
 
-        if (!found)
+        if (!found) /* If the expense is not from a shop, categorize it as 'Others' */
         {
 
-            CurrencyType currency = getCurrencyType(expenses[i].currency);
+            CurrencyType currency = getCurrencyType(expenses[i].currency);  /* Get the currency type */
 
-            switch (currency)
+            switch (currency) /* Update account totals based on currency */
             {
             case SGD:
                 accountTotals[expenses[i].account_id].totalOthersSGD += amount;
@@ -150,9 +174,9 @@ void categorizeExpenses(Expenses *expenses, int numExpenses)
         else
         {
 
-            CurrencyType currency = getCurrencyType(expenses[i].currency);
+            CurrencyType currency = getCurrencyType(expenses[i].currency); /* Get the currency type */
 
-            switch (currency)
+            switch (currency)  /* Categorize the expense based on the shop's category and update account totals */
             {
             case SGD:
                 if (strcmp(shops[j].category, "Food") == 0)
