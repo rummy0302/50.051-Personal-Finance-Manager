@@ -14,7 +14,7 @@ cJSON *parseExpensesJSONfile(const char *filename)
 {
     long fileSize;
     char *jsonContent;
-    cJSON *json;
+    cJSON *json;    
 
     /* Open the JSON file */
     FILE *expenses_file = fopen(filename, "r");
@@ -57,7 +57,6 @@ cJSON *parseExpensesJSONfile(const char *filename)
     /* Validate JSON format */
     if (!validateExpensesJSON(json))
     {
-        printf("Error: Invalid JSON format.\n");
         cJSON_Delete(json);
         free(jsonContent);
         return NULL;
@@ -74,7 +73,10 @@ cJSON *parseExpensesJSONfile(const char *filename)
 int validateExpensesJSON(cJSON *json)
 {
     int i, numExpenses;
-    /* double amountSpent;*/
+    int lineNumber;
+    cJSON *dateObject;
+    cJSON *currencyItem;
+    const char *currency;
 
     /* Check if JSON is an array */
     if (!cJSON_IsArray(json))
@@ -85,70 +87,157 @@ int validateExpensesJSON(cJSON *json)
 
     /* Get the number of elements in the array */
     numExpenses = cJSON_GetArraySize(json);
+    lineNumber = 1; /* Starting [ */
+    /* Each element in the json spans 7 lines (including {}) */
 
     /* Iterate over each element to validate its format */
     for (i = 0; i < numExpenses; i++)
     {
+        
         cJSON *expenseObject = cJSON_GetArrayItem(json, i);
+        lineNumber++; /* Starting { */
 
-        /* Check if all required fields are present */
-        if (!cJSON_HasObjectItem(expenseObject, "account_id") || !cJSON_HasObjectItem(expenseObject, "date") ||
-            !cJSON_HasObjectItem(expenseObject, "description") || !cJSON_HasObjectItem(expenseObject, "currency") ||
-            !cJSON_HasObjectItem(expenseObject, "amount_spent"))
-        {
-            printf("Error: Missing required field in expense at index %d.\n", i);
-            return 0;
-        }
+        /* Check if all required fields are present and are in the correct format */
+
+        if (!cJSON_HasObjectItem(expenseObject, "account_id")){
+                printf("\n");
+                printf("Error in Expenses.json : Missing required account_id field at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                printf("\n");
+                return 0;
+            }
+            else{
+                /* Check format of account_id */
+                if (!cJSON_IsNumber(cJSON_GetObjectItem(expenseObject, "account_id")) ||
+                    cJSON_GetObjectItem(expenseObject, "account_id")->valuedouble < 10 ||
+                    cJSON_GetObjectItem(expenseObject, "account_id")->valuedouble >= 100)
+                {
+                    printf("\n");
+                    printf("Error in Expenses.json : Invalid account_id format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Please ensure that the account_id is of type int and is within the range of 1-90.\n");
+                    printf("\n");
+                    return 0;
+                }
+            }
+            lineNumber++;
+
+
+            if (!cJSON_HasObjectItem(expenseObject, "date")){
+                printf("\n");
+                printf("Error in Expenses.json : Missing required date field at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                printf("\n");
+                return 0;
+            }
+            dateObject = cJSON_GetObjectItem(expenseObject, "date");
+            if (cJSON_IsString(dateObject)) {
+                /* Check format of date */
+                if (!validateDateFormat(dateObject->valuestring)) {
+                    printf("\n");
+                    printf("Error in Expenses.json : Invalid date format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Please ensure that the date is a string and follows the format of YYYY-MM-DD. \n");
+                    printf("\n");
+                    return 0;
+                }
+            } else if (cJSON_IsNumber(dateObject)) {
+                /* If date is a number, raise an error immediately */
+                printf("\n");
+                printf("Error in Expenses.json : Invalid date format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                printf("Please ensure that the date is a string and follows the format of YYYY-MM-DD. \n");
+                printf("\n");
+                return 0;
+            } else {
+                printf("\n");
+                printf("Error in Expenses.json : Invalid date format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                printf("Please ensure that the date is a string and follows the format of YYYY-MM-DD. \n");
+                printf("\n");
+                return 0;
+            }
+            lineNumber++;
+
+
+            if (!cJSON_HasObjectItem(expenseObject, "description")){
+                printf("\n");
+                printf("Error in Expenses.json : Missing required description field at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                printf("\n");
+                return 0;
+            }
+            else{
+                /* Check format of description */
+                if (!cJSON_IsString(cJSON_GetObjectItem(expenseObject, "description")))
+                {
+                    printf("\n");
+                    printf("Error in Accounts.json : Invalid description format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Please ensure that the description is a string.\n");
+                    printf("\n");
+                    return 0;
+                }
+            }
+            lineNumber++;
+
+
+            if (!cJSON_HasObjectItem(expenseObject, "currency")){
+                printf("\n");
+                printf("Error in Accounts.json : Missing required currency field at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                printf("\n");
+                return 0;
+            }
+            else{
+                /* Check format of currency */
+                currencyItem = cJSON_GetObjectItem(expenseObject, "currency");
+                if (!cJSON_IsString(currencyItem)) {
+                    printf("\n");
+                    printf("Error in Accounts.json : Invalid currency format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Please ensure that the currency is a 3-letter string. \n");
+                    printf("\n");
+                    return 0;
+                }
+
+                currency = currencyItem->valuestring;
+                if (strlen(currency) != 3) {
+                    printf("\n");
+                    printf("Error in Accounts.json : Invalid currency format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Please ensure that the currency is a 3-letter string. \n");
+                    printf("\n");
+                    return 0;
+                }
+            }
+            lineNumber++;
+
+
+            if (!cJSON_HasObjectItem(expenseObject, "amount_spent")){
+                printf("\n");
+                printf("Error in Accounts.json : Missing required amount_spent field at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                printf("\n");
+                return 0;
+            }
+            else{
+                /* Check format of amount_spent */
+                if (!cJSON_IsNumber(cJSON_GetObjectItem(expenseObject, "amount_spent")))
+                {
+                    printf("\n");
+                    printf("Error in Accounts.json : Invalid amount_spent format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
+                    printf("Please ensure that the amount_spent is a float or an integer value.\n");
+                    printf("\n");
+                    return 0;
+                }
+            }
+            lineNumber++;
 
         /* Check if there are extra fields */
         if (cJSON_GetArraySize(expenseObject) > 5)
         {
-            printf("Error: Extra fields in expense at index %d.\n", i);
+            
+            lineNumber += (cJSON_GetArraySize(expenseObject) - 5);
+            printf("\n");
+            printf("Error in Accounts.json : Extra fields at entry number %d and line number %d.\n", i+1, lineNumber);
+            printf("\n");
             return 0;
         }
 
-        /* Check format of account_id */
-        if (!cJSON_IsNumber(cJSON_GetObjectItem(expenseObject, "account_id")) ||
-            cJSON_GetObjectItem(expenseObject, "account_id")->valuedouble < 10 ||
-            cJSON_GetObjectItem(expenseObject, "account_id")->valuedouble >= 100)
-        {
-            printf("Error: Invalid account_id format in at entry number: %d.\n", i+1);
-            printf("Please ensure that the account_id is of type int and is within the range of 1-90.\n");
-            return 0;
-        }
 
-        /* Check format of date */
-        if (!validateDateFormat(cJSON_GetObjectItem(expenseObject, "date")->valuestring))
-        {
-            printf("Error: Invalid date format at entry number: %d.\n", i+1);
-            printf("Please ensure that the date is a string and follows the format of YYYY-MM-DD. \n");
-            return 0;
-        }
-
-        /* Check format of description */
-        if (!cJSON_IsString(cJSON_GetObjectItem(expenseObject, "description")))
-        {
-            printf("Error: Invalid description format in at entry number: %d.\n", i+1);
-            printf("Please ensure that the description is a string.\n");
-            return 0;
-        }
-
-        /* Check format of currency */
-        if (!cJSON_IsString(cJSON_GetObjectItem(expenseObject, "currency")))
-        {
-            printf("Error: Invalid currency format in at entry number: %d.\n", i+1);
-            printf("Please ensure that the currency is a string.\n");
-            return 0;
-        }
-
-        /* Check format of amount_spent */
-        if (!cJSON_IsNumber(cJSON_GetObjectItem(expenseObject, "amount_spent")))
-        {
-            printf("Error: Invalid amount_spent format in at entry number: %d.\n", i+1);
-            printf("Please ensure that the currency is a float.\n");
-            return 0;
-        }
+        lineNumber++; /* Ending } */
+        
     }
+    lineNumber++; /* Ending ] */
 
     return 1; /* JSON format is valid */
 }
@@ -165,6 +254,7 @@ int validateDateFormat(const char *date)
 
     return 1;
 }
+
 
 /* Function to process cJSON object into Expenses array */
 Expenses *processExpensesData(cJSON *json, int *numExpenses)
