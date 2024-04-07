@@ -112,6 +112,7 @@ int validateAccountsJSON(cJSON *json)
     int lineNumber;
     cJSON *currencyItem;
     const char *currency;
+    cJSON *nameItem;
     
 
     /* Check if JSON is an array */
@@ -183,7 +184,8 @@ int validateAccountsJSON(cJSON *json)
             }
             else{
                 /* Check format of name */
-                if (!cJSON_IsString(cJSON_GetObjectItem(accountObject, "name")))
+                nameItem = cJSON_GetObjectItem(accountObject, "name");
+                if (!cJSON_IsString(nameItem) || cJSON_GetStringValue(nameItem) == NULL || strcmp(cJSON_GetStringValue(nameItem), "") == 0)
                 {
                     printf("\n");
                     printf("Error in Accounts.json : Invalid name format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
