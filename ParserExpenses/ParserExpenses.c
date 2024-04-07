@@ -77,6 +77,7 @@ int validateExpensesJSON(cJSON *json)
     cJSON *dateObject;
     cJSON *currencyItem;
     const char *currency;
+    cJSON *descriptionItem;
 
     /* Check if JSON is an array */
     if (!cJSON_IsArray(json))
@@ -162,7 +163,8 @@ int validateExpensesJSON(cJSON *json)
             }
             else{
                 /* Check format of description */
-                if (!cJSON_IsString(cJSON_GetObjectItem(expenseObject, "description")))
+            descriptionItem = cJSON_GetObjectItem(expenseObject, "description");
+            if (!cJSON_IsString(descriptionItem) || cJSON_GetStringValue(descriptionItem) == NULL || strcmp(cJSON_GetStringValue(descriptionItem), "") == 0)
                 {
                     printf("\n");
                     printf("Error in Expenses.json : Invalid description format at entry number: %d and line number: %d.\n", i+1, lineNumber+1);
