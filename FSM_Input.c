@@ -8,71 +8,124 @@
 void initInputFSM(InputFSM *inputFsm)
 {
     inputFsm->currentState = INITIAL_STATE;
-    inputFsm->accountsJson = NULL;
-    inputFsm->expensesJson = NULL;
-    inputFsm->accounts = NULL;
-    inputFsm->expenses = NULL;
+    inputFsm->accounts;
+    inputFsm->expenses;
 }
 
 void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
 {
+    int num_expenses = 0;
+    int num_accounts = 0;
+
     while ((inputFSM->currentState != COMPLETED) && (inputFSM->currentState != ERROR))
     {
+
         switch (inputFSM->currentState)
         {
         case INITIAL_STATE:
         {
-            inputFSM->accountsJson = parseAccountsJSONfile(accountFile);
-            inputFSM->expensesJson = parseExpensesJSONfile(expenseFile);
-
-            if (inputFSM->accountsJson != NULL && inputFSM->expensesJson != NULL)
+            // parse account json
+            FILE *accounts_file = fopen(accountFile, "r");
+            if (accounts_file == NULL)
             {
-                printf("Successfully parsed %s file and %s file to cJSON objects. \n", accountFile, expenseFile);
-                /*Transition to the next state*/
-                inputFSM->currentState = READING_ACCOUNT;
+                printf("Error: Unable to open %s\n", accountFile);
+                inputFSM->currentState = ERROR;
+            }
+
+            // Get the file size
+            fseek(accounts_file, 0L, SEEK_END);
+            long fileSize = ftell(accounts_file);
+            rewind(accounts_file);
+
+            // Allocate memory for JSON content
+            char *jsonContent = (char *)malloc(fileSize + 1); // +1 for null terminator
+            if (jsonContent == NULL)
+            {
+                printf("Error: Unable to allocate memory\n");
+                fclose(accounts_file);
+                inputFSM->currentState = ERROR;
+            }
+
+            // Read the JSON content into the allocated memory
+            size_t bytesRead = fread(jsonContent, 1, fileSize, accounts_file);
+
+            // Null-terminate the JSON content
+            jsonContent[fileSize] = '\0';
+
+            // Close the file
+            fclose(accounts_file);
+
+            // Parse the JSON content
+
+            parse_accountsjson(jsonContent, inputFSM->accounts, &num_accounts);
+
+            // parse expense json
+
+            FILE *expenses_file = fopen(expenseFile, "r");
+            if (expenses_file == NULL)
+            {
+                printf("Error: Unable to open %s\n", expenseFile);
+                inputFSM->currentState = ERROR;
+            }
+
+            // Get the file size
+            fseek(expenses_file, 0L, SEEK_END);
+            long fileSize2 = ftell(expenses_file);
+            rewind(expenses_file);
+
+            // Allocate memory for JSON content
+            char *jsonContent2 = (char *)malloc(fileSize2 + 1); // +1 for null terminator
+            if (jsonContent2 == NULL)
+            {
+                printf("Error: Unable to allocate memory\n");
+                fclose(expenses_file);
+                inputFSM->currentState = ERROR;
+            }
+
+            // Read the JSON content into the allocated memory
+            size_t bytesRead2 = fread(jsonContent2, 1, fileSize2, expenses_file);
+
+            // Null-terminate the JSON content
+            jsonContent2[fileSize2] = '\0';
+
+            // Close the file
+            fclose(expenses_file);
+
+            parse_expensesjson(jsonContent2, inputFSM->expenses, &num_expenses);
+            printf("account.json file and expenses.json file are successfully parsed.\n");
+
+            inputFSM->currentState = Validate_ACCOUNT;
+
+            break;
+        }
+
+        case Validate_ACCOUNT:
+        {
+            if (validateAccounts(inputFSM->accounts, num_accounts))
+            {
+                printf("All accounts fields are validated to be true.\n");
+                inputFSM->currentState = Validate_EXPENSES;
             }
 
             else
             {
-                printf("Failed in parsed json files to cJSON objects, please try again.\n");
+
                 inputFSM->currentState = ERROR;
             }
 
             break;
         }
 
-        case READING_ACCOUNT:
+        case Validate_EXPENSES:
         {
-            int numAccounts;
-            inputFSM->accounts = processAccountsData(inputFSM->accountsJson, &numAccounts);
-            if (inputFSM->accounts != NULL)
+            if (validateExpenses(inputFSM->expenses, num_expenses))
             {
-                printf("Successfully processed Accounts cJSON object into Accounts array.\n");
-                /*Transition to the next state*/
-                inputFSM->currentState = READING_EXPENSES;
-            }
-            else
-            {
-                printf("Error: Unable to process Accounts cJSON object into Accounts array, please try again.\n");
-                inputFSM->currentState = ERROR;
-            }
-            break;
-        }
-
-        case READING_EXPENSES:
-        {
-            int numExpenses;
-            inputFSM->expenses = processExpensesData(inputFSM->expensesJson, &numExpenses);
-
-            if (inputFSM->expenses != NULL)
-            {
-                printf("Successfully processed Expenses cJSON object into Expenses array.\n");
-                /*Transition to the next state*/
+                printf("All expenses fields are validated to be true.\n");
                 inputFSM->currentState = COMPLETED;
             }
+
             else
             {
-                printf("Error: Unable to process Expenses cJSON object into Expenses array, please try again.\n");
                 inputFSM->currentState = ERROR;
             }
             break;
@@ -96,67 +149,43 @@ int runInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
 }
 
 /* Print all the information from accounts and expenses */
-void printAccountsAndExpenses(InputFSM *inputFSM)
-{
-    if (inputFSM->accounts != NULL)
-    {
-        int numAccounts;
-        int i;
-        printf("Accounts:\n");
-        numAccounts = cJSON_GetArraySize(inputFSM->accountsJson);
-        for (i = 0; i < numAccounts; ++i)
-        {
-            printf("Account ID: %d\n", inputFSM->accounts[i].account_id);
-            printf("User ID: %d\n", inputFSM->accounts[i].user_id);
-            printf("Name: %s\n", inputFSM->accounts[i].name);
-            printf("Currency: %s\n", inputFSM->accounts[i].default_currency);
-            printf("Balance: %.2f\n", inputFSM->accounts[i].balance);
-            printf("\n");
-        }
-    }
-    if (inputFSM->expenses != NULL)
-    {
-        int numExpenses;
-        int i;
-        printf("Expenses:\n");
+// void printAccountsAndExpenses(InputFSM *inputFSM)
+// {
+//     if (inputFSM->accounts != NULL)
+//     {
+//         int numAccounts;
+//         int i;
+//         printf("Accounts:\n");
+//         numAccounts = cJSON_GetArraySize(inputFSM->accountsJson);
+//         for (i = 0; i < numAccounts; ++i)
+//         {
+//             printf("Account ID: %d\n", inputFSM->accounts[i].account_id);
+//             printf("User ID: %d\n", inputFSM->accounts[i].user_id);
+//             printf("Name: %s\n", inputFSM->accounts[i].name);
+//             printf("Currency: %s\n", inputFSM->accounts[i].default_currency);
+//             printf("Balance: %.2f\n", inputFSM->accounts[i].balance);
+//             printf("\n");
+//         }
+//     }
+//     if (inputFSM->expenses != NULL)
+//     {
+//         int numExpenses;
+//         int i;
+//         printf("Expenses:\n");
 
-        numExpenses = cJSON_GetArraySize(inputFSM->expensesJson);
+//         numExpenses = cJSON_GetArraySize(inputFSM->expensesJson);
 
-        for (i = 0; i < numExpenses; i++)
-        {
-            printf("Account ID: %d\n", inputFSM->expenses[i].account_id);
-            printf("Date: %s\n", inputFSM->expenses[i].date);
-            printf("Description: %s\n", inputFSM->expenses[i].description);
-            printf("Currency: %s\n", inputFSM->expenses[i].currency);
-            printf("Amount Spent: %.2f\n", inputFSM->expenses[i].amount_spent);
-            printf("\n");
-        }
-    }
-}
-
-void cleanupInputFSM(InputFSM *inputFSM)
-{
-    if (inputFSM->accountsJson != NULL)
-    {
-        cJSON_Delete(inputFSM->accountsJson);
-        inputFSM->accountsJson = NULL;
-    }
-    if (inputFSM->expensesJson != NULL)
-    {
-        cJSON_Delete(inputFSM->expensesJson);
-        inputFSM->expensesJson = NULL;
-    }
-    if (inputFSM->accounts != NULL)
-    {
-        free(inputFSM->accounts);
-        inputFSM->accounts = NULL;
-    }
-    if (inputFSM->expenses != NULL)
-    {
-        free(inputFSM->expenses);
-        inputFSM->expenses = NULL;
-    }
-}
+//         for (i = 0; i < numExpenses; i++)
+//         {
+//             printf("Account ID: %d\n", inputFSM->expenses[i].account_id);
+//             printf("Date: %s\n", inputFSM->expenses[i].date);
+//             printf("Description: %s\n", inputFSM->expenses[i].description);
+//             printf("Currency: %s\n", inputFSM->expenses[i].currency);
+//             printf("Amount Spent: %.2f\n", inputFSM->expenses[i].amount_spent);
+//             printf("\n");
+//         }
+//     }
+// }
 
 int main(int argc, char const *argv[])
 {
@@ -173,9 +202,8 @@ int main(int argc, char const *argv[])
     if (runInputState(&inputFSM, accountFile, expenseFile))
     {
         printf("Successfully processed %s and %s.", accountFile, expenseFile);
-        /*printAccountsAndExpenses(&inputFSM);*/
+        // printAccountsAndExpenses(&inputFSM);
     }
 
-    cleanupInputFSM(&inputFSM);
     return 0;
 }

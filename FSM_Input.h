@@ -3,14 +3,14 @@
 #define FSM_INPUT_H
 
 #include "ParserExpenses/cJSON.h"
-#include "ParserAccounts/ParserAccounts.h"
-#include "ParserExpenses/ParserExpenses.h"
+#include "ParserAccounts/AccountsParser.h"
+#include "ParserExpenses/ExpenseParser.h"
 
 typedef enum
 {
     INITIAL_STATE,
-    READING_ACCOUNT,
-    READING_EXPENSES,
+    Validate_ACCOUNT,
+    Validate_EXPENSES,
     COMPLETED,
     ERROR
 } InputState;
@@ -18,10 +18,9 @@ typedef enum
 typedef struct
 {
     InputState currentState;
-    cJSON *accountsJson;
-    cJSON *expensesJson;
-    Account *accounts;
-    Expenses *expenses;
+    Account accounts[MAX_ACCOUNTS];
+    Expenses expenses[MAX_EXPENSES];
+
 } InputFSM;
 
 void initInputFSM(InputFSM *inputFsm);

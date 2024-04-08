@@ -8,6 +8,8 @@
     "page2-userbargraph.h": "c",
     "page4-accyearlyexpenses.h": "c",
     "page3and4-common.h": "c",
-    "unistd.h": "c"
+    "unistd.h": "c",
+    "accountsparser.h": "c",
+    "expenseparser.h": "c"
   }
 }
