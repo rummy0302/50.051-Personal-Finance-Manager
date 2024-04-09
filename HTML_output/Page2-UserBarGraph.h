@@ -1,7 +1,7 @@
 #ifndef PAGE2__USERBARGRAPH_H
 #define PAGE2__USERBARGRAPH_H
-#include "../ParserExpenses/ParserExpenses.h"
-#include "../ParserAccounts/ParserAccounts.h"
+#include "../ParserExpenses/ExpenseParser.h"
+#include "../ParserAccounts/AccountsParser.h"
 
 #define MAX_USERS 50
 
@@ -11,7 +11,6 @@ typedef struct
 } ExpenseTotalsSGD;
 
 void calculateExpenseTotal(Expenses *expenses, int numExpenses);
-void printAllExpenseTotals(int userIdInput, Expenses *expenses, int numExpenses, Account *accounts, int numAccounts, FILE *htmlFile);
 void printExpenseTotal(int accountId, double totalExpenseInSGD);
 
 #endif /* PAGE2__USERBARGRAPH_H */

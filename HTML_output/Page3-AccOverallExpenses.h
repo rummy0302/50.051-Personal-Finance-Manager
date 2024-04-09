@@ -1,7 +1,7 @@
 #ifndef PAGE3_ACCOVERALLEXPENSES_H
 #define PAGE3_ACCOVERALLEXPENSES_H
-#include "../ParserExpenses/ParserExpenses.h"
-#include "../ParserAccounts/ParserAccounts.h"
+#include "../ParserExpenses/ExpenseParser.h"
+#include "../ParserAccounts/AccountsParser.h"
 #include <stdio.h>
 
 #define MIN_YEAR 2020 /* Expense data starts from year 2020 */

@@ -1,10 +1,9 @@
 #ifndef CUR_EXP_TABLE_PAGE_H
 #define CUR_EXP_TABLE_PAGE_H
-#include "../ParserExpenses/ParserExpenses.h"
-#include "../ParserAccounts/ParserAccounts.h"
+#include "../ParserExpenses/ExpenseParser.h"
+#include "../ParserAccounts/AccountsParser.h"
 #include <stdio.h>
 
-#define MAX_ACCOUNTS 100
 #define MAX_YEARS 5 /* Expense data ranges from 2020 to 2024 */
 
 typedef struct

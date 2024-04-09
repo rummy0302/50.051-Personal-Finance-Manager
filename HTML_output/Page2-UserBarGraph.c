@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "Page2-UserBarGraph.h"
-#include "../ParserExpenses/ParserExpenses.h"
-#include "../ParserAccounts/ParserAccounts.h"
+#include "../ParserExpenses/ExpenseParser.h"
+#include "../ParserAccounts/AccountsParser.h"
 #include "Common.h"
 
 /* This file is to generate the user expense graphs (total expense in SGD) for each account -

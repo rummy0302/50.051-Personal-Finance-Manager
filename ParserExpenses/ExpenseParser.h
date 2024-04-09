@@ -1,7 +1,10 @@
 #ifndef EXPENSES_H
 #define EXPENSES_H
+#include <stdbool.h>
 
-typedef struct {
+#define MAX_EXPENSES 100 // Maximum number of expenses to store
+typedef struct
+{
     int account_id;
     char date[20];
     char description[100];
@@ -9,6 +12,7 @@ typedef struct {
     float amount_spent;
 } Expenses;
 
-void parse_json(const char *json, Expenses expenses[], int *num_expenses);
+void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses);
+bool validateExpenses(Expenses expenses[], int num_expenses);
 
 #endif /* EXPENSES_H */

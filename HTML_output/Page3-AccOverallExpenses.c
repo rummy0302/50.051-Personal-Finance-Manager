@@ -3,8 +3,8 @@
 #include <string.h>
 #include "cJSON.h"
 #include "Page3-AccOverallExpenses.h"
-#include "../ParserExpenses/ParserExpenses.h"
-#include "../ParserAccounts/ParserAccounts.h"
+#include "../ParserExpenses/ExpenseParser.h"
+#include "../ParserAccounts/AccountsParser.h"
 #include "Common.h"
 
 /* This file is to generate the categorization table by account and display account expense graphs (total expense in SGD, USD, EUR) for all years for each account -

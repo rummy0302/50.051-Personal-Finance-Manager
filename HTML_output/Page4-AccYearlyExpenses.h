@@ -1,7 +1,7 @@
 #ifndef PAGE4_SOMEOTHERHEADER_H
 #define PAGE4_SOMEOTHERHEADER_H
-#include "../ParserExpenses/ParserExpenses.h"
-#include "../ParserAccounts/ParserAccounts.h"
+#include "../ParserExpenses/ExpenseParser.h"
+#include "../ParserAccounts/AccountsParser.h"
 #include <stdio.h>
 
 #define MAX_MONTHS 13 /* Expense data for 12 months of the year */

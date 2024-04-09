@@ -2,11 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "ExpenseParser.h"
+#include "AccountsParser.h"
 
-#define MAX_EXPENSES 100 // Maximum number of expenses to store
-
-void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses)
+void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
 {
     const char *ptr = json;
 
@@ -26,10 +24,10 @@ void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses
     ptr++; // Skip [
 
     // Parse array elements
-    while (*ptr != '\0' && *ptr != ']' && *num_expenses < MAX_EXPENSES)
+    while (*ptr != '\0' && *ptr != ']' && *num_accounts < MAX_ACCOUNTS)
     {
-        // Parse expense object
-        Expenses *expense = &expenses[*num_expenses];
+        // Parse account object
+        Account *account = &accounts[*num_accounts];
 
         // Parse account_id
         while (*ptr != ':')
@@ -45,7 +43,7 @@ void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses
         }
 
         // Parse numeric value
-        expense->account_id = atoi(ptr);
+        account->account_id = atoi(ptr);
 
         // Move ptr to next token
         while (*ptr != ',' && *ptr != ']')
@@ -53,7 +51,29 @@ void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses
             ptr++;
         }
 
-        // Parse date
+        // Parse user_id
+        while (*ptr != ':')
+        {
+            ptr++;
+        }
+        ptr++; // Skip :
+
+        // Skip whitespace
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
+        // Parse numeric value
+        account->user_id = atoi(ptr);
+
+        // Move ptr to next token
+        while (*ptr != ',' && *ptr != ']')
+        {
+            ptr++;
+        }
+
+        // Parse name
         while (*ptr != ':')
         {
             ptr++;
@@ -67,7 +87,7 @@ void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses
         }
 
         // Parse string value
-        sscanf(ptr, "\"%[^\"]\"", expense->date);
+        sscanf(ptr, "\"%[^\"]\"", account->name);
 
         // Move ptr to next token
         while (*ptr != ',' && *ptr != ']')
@@ -75,7 +95,7 @@ void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses
             ptr++;
         }
 
-        // Parse description
+        // Parse default_currency
         while (*ptr != ':')
         {
             ptr++;
@@ -89,29 +109,7 @@ void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses
         }
 
         // Parse string value
-        sscanf(ptr, "\"%[^\"]\"", expense->description);
-
-        // Move ptr to next token
-        while (*ptr != ',' && *ptr != ']')
-        {
-            ptr++;
-        }
-
-        // Parse currency
-        while (*ptr != ':')
-        {
-            ptr++;
-        }
-        ptr++; // Skip :
-
-        // Skip whitespace
-        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
-        {
-            ptr++;
-        }
-
-        // Parse string value
-        sscanf(ptr, "\"%[^\"]\"", expense->currency);
+        sscanf(ptr, "\"%[^\"]\"", account->default_currency);
 
         // Move ptr to next token
         while (*ptr != ',' && *ptr != ']')
@@ -133,7 +131,7 @@ void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses
         }
 
         // Parse numeric value
-        sscanf(ptr, "%f", &expense->amount_spent);
+        sscanf(ptr, "%f", &account->balance);
 
         // Move ptr to next token
         while (*ptr != ',' && *ptr != ']')
@@ -141,12 +139,12 @@ void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses
             ptr++;
         }
 
-        // Increment the number of expenses parsed
-        (*num_expenses)++;
+        // Increment the number of account parsed
+        (*num_accounts)++;
     }
 }
 
-bool isValidAccountID(const int account_id)
+bool isValidAccountsID(const int account_id)
 {
     // Check if the accountID within the range and if it is an integer
     if (account_id < 1 || account_id > 100)
@@ -155,27 +153,24 @@ bool isValidAccountID(const int account_id)
     return true;
 }
 
-bool isValidDate(const char *date)
+bool isValidUserID(const int user_id)
 {
-    int year, month, day;
-    if (sscanf(date, "%d-%d-%d", &year, &month, &day) != 3)
-        return 0;
+    // Check if the userID within the range and if it is an integer
+    if (user_id < 1 || user_id > 50)
+        return false;
 
-    if (year < 1000 || year > 9999 || month < 1 || month > 12 || day < 1 || day > 31)
-        return 0;
-
-    return 1;
+    return true;
 }
 
-bool isValidDescription(const char *description)
+bool isValidname(const char *name)
 {
-    // Check if description is not empty or it is in the wrong format
-    if (description[0] == '\0')
+    // Check if description is not empty or it is an integer
+    if (name[0] == '\0')
         return false;
     return true;
 }
 
-bool isValidCurrency(const char *currency)
+bool isValidDefaultCurrency(const char *currency)
 {
     // Check if the currency is empty or is not 3 digit
 
@@ -185,32 +180,33 @@ bool isValidCurrency(const char *currency)
     return true;
 }
 
-bool isValidAmountSpent(const float amount_spend)
+bool isValidBalance(const float balance)
 {
-    // Check if the currency is empty or is not 3 digit
+    // Check if the balance is empty or it is a string
 
-    if (amount_spend == 0.00)
+    if (balance == 0.00)
         return false;
 
     return true;
 }
 
-bool validateExpenses(Expenses expenses[], int num_expenses)
+bool validateAccounts(Account accounts[], int num_accounts)
 
 {
     int lineNumber;
     lineNumber = 1;
+
     bool isAllValid = true;
-    for (int i = 0; i < num_expenses; i++)
+    for (int i = 0; i < num_accounts; i++)
     {
         bool valid = true;
         lineNumber++;
 
-        if (!isValidAccountID(expenses[i].account_id))
+        if (!isValidAccountsID(accounts[i].account_id))
         {
 
             printf("\n");
-            printf("Error in Expenses.json : Invalid account_id format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
+            printf("Error in Accounts.json : Invalid account_id format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
             printf("Please ensure that the account_id is of type int and is within the range of 1-100.\n");
             printf("\n");
             valid = false;
@@ -218,11 +214,11 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
         }
         lineNumber++;
 
-        if (!isValidDate(expenses[i].date))
+        if (!isValidUserID(accounts[i].user_id))
         {
             printf("\n");
-            printf("Error in Expenses.json : Invalid date format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
-            printf("Please ensure that the date is a string and follows the format of YYYY-MM-DD. \n");
+            printf("Error in Accounts.json : Invalid user_id format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
+            printf("Please ensure that the user_id is of type int and is within the range of 1-50.\n");
             printf("\n");
             valid = false;
             isAllValid = false;
@@ -230,21 +226,21 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
 
         lineNumber++;
 
-        if (!isValidDescription(expenses[i].description))
+        if (!isValidname(accounts[i].name))
         {
             printf("\n");
-            printf("Error in Expenses.json : Invalid description format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
-            printf("Please ensure that the description is a string.\n");
+            printf("Error in Accounts.json : Invalid name format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
+            printf("Please ensure that the name is a string.\n");
             printf("\n");
             valid = false;
             isAllValid = false;
         }
         lineNumber++;
 
-        if (!isValidCurrency(expenses[i].currency))
+        if (!isValidDefaultCurrency(accounts[i].default_currency))
         {
             printf("\n");
-            printf("Error in Expenses.json : Invalid currency format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
+            printf("Error in Accounts.json : Invalid currency format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
             printf("Please ensure that the currency is a 3-letter string. \n");
             printf("\n");
             valid = false;
@@ -252,11 +248,11 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
         }
         lineNumber++;
 
-        if (!isValidAmountSpent(expenses[i].amount_spent))
+        if (!isValidBalance(accounts[i].balance))
         {
             printf("\n");
-            printf("Error in Expenses.json : Invalid amount_spent format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
-            printf("Please ensure that the amount_spent is a float or an integer value.\n");
+            printf("Error in Accounts.json : Invalid balance format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
+            printf("Please ensure that the balance is a float.\n");
             printf("\n");
             valid = false;
             isAllValid = false;
@@ -265,42 +261,44 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
 
         if (valid)
         {
-            // printf("Expense %d is valid.\n", i + 1);
+            // printf("Account %d is valid.\n", i + 1);
         }
         else
         {
-            printf("Expense %d has validation errors.\n", i + 1);
+            printf("Account %d has validation errors.\n", i + 1);
         }
     }
+
     return isAllValid;
 }
 
-/* int main()
+/*
+int main()
 {
-    const char *filename = "Expenses.json";
-    FILE *expenses_file = fopen(filename, "r");
-    if (expenses_file == NULL)
+    const char *filename = "Accounts.json";
+    FILE *accounts_file = fopen(filename, "r");
+    if (accounts_file == NULL)
     {
         printf("Error: Unable to open %s\n", filename);
         return 1;
     }
 
     // Get the file size
-    fseek(expenses_file, 0L, SEEK_END);
-    long fileSize = ftell(expenses_file);
-    rewind(expenses_file);
+    fseek(accounts_file, 0L, SEEK_END);
+    long fileSize = ftell(accounts_file);
+    rewind(accounts_file);
 
     // Allocate memory for JSON content
     char *jsonContent = (char *)malloc(fileSize + 1); // +1 for null terminator
     if (jsonContent == NULL)
     {
         printf("Error: Unable to allocate memory\n");
-        fclose(expenses_file);
+        fclose(accounts_file);
         return 1;
     }
 
     // Read the JSON content into the allocated memory
-    size_t bytesRead = fread(jsonContent, 1, fileSize, expenses_file);
+    size_t bytesRead = fread(jsonContent, 1, fileSize, accounts_file);
     // if (bytesRead != fileSize)
     // {
     //     printf("Error: Failed to read JSON content\n");
@@ -313,33 +311,32 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
     jsonContent[fileSize] = '\0';
 
     // Close the file
-    fclose(expenses_file);
+    fclose(accounts_file);
 
     // Array to store parsed expenses
-    Expenses expenses[MAX_EXPENSES];
-    int num_expenses = 0;
+    Account accounts[MAX_ACCOUNTS];
+    int num_accounts = 0;
 
     // Parse the JSON content
-    memset(expenses, 0, sizeof(expenses));
+    memset(accounts, 0, sizeof(accounts));
 
-    parse_expensesjson(jsonContent, expenses, &num_expenses);
+    parse_accountsjson(jsonContent, accounts, &num_accounts);
 
     // Access the parsed expenses
-    for (int i = 0; i < num_expenses; i++)
+    for (int i = 0; i < num_accounts; i++)
     {
-        printf("Expense %d:\n", i + 1);
-        printf("Account ID: %d\n", expenses[i].account_id);
-        printf("Date: %s\n", expenses[i].date);
-        printf("Description: %s\n", expenses[i].description);
-        printf("Currency: %s\n", expenses[i].currency);
-        printf("Amount Spent: %.2f\n", expenses[i].amount_spent);
+        printf("Account ID: %d\n", accounts[i].account_id);
+        printf("User ID: %d\n", accounts[i].user_id);
+        printf("Name: %s\n", accounts[i].name);
+        printf("Default_Currency: %s\n", accounts[i].default_currency);
+        printf("Balance: %.2f\n", accounts[i].balance);
         printf("\n");
     }
 
     // Free the allocated memory
     free(jsonContent);
 
-    validateExpenses(expenses, num_expenses);
+    validateAccounts(accounts, num_accounts);
 
     return 0;
 } */
