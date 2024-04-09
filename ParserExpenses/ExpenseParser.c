@@ -4,158 +4,158 @@
 #include <stdbool.h>
 #include "ExpenseParser.h"
 
-#define MAX_EXPENSES 100 // Maximum number of expenses to store
+#define MAX_EXPENSES 100 /* Maximum number of expenses to store */
 
 void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses)
 {
     const char *ptr = json;
 
-    // Skip leading whitespace
+    /* Skip leading whitespace */
     while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
     {
         ptr++;
     }
 
-    // Check if JSON starts with [
+    /* Check if JSON starts with [ */
     if (*ptr != '[')
     {
         printf("Invalid JSON\n");
         return;
     }
 
-    ptr++; // Skip [
+    ptr++; /* / Skip [ */
 
-    // Parse array elements
+    /* Parse array elements */
     while (*ptr != '\0' && *ptr != ']' && *num_expenses < MAX_EXPENSES)
     {
-        // Parse expense object
+        /* Parse expense object */
         Expenses *expense = &expenses[*num_expenses];
 
-        // Parse account_id
+        /* Parse account_id */
         while (*ptr != ':')
         {
             ptr++;
         }
-        ptr++; // Skip :
+        ptr++; /* Skip : */
 
-        // Skip whitespace
+        /* Skip whitespace */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse numeric value
+        /* Parse numeric value */
         expense->account_id = atoi(ptr);
 
-        // Move ptr to next token
+        /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Parse date
+        /* Parse date */
         while (*ptr != ':')
         {
             ptr++;
         }
-        ptr++; // Skip :
+        ptr++; /* Skip :*/
 
-        // Skip whitespace
+        /* Skip whitespace */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse string value
+        /* Parse string value */
         sscanf(ptr, "\"%[^\"]\"", expense->date);
 
-        // Move ptr to next token
+        /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Parse description
+        /* Parse description*/
         while (*ptr != ':')
         {
             ptr++;
         }
-        ptr++; // Skip :
+        ptr++; /* Skip : */
 
-        // Skip whitespace
+        /* Skip whitespace*/
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse string value
+        /* Parse string value */
         sscanf(ptr, "\"%[^\"]\"", expense->description);
 
-        // Move ptr to next token
+        /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Parse currency
+        /* Parse currency*/
         while (*ptr != ':')
         {
             ptr++;
         }
-        ptr++; // Skip :
+        ptr++; /* Skip :*/
 
-        // Skip whitespace
+        /* Skip whitespace*/
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse string value
+        /* Parse string value*/
         sscanf(ptr, "\"%[^\"]\"", expense->currency);
 
-        // Move ptr to next token
+        /* Move ptr to next token*/
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Parse amount_spent
+        
         while (*ptr != ':')
         {
             ptr++;
         }
-        ptr++; // Skip :
+        ptr++; 
 
-        // Skip whitespace
+        
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse numeric value
+        
         sscanf(ptr, "%f", &expense->amount_spent);
 
-        // Move ptr to next token
+        /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Increment the number of expenses parsed
+        /* Increment the number of expenses parsed */
         (*num_expenses)++;
     }
 }
 
-bool isValidAccountID(const int account_id)
+int isValidAccountID(const int account_id)
 {
-    // Check if the accountID within the range and if it is an integer
+    
     if (account_id < 1 || account_id > 100)
-        return false;
+        return 0;
 
-    return true;
+    return 1;
 }
 
-bool isValidDate(const char *date)
+int isValidDate(const char *date)
 {
     int year, month, day;
     if (sscanf(date, "%d-%d-%d", &year, &month, &day) != 3)
@@ -167,43 +167,46 @@ bool isValidDate(const char *date)
     return 1;
 }
 
-bool isValidDescription(const char *description)
+int isValidDescription(const char *description)
 {
-    // Check if description is not empty or it is in the wrong format
+    
     if (description[0] == '\0')
-        return false;
-    return true;
+        return 0;
+    return 1;
 }
 
-bool isValidCurrency(const char *currency)
+int isValidCurrency(const char *currency)
 {
-    // Check if the currency is empty or is not 3 digit
+    
 
     if (strlen(currency) != 3)
-        return false;
+        return 0;
 
-    return true;
+    return 1;
 }
 
-bool isValidAmountSpent(const float amount_spend)
+int isValidAmountSpent(const float amount_spend)
 {
-    // Check if the currency is empty or is not 3 digit
+    
 
     if (amount_spend == 0.00)
-        return false;
+        return 0;
 
-    return true;
+    return 1;
 }
 
-bool validateExpenses(Expenses expenses[], int num_expenses)
+int validateExpenses(Expenses expenses[], int num_expenses)
 
 {
     int lineNumber;
+    int i;
+    int isAllValid = 1;
     lineNumber = 1;
-    bool isAllValid = true;
-    for (int i = 0; i < num_expenses; i++)
+    
+    
+    for (i = 0; i < num_expenses; i++)
     {
-        bool valid = true;
+        int valid = 1;
         lineNumber++;
 
         if (!isValidAccountID(expenses[i].account_id))
@@ -213,8 +216,8 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
             printf("Error in Expenses.json : Invalid account_id format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
             printf("Please ensure that the account_id is of type int and is within the range of 1-100.\n");
             printf("\n");
-            valid = false;
-            isAllValid = false;
+            valid = 0;
+            isAllValid = 0;
         }
         lineNumber++;
 
@@ -224,8 +227,8 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
             printf("Error in Expenses.json : Invalid date format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
             printf("Please ensure that the date is a string and follows the format of YYYY-MM-DD. \n");
             printf("\n");
-            valid = false;
-            isAllValid = false;
+            valid = 0;
+            isAllValid = 0;
         }
 
         lineNumber++;
@@ -236,8 +239,8 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
             printf("Error in Expenses.json : Invalid description format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
             printf("Please ensure that the description is a string.\n");
             printf("\n");
-            valid = false;
-            isAllValid = false;
+            valid = 0;
+            isAllValid = 0;
         }
         lineNumber++;
 
@@ -247,8 +250,8 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
             printf("Error in Expenses.json : Invalid currency format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
             printf("Please ensure that the currency is a 3-letter string. \n");
             printf("\n");
-            valid = false;
-            isAllValid = false;
+            valid = 0;
+            isAllValid = 0;
         }
         lineNumber++;
 
@@ -258,14 +261,14 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
             printf("Error in Expenses.json : Invalid amount_spent format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
             printf("Please ensure that the amount_spent is a float or an integer value.\n");
             printf("\n");
-            valid = false;
-            isAllValid = false;
+            valid = 0;
+            isAllValid = 0;
         }
         lineNumber++;
 
         if (valid)
         {
-            // printf("Expense %d is valid.\n", i + 1);
+            /* printf("Expense %d is valid.\n", i + 1);*/
         }
         else
         {

@@ -8,198 +8,201 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
 {
     const char *ptr = json;
 
-    // Skip leading whitespace
+    /* Skip leading whitespace */
     while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
     {
         ptr++;
     }
 
-    // Check if JSON starts with [
+    /* Check if JSON starts with [ */
     if (*ptr != '[')
     {
         printf("Invalid JSON\n");
         return;
     }
 
-    ptr++; // Skip [
+    ptr++; /* Skip [ */
 
-    // Parse array elements
+    /* Parse array elements */
     while (*ptr != '\0' && *ptr != ']' && *num_accounts < MAX_ACCOUNTS)
     {
-        // Parse account object
+        /* Parse account object */
         Account *account = &accounts[*num_accounts];
 
-        // Parse account_id
+        /* Parse account_id */
         while (*ptr != ':')
         {
             ptr++;
         }
-        ptr++; // Skip :
+        ptr++; /* Skip : */
 
-        // Skip whitespace
+        /* Skip whitespace */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse numeric value
+        /* Parse numeric value */
         account->account_id = atoi(ptr);
 
-        // Move ptr to next token
+        /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Parse user_id
+        /* Parse user_id */
         while (*ptr != ':')
         {
             ptr++;
         }
-        ptr++; // Skip :
+        ptr++; /* Skip :*/
 
-        // Skip whitespace
+        /* Skip whitespace */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse numeric value
+        /* Parse numeric value */
         account->user_id = atoi(ptr);
 
-        // Move ptr to next token
+        /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Parse name
+        /* Parse name */
         while (*ptr != ':')
         {
             ptr++;
         }
-        ptr++; // Skip :
+        ptr++; /* Skip : */
 
-        // Skip whitespace
+        /* Skip whitespace */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse string value
+        /* Parse string value */
         sscanf(ptr, "\"%[^\"]\"", account->name);
 
-        // Move ptr to next token
+        /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Parse default_currency
+        /* Parse default_currency */
         while (*ptr != ':')
         {
             ptr++;
         }
-        ptr++; // Skip :
+        ptr++; /* Skip : */
 
-        // Skip whitespace
+        /* Skip whitespace */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse string value
+        /* Parse string value */
         sscanf(ptr, "\"%[^\"]\"", account->default_currency);
 
-        // Move ptr to next token
+        /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Parse amount_spent
+        /* Parse amount_spent */
         while (*ptr != ':')
         {
             ptr++;
         }
-        ptr++; // Skip :
+        ptr++; /* Skip :*/
 
-        // Skip whitespace
+        /* Skip whitespace */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse numeric value
+        /* Parse numeric value */
         sscanf(ptr, "%f", &account->balance);
 
-        // Move ptr to next token
+        /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Increment the number of account parsed
+        /* Increment the number of account parsed */
         (*num_accounts)++;
     }
 }
 
-bool isValidAccountsID(const int account_id)
+int isValidAccountsID(const int account_id)
 {
-    // Check if the accountID within the range and if it is an integer
+    /* Check if the accountID within the range and if it is an integer */
     if (account_id < 1 || account_id > 100)
-        return false;
+        return 0;
 
-    return true;
+    return 1;
 }
 
-bool isValidUserID(const int user_id)
+int isValidUserID(const int user_id)
 {
-    // Check if the userID within the range and if it is an integer
+    /* Check if the userID within the range and if it is an integer */
     if (user_id < 1 || user_id > 50)
-        return false;
+        return 0;
 
-    return true;
+    return 1;
 }
 
-bool isValidname(const char *name)
+int isValidname(const char *name)
 {
-    // Check if description is not empty or it is an integer
+    /* Check if description is not empty or it is an integer */
     if (name[0] == '\0')
-        return false;
-    return true;
+        return 0;
+    return 1;
 }
 
-bool isValidDefaultCurrency(const char *currency)
+int isValidDefaultCurrency(const char *currency)
 {
-    // Check if the currency is empty or is not 3 digit
+    /* Check if the currency is empty or is not 3 digit */
 
     if (strlen(currency) != 3)
-        return false;
+        return 0;
 
-    return true;
+    return 1;
 }
 
-bool isValidBalance(const float balance)
+int isValidBalance(const float balance)
 {
-    // Check if the balance is empty or it is a string
+    /* Check if the balance is empty or it is a string */
 
     if (balance == 0.00)
-        return false;
+        return 0;
 
-    return true;
+    return 1;
 }
 
-bool validateAccounts(Account accounts[], int num_accounts)
+int validateAccounts(Account accounts[], int num_accounts)
 
 {
     int lineNumber;
+    int i;
+    int isAllValid = 1;
     lineNumber = 1;
+    
 
-    bool isAllValid = true;
-    for (int i = 0; i < num_accounts; i++)
+    
+    for (i = 0; i < num_accounts; i++)
     {
-        bool valid = true;
+        int valid = 1;
         lineNumber++;
 
         if (!isValidAccountsID(accounts[i].account_id))
@@ -209,8 +212,8 @@ bool validateAccounts(Account accounts[], int num_accounts)
             printf("Error in Accounts.json : Invalid account_id format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
             printf("Please ensure that the account_id is of type int and is within the range of 1-100.\n");
             printf("\n");
-            valid = false;
-            isAllValid = false;
+            valid = 0;
+            isAllValid = 0;
         }
         lineNumber++;
 
@@ -220,8 +223,8 @@ bool validateAccounts(Account accounts[], int num_accounts)
             printf("Error in Accounts.json : Invalid user_id format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
             printf("Please ensure that the user_id is of type int and is within the range of 1-50.\n");
             printf("\n");
-            valid = false;
-            isAllValid = false;
+            valid = 0;
+            isAllValid = 0;
         }
 
         lineNumber++;
@@ -232,8 +235,8 @@ bool validateAccounts(Account accounts[], int num_accounts)
             printf("Error in Accounts.json : Invalid name format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
             printf("Please ensure that the name is a string.\n");
             printf("\n");
-            valid = false;
-            isAllValid = false;
+            valid = 0;
+            isAllValid = 0;
         }
         lineNumber++;
 
@@ -243,8 +246,8 @@ bool validateAccounts(Account accounts[], int num_accounts)
             printf("Error in Accounts.json : Invalid currency format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
             printf("Please ensure that the currency is a 3-letter string. \n");
             printf("\n");
-            valid = false;
-            isAllValid = false;
+            valid = 0;
+            isAllValid = 0;
         }
         lineNumber++;
 
@@ -254,14 +257,14 @@ bool validateAccounts(Account accounts[], int num_accounts)
             printf("Error in Accounts.json : Invalid balance format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
             printf("Please ensure that the balance is a float.\n");
             printf("\n");
-            valid = false;
-            isAllValid = false;
+            valid = 0;
+            isAllValid = 0;
         }
         lineNumber++;
 
         if (valid)
         {
-            // printf("Account %d is valid.\n", i + 1);
+            /* printf("Account %d is valid.\n", i + 1); */
         }
         else
         {

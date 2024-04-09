@@ -320,6 +320,7 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses, int accountId, 
     fprintf(htmlFile, ".plotly-graph-container {\n");
     fprintf(htmlFile, "    padding: 0px;\n");
     fprintf(htmlFile, "    width: 90%%; \n");
+    fprintf(htmlFile, "    margin-top: -15px; \n");
     fprintf(htmlFile, "    height: 400px !important;\n");
 
     fprintf(htmlFile, "}\n");

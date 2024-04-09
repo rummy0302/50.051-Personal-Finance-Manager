@@ -14,8 +14,14 @@ void initInputFSM(InputFSM *inputFsm)
 
 void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
 {
+    long fileSize;
+    long fileSize2;
+    FILE *expenses_file;
+    char *jsonContent;
+    char *jsonContent2;
     int num_expenses = 0;
     int num_accounts = 0;
+    
 
     while ((inputFSM->currentState != COMPLETED) && (inputFSM->currentState != ERROR))
     {
@@ -24,7 +30,7 @@ void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
         {
         case INITIAL_STATE:
         {
-            // parse account json
+            /* parse account json */
             FILE *accounts_file = fopen(accountFile, "r");
             if (accounts_file == NULL)
             {
@@ -32,13 +38,13 @@ void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
                 inputFSM->currentState = ERROR;
             }
 
-            // Get the file size
+            /* Get the file size */
             fseek(accounts_file, 0L, SEEK_END);
-            long fileSize = ftell(accounts_file);
+            fileSize = ftell(accounts_file);
             rewind(accounts_file);
 
-            // Allocate memory for JSON content
-            char *jsonContent = (char *)malloc(fileSize + 1); // +1 for null terminator
+            /* Allocate memory for JSON content */
+            jsonContent = (char *)malloc(fileSize + 1); /* +1 for null terminator */
             if (jsonContent == NULL)
             {
                 printf("Error: Unable to allocate memory\n");
@@ -46,35 +52,35 @@ void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
                 inputFSM->currentState = ERROR;
             }
 
-            // Read the JSON content into the allocated memory
-            size_t bytesRead = fread(jsonContent, 1, fileSize, accounts_file);
+            /* Read the JSON content into the allocated memory */
+            fread(jsonContent, 1, fileSize, accounts_file);
 
-            // Null-terminate the JSON content
+            /* Null-terminate the JSON content */
             jsonContent[fileSize] = '\0';
 
-            // Close the file
+            /* Close the file */
             fclose(accounts_file);
 
-            // Parse the JSON content
+            /* Parse the JSON content */
 
             parse_accountsjson(jsonContent, inputFSM->accounts, &num_accounts);
 
-            // parse expense json
+            /* parse expense json */
 
-            FILE *expenses_file = fopen(expenseFile, "r");
+            expenses_file = fopen(expenseFile, "r");
             if (expenses_file == NULL)
             {
                 printf("Error: Unable to open %s\n", expenseFile);
                 inputFSM->currentState = ERROR;
             }
 
-            // Get the file size
+            /* Get the file size */
             fseek(expenses_file, 0L, SEEK_END);
-            long fileSize2 = ftell(expenses_file);
+            fileSize2 = ftell(expenses_file);
             rewind(expenses_file);
 
-            // Allocate memory for JSON content
-            char *jsonContent2 = (char *)malloc(fileSize2 + 1); // +1 for null terminator
+            /* Allocate memory for JSON content */
+            jsonContent2 = (char *)malloc(fileSize2 + 1); /* +1 for null terminator */
             if (jsonContent2 == NULL)
             {
                 printf("Error: Unable to allocate memory\n");
@@ -82,13 +88,13 @@ void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
                 inputFSM->currentState = ERROR;
             }
 
-            // Read the JSON content into the allocated memory
-            size_t bytesRead2 = fread(jsonContent2, 1, fileSize2, expenses_file);
+            /* Read the JSON content into the allocated memory */
+            fread(jsonContent2, 1, fileSize2, expenses_file);
 
-            // Null-terminate the JSON content
+            /* Null-terminate the JSON content */
             jsonContent2[fileSize2] = '\0';
 
-            // Close the file
+            /* Close the file */
             fclose(expenses_file);
 
             parse_expensesjson(jsonContent2, inputFSM->expenses, &num_expenses);
@@ -149,7 +155,7 @@ int runInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
 }
 
 /* Print all the information from accounts and expenses */
-// void printAccountsAndExpenses(InputFSM *inputFSM)
+/* // void printAccountsAndExpenses(InputFSM *inputFSM)
 // {
 //     if (inputFSM->accounts != NULL)
 //     {
@@ -185,7 +191,7 @@ int runInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
 //             printf("\n");
 //         }
 //     }
-// }
+// }*/
 
 int main(int argc, char const *argv[])
 {
@@ -202,7 +208,7 @@ int main(int argc, char const *argv[])
     if (runInputState(&inputFSM, accountFile, expenseFile))
     {
         printf("Successfully processed %s and %s.", accountFile, expenseFile);
-        // printAccountsAndExpenses(&inputFSM);
+        /* printAccountsAndExpenses(&inputFSM); */
     }
 
     return 0;
