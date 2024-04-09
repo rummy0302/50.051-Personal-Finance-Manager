@@ -8,8 +8,9 @@
 void initInputFSM(InputFSM *inputFsm)
 {
     inputFsm->currentState = INITIAL_STATE;
-    inputFsm->accounts;
-    inputFsm->expenses;
+
+    memset(inputFsm->accounts, 0, sizeof(inputFsm->accounts));
+    memset(inputFsm->expenses, 0, sizeof(inputFsm->expenses));
 }
 
 void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
@@ -21,7 +22,6 @@ void processInputState(InputFSM *inputFSM, char *accountFile, char *expenseFile)
     char *jsonContent2;
     int num_expenses = 0;
     int num_accounts = 0;
-    
 
     while ((inputFSM->currentState != COMPLETED) && (inputFSM->currentState != ERROR))
     {
