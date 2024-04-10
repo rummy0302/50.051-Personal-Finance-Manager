@@ -1,12 +1,40 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
+
 #include "AccountsParser.h"
+
+int isValidKey(const char *current_pos, const char **next_pos, char *expected_key){
+    size_t key_len;
+    /* Skip leading whitespace */
+    while (*current_pos == ' ' || *current_pos == '\t' || *current_pos == '\n' || *current_pos == '\r')
+    {
+        current_pos++;
+    }
+
+    /* Check if the JSON starts with the expected key */
+    key_len = strlen(expected_key); /* To account for the last character */
+
+    if (strncmp(current_pos, expected_key, key_len) != 0)
+    {
+        return 0;
+    }
+
+    /* Move ptr to the end of the key */
+    current_pos += key_len;
+
+    *next_pos = current_pos;
+    return 1;
+}
+
 
 void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
 {
     const char *ptr = json;
+    int lineNumber = 1;
+    const char *current_pos;
+    const char *next_pos = NULL;
+    char * expected_key;
 
     /* Skip leading whitespace */
     while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
@@ -17,11 +45,12 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
     /* Check if JSON starts with [ */
     if (*ptr != '[')
     {
-        printf("Invalid JSON\n");
+        printf("Error: Invalid JSON format. File does not contain starting [ at line number: %d.\n", lineNumber);
         return;
     }
 
     ptr++; /* Skip [ */
+
 
     /* Parse array elements */
     while (*ptr != '\0' && *ptr != ']' && *num_accounts < MAX_ACCOUNTS)
@@ -29,14 +58,60 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
         /* Parse account object */
         Account *account = &accounts[*num_accounts];
 
-        /* Parse account_id */
-        while (*ptr != ':')
+        
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r' || *ptr == ',')
         {
             ptr++;
         }
-        ptr++; /* Skip : */
+
+
+        /* Check if each JSON object starts with { */
+        if (*ptr != '{')
+        {
+            printf("Error: Invalid JSON. JSON object does not start with starting { at line number: %d. \n", lineNumber);
+            return;
+        }
+
+        ptr++; /* Skip { */
+        lineNumber++;
+
+        
 
         /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
+        lineNumber++;
+        
+
+        current_pos = ptr;
+        expected_key = "\"account_id\"";
+        if (!isValidKey(current_pos, &next_pos, expected_key)){
+            printf("Error in %s key format in line number: %d\n", expected_key, lineNumber);
+            return;
+        }
+        ptr = next_pos;
+
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
+        /* Check if the next character is ':' */
+        if (*ptr != ':')
+        {
+            printf("Error: Invalid JSON format. File does not contain : between key and value at line number: %d.\n", lineNumber);
+            return;
+        }
+
+        /* Move ptr to the next character after ':' */
+        ptr++;
+
+        /* Skip whitespace after ':' */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
@@ -45,20 +120,52 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
         /* Parse numeric value */
         account->account_id = atoi(ptr);
 
+
         /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        /* Parse user_id */
-        while (*ptr != ':')
+        /* Check if the next character is a comma, indicating the start of the next key-value pair */
+        if (*ptr == ',')
+        {
+            ptr++; 
+        }
+
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
-        ptr++; /* Skip :*/
+        lineNumber++;
+
+        current_pos = ptr;
+        expected_key = "\"user_id\"";
+        if (!isValidKey(current_pos, &next_pos, expected_key)){
+            printf("Error in %s key format in line number: %d\n", expected_key, lineNumber);
+            return;
+        }
+        ptr = next_pos;
+        
 
         /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
+        /* Check if the next character is ':' */
+        if (*ptr != ':')
+        {
+            printf("Error: Invalid JSON format. File does not contain : between key and value at line number: %d.\n", lineNumber);
+            return;
+        }
+
+        /* Move ptr to the next character after ':' */
+        ptr++;
+
+        /* Skip whitespace after ':' */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
@@ -73,14 +180,46 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
             ptr++;
         }
 
-        /* Parse name */
-        while (*ptr != ':')
+        /* Check if the next character is a comma, indicating the start of the next key-value pair */
+        if (*ptr == ',')
+        {
+            ptr++; 
+        }
+
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
-        ptr++; /* Skip : */
+        lineNumber++;
+
+
+        current_pos = ptr;
+        expected_key = "\"name\"";
+        if (!isValidKey(current_pos, &next_pos, expected_key)){
+            printf("Error in %s key format in line number: %d\n", expected_key, lineNumber);
+            return;
+        }
+        ptr = next_pos;
+        
 
         /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
+        /* Check if the next character is ':' */
+        if (*ptr != ':')
+        {
+            printf("Error: Invalid JSON format. File does not contain : between key and value at line number: %d.\n", lineNumber);
+            return;
+        }
+
+        /* Move ptr to the next character after ':' */
+        ptr++;
+
+        /* Skip whitespace after ':' */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
@@ -95,18 +234,50 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
             ptr++;
         }
 
-        /* Parse default_currency */
-        while (*ptr != ':')
+        /* Check if the next character is a comma, indicating the start of the next key-value pair */
+        if (*ptr == ',')
         {
-            ptr++;
+            ptr++; 
         }
-        ptr++; /* Skip : */
 
         /* Skip whitespace */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
+        lineNumber++;
+
+        current_pos = ptr;
+        expected_key = "\"default_currency\"";
+        if (!isValidKey(current_pos, &next_pos, expected_key)){
+            printf("Error in %s key format in line number: %d\n", expected_key, lineNumber);
+            return;
+        }
+        ptr = next_pos;
+        
+
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
+        /* Check if the next character is ':' */
+        if (*ptr != ':')
+        {
+            printf("Error: Invalid JSON format. File does not contain : between key and value at line number: %d.\n", lineNumber);
+            return;
+        }
+
+        /* Move ptr to the next character after ':' */
+        ptr++;
+
+        /* Skip whitespace after ':' */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
 
         /* Parse string value */
         sscanf(ptr, "\"%[^\"]\"", account->default_currency);
@@ -117,14 +288,45 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
             ptr++;
         }
 
-        /* Parse amount_spent */
-        while (*ptr != ':')
+        /* Check if the next character is a comma, indicating the start of the next key-value pair */
+        if (*ptr == ',')
+        {
+            ptr++; 
+        }
+
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
-        ptr++; /* Skip :*/
+        lineNumber++;
+
+        current_pos = ptr;
+        expected_key = "\"balance\"";
+        if (!isValidKey(current_pos, &next_pos, expected_key)){
+            printf("Error in %s key format in line number: %d\n", expected_key, lineNumber);
+            return;
+        }
+        ptr = next_pos;
+        
 
         /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
+        /* Check if the next character is ':' */
+        if (*ptr != ':')
+        {
+            printf("Error: Invalid JSON format. File does not contain : between key and value at line number: %d.\n", lineNumber);
+            return;
+        }
+
+        /* Move ptr to the next character after ':' */
+        ptr++;
+
+        /* Skip whitespace after ':' */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
@@ -139,8 +341,19 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
             ptr++;
         }
 
+        /* Check if the next character is a comma, indicating the start of the next key-value pair */
+        if (*ptr == ',')
+        {
+            ptr++; 
+        }
+
+        lineNumber++;
+
+
+
         /* Increment the number of account parsed */
         (*num_accounts)++;
+
     }
 }
 
