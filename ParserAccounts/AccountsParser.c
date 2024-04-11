@@ -4,6 +4,53 @@
 
 #include "AccountsParser.h"
 
+int isValidAccountsID(const int account_id)
+{
+    /* Check if the accountID within the range and if it is an integer */
+    if (account_id < 1 || account_id > 100)
+        return 0;
+
+    return 1;
+}
+
+int isValidUserID(const int user_id)
+{
+    /* Check if the userID within the range and if it is an integer */
+    if (user_id < 1 || user_id > 50)
+        return 0;
+
+    return 1;
+}
+
+int isValidname(const char name[])
+{
+    /* Check if description is not empty or it is an integer */
+    if (name[0] == '\0' || strlen(name) == 0)
+        return 0;
+    return 1;
+}
+
+int isValidDefaultCurrency(const char *currency)
+{
+    /* Check if the currency is empty or is not 3 digit */
+
+    if (strlen(currency) != 3)
+        return 0;
+
+    return 1;
+}
+
+int isValidBalance(const float balance)
+{
+    /* Check if the balance is empty or it is a string */
+
+    if (balance == 0.00)
+        return 0;
+
+    return 1;
+}
+
+
 int isValidKey(const char *current_pos, const char **next_pos, char *expected_key){
     size_t key_len;
     /* Skip leading whitespace */
@@ -35,6 +82,11 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
     const char *current_pos;
     const char *next_pos = NULL;
     char * expected_key;
+
+    char name[50];
+    char default_currency[4];
+
+    float balance = 0.0;
 
     /* Skip leading whitespace */
     while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
@@ -117,6 +169,16 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
             ptr++;
         }
 
+        /* Check format of account id: */
+        if (!isValidAccountsID(atoi(ptr))){
+            printf("\n");
+            printf("Error in Accounts.json : Invalid account_id format at line number: %d.\n", lineNumber);
+            printf("Please ensure that the account_id is of type int and is within the range of 1-100.\n");
+            printf("\n");
+            return;
+            
+        }
+
         /* Parse numeric value */
         account->account_id = atoi(ptr);
 
@@ -169,6 +231,16 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
+        }
+
+        /* Check format of user id : */
+        if (!isValidUserID(atoi(ptr)))
+        {
+            printf("\n");
+            printf("Error in Accounts.json : Invalid user_id format at line number: %d.\n", lineNumber);
+            printf("Please ensure that the user_id is of type int and is within the range of 1-50.\n");
+            printf("\n");
+            return;
         }
 
         /* Parse numeric value */
@@ -226,7 +298,20 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
         }
 
         /* Parse string value */
-        sscanf(ptr, "\"%[^\"]\"", account->name);
+        sscanf(ptr, "\"%[^\"]\"", name);
+
+        /* Check format of name : */
+        if (!isValidname(name))
+        {
+            printf("\n");
+            printf("Error in Accounts.json : Invalid name format at line number: %d.\n", lineNumber);
+            printf("Please ensure that the name is a string.\n");
+            printf("\n");
+            return;
+        }
+
+        strcpy(account->name, name);
+
 
         /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
@@ -280,7 +365,18 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
 
 
         /* Parse string value */
-        sscanf(ptr, "\"%[^\"]\"", account->default_currency);
+        sscanf(ptr, "\"%[^\"]\"", default_currency);
+
+        if (!isValidDefaultCurrency(default_currency))
+        {
+            printf("\n");
+            printf("Error in Accounts.json : Invalid currency format at line number: %d.\n", lineNumber);
+            printf("Please ensure that the currency is a 3-letter string. \n");
+            printf("\n");
+            return;
+        }
+
+        strcpy(account->default_currency, default_currency);
 
         /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
@@ -333,7 +429,18 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
         }
 
         /* Parse numeric value */
-        sscanf(ptr, "%f", &account->balance);
+        sscanf(ptr, "%f", &balance);
+
+        if (!isValidBalance(balance))
+        {
+            printf("\n");
+            printf("Error in Accounts.json : Invalid balance format at line number: %d.\n", lineNumber);
+            printf("Please ensure that the balance is a float.\n");
+            printf("\n");
+            return;
+        }
+
+        account->balance = balance;
 
         /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
@@ -357,51 +464,6 @@ void parse_accountsjson(const char *json, Account accounts[], int *num_accounts)
     }
 }
 
-int isValidAccountsID(const int account_id)
-{
-    /* Check if the accountID within the range and if it is an integer */
-    if (account_id < 1 || account_id > 100)
-        return 0;
-
-    return 1;
-}
-
-int isValidUserID(const int user_id)
-{
-    /* Check if the userID within the range and if it is an integer */
-    if (user_id < 1 || user_id > 50)
-        return 0;
-
-    return 1;
-}
-
-int isValidname(const char *name)
-{
-    /* Check if description is not empty or it is an integer */
-    if (name[0] == '\0')
-        return 0;
-    return 1;
-}
-
-int isValidDefaultCurrency(const char *currency)
-{
-    /* Check if the currency is empty or is not 3 digit */
-
-    if (strlen(currency) != 3)
-        return 0;
-
-    return 1;
-}
-
-int isValidBalance(const float balance)
-{
-    /* Check if the balance is empty or it is a string */
-
-    if (balance == 0.00)
-        return 0;
-
-    return 1;
-}
 
 int validateAccounts(Account accounts[], int num_accounts)
 
