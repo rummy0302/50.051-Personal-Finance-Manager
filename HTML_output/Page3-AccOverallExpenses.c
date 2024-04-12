@@ -8,12 +8,12 @@
 #include "Common.h"
 
 /* This file is to generate the categorization table by account and display account expense graphs (total expense in SGD, USD, EUR) for all years for each account -
-    
+
     Categorization Table
     1. Categorizes the expenses according to the Shop dictionary
     2. Updates the total value for each category
     3. Displays the final total for each category in a table format
-    
+
     Account Expenses Graph
     1. Calculates total expense in SGD, EUR, USD for each account for each year
     2. Displays a scatter plot showing the total expense in SGD, EUR, USD for each account for each year
@@ -134,14 +134,14 @@ void categorizeExpenses(Expenses *expenses, int numExpenses)
 {
     int i, j;
 
-    memset(accountTotals, 0, sizeof(accountTotals));    /* Reset accountTotals array to zero */
+    memset(accountTotals, 0, sizeof(accountTotals)); /* Reset accountTotals array to zero */
 
-    for (i = 0; i < numExpenses; i++)  /* Loop through each expense */
+    for (i = 0; i < numExpenses; i++) /* Loop through each expense */
     {
         double amount = expenses[i].amount_spent;
         int found = 0;
 
-        for (j = 0; j < sizeof(shops) / sizeof(shops[0]); j++)  /* Check if the expense matches any shop */
+        for (j = 0; j < sizeof(shops) / sizeof(shops[0]); j++) /* Check if the expense matches any shop */
         {
             if (strcmp(expenses[i].description, shops[j].shopName) == 0)
             {
@@ -153,7 +153,7 @@ void categorizeExpenses(Expenses *expenses, int numExpenses)
         if (!found) /* If the expense is not from a shop, categorize it as 'Others' */
         {
 
-            CurrencyType currency = getCurrencyType(expenses[i].currency);  /* Get the currency type */
+            CurrencyType currency = getCurrencyType(expenses[i].currency); /* Get the currency type */
 
             switch (currency) /* Update account totals based on currency */
             {
@@ -176,7 +176,7 @@ void categorizeExpenses(Expenses *expenses, int numExpenses)
 
             CurrencyType currency = getCurrencyType(expenses[i].currency); /* Get the currency type */
 
-            switch (currency)  /* Categorize the expense based on the shop's category and update account totals */
+            switch (currency) /* Categorize the expense based on the shop's category and update account totals */
             {
             case SGD:
                 if (strcmp(shops[j].category, "Food") == 0)
@@ -502,50 +502,73 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses, int accountId, 
     fprintf(htmlFile, "</html>\n");
 }
 
-/* int main(int argc, char **argv)
+/*
+int main(int argc, char **argv)
 {
-    int numExpenses;
-    Expenses *expenses;
-    cJSON *json;
-    FILE *htmlFile;
     int inputAccountId, userId;
     int i;
-    cJSON *accountsJson;
-    Account *accountsData;
+    FILE *htmlFile;
 
-    accountsJson = parseAccountsJSONfile("../ParserAccounts/Accounts.json");
-    if (accountsJson == NULL)
-    {
-        printf("Error: Failed to parse Accounts.json\n");
-        return 1;
-    }
+    int num_expenses = 0;
+    int num_accounts = 0;
 
-    accountsData = processAccountsData(accountsJson, &numAccountsPage3);
-    cJSON_Delete(accountsJson);
+    int userIdInput;
+    Account accounts[MAX_ACCOUNTS];
+    Expenses expenses[MAX_EXPENSES];
+
+    const char *accountsfilename = "../ParserAccounts/Accounts.json";
+    const char *expensesfilename = "../ParserExpenses/Expenses.json";
+    FILE *accounts_file = fopen(accountsfilename, "r");
+
+    fseek(accounts_file, 0L, SEEK_END);
+    long accountsexpensesfileSize = ftell(accounts_file);
+    rewind(accounts_file);
+
+    char *accountsjsonContent = (char *)malloc(accountsexpensesfileSize + 1);
+
+    size_t accountsbytesRead = fread(accountsjsonContent, 1, accountsexpensesfileSize, accounts_file);
+
+    accountsjsonContent[accountsexpensesfileSize] = '\0';
+
+    fclose(accounts_file);
+    memset(accounts, 0, sizeof(accounts));
+
+    parse_accountsjson(accountsjsonContent, accounts, &num_accounts);
+
+    free(accountsjsonContent);
+
+    FILE *expenses_file = fopen(expensesfilename, "r");
+
+    fseek(expenses_file, 0L, SEEK_END);
+    long expensesfileSize = ftell(expenses_file);
+    rewind(expenses_file);
+
+    char *expensesjsonContent = (char *)malloc(expensesfileSize + 1);
+
+    size_t expensesbytesRead = fread(expensesjsonContent, 1, expensesfileSize, expenses_file);
+
+    expensesjsonContent[expensesfileSize] = '\0';
+
+    fclose(expenses_file);
+
+    memset(expenses, 0, sizeof(expenses));
+
+    parse_expensesjson(expensesjsonContent, expenses, &num_expenses);
+
+    free(expensesjsonContent);
 
     for (i = 0; i < numAccountsPage3; i++)
     {
-        accountInfoPage3[i].account_id = accountsData[i].account_id;
-        accountInfoPage3[i].user_id = accountsData[i].user_id;
+        accountInfoPage3[i].account_id = accounts[i].account_id;
+        accountInfoPage3[i].user_id = accounts[i].user_id;
     }
-    free(accountsData);
 
     printf("Enter the user ID: ");
     scanf("%d", &userId);
     printf("Enter the account ID: ");
     scanf("%d", &inputAccountId);
 
-    json = parseExpensesJSONfile("../ParserExpenses/Expenses.json");
-    if (json == NULL)
-    {
-        printf("Error: Failed to parse Expenses.json\n");
-        return 1;
-    }
-
-    expenses = processExpensesData(json, &numExpenses);
-    cJSON_Delete(json);
-
-    categorizeExpenses(expenses, numExpenses);
+    categorizeExpenses(expenses, num_expenses);
 
     htmlFile = fopen("Page3-AccOverallExpenses.html", "w");
     if (htmlFile == NULL)
@@ -554,11 +577,9 @@ void generateHTMLForAccount(Expenses *expenses, int numExpenses, int accountId, 
         return 1;
     }
 
-    generateHTMLForAccount(expenses, numExpenses, inputAccountId, htmlFile);
+    generateHTMLForAccount(expenses, num_expenses, inputAccountId, htmlFile);
 
     fclose(htmlFile);
-
-    free(expenses);
 
 #ifdef _WIN32
     system("start Page3-AccOverallExpenses.html");

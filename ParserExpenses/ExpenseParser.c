@@ -4,8 +4,6 @@
 #include <stdbool.h>
 #include "ExpenseParser.h"
 
-#define MAX_EXPENSES 100 // Maximum number of expenses to store
-
 void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses)
 {
     const char *ptr = json;

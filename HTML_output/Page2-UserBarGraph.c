@@ -307,42 +307,60 @@ void printAllExpenseTotals(int userIdInput, Expenses *expenses, int numExpenses,
     free(accountsPerUser);
 }
 
-/* int main(int argc, char **argv)
+/*
+int main(int argc, char **argv)
 {
-    int numExpenses;
-    int numAccounts;
-    Expenses *expenses;
-    Account *accounts;
-
-    cJSON *json_expenses;
-    cJSON *json_accounts;
+    int num_expenses = 0;
+    int num_accounts = 0;
     FILE *htmlFile;
-
     int userIdInput;
+    Account accounts[MAX_ACCOUNTS];
+    Expenses expenses[MAX_EXPENSES];
 
-    json_expenses = parseExpensesJSONfile("../ParserExpenses/Expenses.json");
-    if (json_expenses == NULL)
-    {
-        printf("Error: Failed to parse Expenses.json\n");
-        return 1;
-    }
+    const char *accountsfilename = "../ParserAccounts/Accounts.json";
+    const char *expensesfilename = "../ParserExpenses/Expenses.json";
+    FILE *accounts_file = fopen(accountsfilename, "r");
 
-    json_accounts = parseAccountsJSONfile("../ParserAccounts/Accounts.json");
-    if (json_accounts == NULL)
-    {
-        printf("Error: Failed to parse Accounts.json\n");
-        return 1;
-    }
+    fseek(accounts_file, 0L, SEEK_END);
+    long accountsexpensesfileSize = ftell(accounts_file);
+    rewind(accounts_file);
 
-    expenses = processExpensesData(json_expenses, &numExpenses);
-    cJSON_Delete(json_expenses);
+    char *accountsjsonContent = (char *)malloc(accountsexpensesfileSize + 1);
 
-    accounts = processAccountsData(json_accounts, &numAccounts);
-    cJSON_Delete(json_accounts);
+    size_t accountsbytesRead = fread(accountsjsonContent, 1, accountsexpensesfileSize, accounts_file);
 
-    calculateExpenseTotal(expenses, numExpenses);
+    accountsjsonContent[accountsexpensesfileSize] = '\0';
 
-    userIdInput = 3;
+    fclose(accounts_file);
+    memset(accounts, 0, sizeof(accounts));
+
+    parse_accountsjson(accountsjsonContent, accounts, &num_accounts);
+
+    free(accountsjsonContent);
+
+    FILE *expenses_file = fopen(expensesfilename, "r");
+
+    fseek(expenses_file, 0L, SEEK_END);
+    long expensesfileSize = ftell(expenses_file);
+    rewind(expenses_file);
+
+    char *expensesjsonContent = (char *)malloc(expensesfileSize + 1);
+
+    size_t expensesbytesRead = fread(expensesjsonContent, 1, expensesfileSize, expenses_file);
+
+    expensesjsonContent[expensesfileSize] = '\0';
+
+    fclose(expenses_file);
+
+    memset(expenses, 0, sizeof(expenses));
+
+    parse_expensesjson(expensesjsonContent, expenses, &num_expenses);
+
+    free(expensesjsonContent);
+
+    calculateExpenseTotal(expenses, num_expenses);
+
+    userIdInput = 1;
 
     htmlFile = fopen("Page2-userBarGraph.html", "w");
     if (htmlFile == NULL)
@@ -351,10 +369,7 @@ void printAllExpenseTotals(int userIdInput, Expenses *expenses, int numExpenses,
         exit(EXIT_FAILURE);
     }
 
-    printAllExpenseTotals(userIdInput, expenses, numExpenses, accounts, numAccounts, htmlFile);
-
-    free(expenses);
-    free(accounts);
+    printAllExpenseTotals(userIdInput, expenses, num_expenses, accounts, num_accounts, htmlFile);
 
     return 0;
 } */

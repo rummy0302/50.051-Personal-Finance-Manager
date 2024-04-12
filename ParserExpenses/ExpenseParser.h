@@ -2,7 +2,7 @@
 #define EXPENSES_H
 #include <stdbool.h>
 
-#define MAX_EXPENSES 100 // Maximum number of expenses to store
+#define MAX_EXPENSES 400 // Maximum number of expenses to store
 typedef struct
 {
     int account_id;

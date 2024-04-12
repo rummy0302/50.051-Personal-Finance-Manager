@@ -8,12 +8,12 @@
 #include "Common.h"
 
 /* This file is to generate the categorization table by account for a particular year and display account expense graphs (total expense in SGD, USD, EUR) for 1 particular year for each account -
-    
+
     Yearly Categorization Table
     1. Categorizes the expenses according to the Shop dictionary
     2. Updates the total value for each category according to year
     3. Displays the final total for each category in a table format
-    
+
     Account Yearly Expenses Graph
     1. Calculates total expense in SGD, EUR, USD for each account for that particular year
     2. Displays a scatter plot showing the total expense in SGD, EUR, USD for each account for each month in that year
@@ -191,13 +191,13 @@ void categorizeExpensesByYear(Expenses *expenses, int numExpenses, int year)
         double amount = expenses[i].amount_spent;
         int found = 0;
 
-        int expenseYear = atoi(strtok(expenses[i].date, "-"));         /* Extract the year from the expense date and compare with the specified year */
+        int expenseYear = atoi(strtok(expenses[i].date, "-")); /* Extract the year from the expense date and compare with the specified year */
         if (expenseYear != year)
         {
             continue; /* Skip the expense if it doesn't belong to the specified year*/
         }
 
-        for (j = 0; j < sizeof(shops_) / sizeof(shops_[0]); j++)  /* Check if the expense matches any shop */
+        for (j = 0; j < sizeof(shops_) / sizeof(shops_[0]); j++) /* Check if the expense matches any shop */
         {
             if (strcmp(expenses[i].description, shops_[j].shopName) == 0)
             {
@@ -206,12 +206,12 @@ void categorizeExpensesByYear(Expenses *expenses, int numExpenses, int year)
             }
         }
 
-        if (!found)    /* If the expense is not from a shop, categorize it as 'Others' */
+        if (!found) /* If the expense is not from a shop, categorize it as 'Others' */
 
         {
 
             CurrencyType currency = getCurrencyType_(expenses[i].currency); /* Get the currency type */
-            switch (currency) /* Update account totals based on currency */
+            switch (currency)                                               /* Update account totals based on currency */
             {
             case SGD:
                 accountTotalsYear[expenses[i].account_id].totalOthersSGDYear += amount;
@@ -227,11 +227,12 @@ void categorizeExpensesByYear(Expenses *expenses, int numExpenses, int year)
                 break;
             }
         }
+
         else
         {
 
             CurrencyType currency = getCurrencyType_(expenses[i].currency); /* Get the currency type */
-            switch (currency)   /* Categorize the expense based on the shop's category and update account totals */
+            switch (currency)                                               /* Categorize the expense based on the shop's category and update account totals */
             {
             case SGD:
                 if (strcmp(shops_[j].category, "Food") == 0)
@@ -292,7 +293,7 @@ void categorizeExpensesByYear(Expenses *expenses, int numExpenses, int year)
                 break;
             }
         }
-    }
+        }
 }
 
 void generateHTMLForAccountYear(Expenses *expenses, int numExpenses, int accountId, FILE *htmlFile, int year)
@@ -415,7 +416,6 @@ void generateHTMLForAccountYear(Expenses *expenses, int numExpenses, int account
     fprintf(htmlFile, "<h1 class=\"main-header\">Welcome to your financial overview!</h1>\n");
     fprintf(htmlFile, "<p class=\"account-overview\"> Here's a detailed breakdown of expenses for  <span class=\"year\"> Account ID %d</span> in <span class=\"year\"> Year %d</span>.</p>\n", accountId, year);
 
-
     fprintf(htmlFile, "<h3>Overall Expenses Table</h3>\n");
     fprintf(htmlFile, "<p class=\"account-overview\"> The Overall Expenses Table shows a breakdown of the expenses according to different categories over the various currencies for a particular year.</p>\n");
 
@@ -472,7 +472,6 @@ void generateHTMLForAccountYear(Expenses *expenses, int numExpenses, int account
 
     fprintf(htmlFile, "<h3 class=\"lineGraphTitle\">Overall Expenses Graph</h3>\n");
     fprintf(htmlFile, "<p class=\"account-overview\"> The Overall Expenses Graph shows a breakdown of the expenses according to different currencies for a particular year.</p>\n");
-
 
     fprintf(htmlFile, "<div id=\"plotly_graph\" class=\"plotly-graph-container\"></div>\n");
 
@@ -556,49 +555,68 @@ void generateHTMLForAccountYear(Expenses *expenses, int numExpenses, int account
     fprintf(htmlFile, "</html>\n");
 }
 
-/* int main(int argc, char **argv)
+/*
+int main(int argc, char **argv)
 {
-    int numExpenses;
-    Expenses *expenses;
-    cJSON *json;
+
     FILE *htmlFile;
     int inputAccountId, userId;
     int i;
     int year;
-    cJSON *accountsJson;
-    Account *accountsData;
 
-    accountsJson = parseAccountsJSONfile("../ParserAccounts/Accounts.json");
-    if (accountsJson == NULL)
+    int num_expenses = 0;
+    int num_accounts = 0;
+
+    int userIdInput;
+    Account accounts[MAX_ACCOUNTS];
+    Expenses expenses[MAX_EXPENSES];
+
+    const char *accountsfilename = "../ParserAccounts/Accounts.json";
+    const char *expensesfilename = "../ParserExpenses/Expenses.json";
+    FILE *accounts_file = fopen(accountsfilename, "r");
+
+    fseek(accounts_file, 0L, SEEK_END);
+    long accountsexpensesfileSize = ftell(accounts_file);
+    rewind(accounts_file);
+
+    char *accountsjsonContent = (char *)malloc(accountsexpensesfileSize + 1);
+
+    size_t accountsbytesRead = fread(accountsjsonContent, 1, accountsexpensesfileSize, accounts_file);
+
+    accountsjsonContent[accountsexpensesfileSize] = '\0';
+
+    fclose(accounts_file);
+    memset(accounts, 0, sizeof(accounts));
+
+    parse_accountsjson(accountsjsonContent, accounts, &num_accounts);
+
+    free(accountsjsonContent);
+
+    FILE *expenses_file = fopen(expensesfilename, "r");
+
+    fseek(expenses_file, 0L, SEEK_END);
+    long expensesfileSize = ftell(expenses_file);
+    rewind(expenses_file);
+
+    char *expensesjsonContent = (char *)malloc(expensesfileSize + 1);
+
+    size_t expensesbytesRead = fread(expensesjsonContent, 1, expensesfileSize, expenses_file);
+
+    expensesjsonContent[expensesfileSize] = '\0';
+
+    fclose(expenses_file);
+
+    memset(expenses, 0, sizeof(expenses));
+
+    parse_expensesjson(expensesjsonContent, expenses, &num_expenses);
+
+    free(expensesjsonContent);
+
+    for (i = 0; i < num_accounts; i++)
     {
-        printf("Error: Failed to parse Accounts.json\n");
-        return 1;
+        accountInfoPage4[i].account_id = accounts[i].account_id;
+        accountInfoPage4[i].user_id = accounts[i].user_id;
     }
-
-    accountsData = processAccountsData(accountsJson, &numAccountsPage4);
-    cJSON_Delete(accountsJson);
-
-    for (i = 0; i < numAccountsPage4; i++)
-    {
-        accountInfoPage4[i].account_id = accountsData[i].account_id;
-        accountInfoPage4[i].user_id = accountsData[i].user_id;
-    }
-    free(accountsData);
-
-    printf("Enter the user ID: ");
-    scanf("%d", &userId);
-    printf("Enter the account ID: ");
-    scanf("%d", &inputAccountId);
-
-    json = parseExpensesJSONfile("../ParserExpenses/Expenses.json");
-    if (json == NULL)
-    {
-        printf("Error: Failed to parse Expenses.json\n");
-        return 1;
-    }
-
-    expenses = processExpensesData(json, &numExpenses);
-    cJSON_Delete(json);
 
     htmlFile = fopen("Page4-AccYearlyExpenses.html", "w");
     if (htmlFile == NULL)
@@ -607,15 +625,19 @@ void generateHTMLForAccountYear(Expenses *expenses, int numExpenses, int account
         return 1;
     }
 
+    printf("Enter the user ID: ");
+    scanf("%d", &userId);
+    printf("Enter the account ID: ");
+    scanf("%d", &inputAccountId);
+
     printf("Enter the year: ");
     scanf("%d", &year);
 
-    categorizeExpensesByYear(expenses, numExpenses, year);
+    categorizeExpensesByYear(expenses, num_expenses, year);
 
-    generateHTMLForAccountYear(expenses, numExpenses, inputAccountId, htmlFile, year);
+    generateHTMLForAccountYear(expenses, num_expenses, inputAccountId, htmlFile, year);
 
     fclose(htmlFile);
-    free(expenses);
 
 #ifdef _WIN32
     system("start Page4-AccYearlyExpenses.html");
