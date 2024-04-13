@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "cJSON.h"
 #include "Page3-AccOverallExpenses.h"
 #include "../ParserExpenses/ExpenseParser.h"
 #include "../ParserAccounts/AccountsParser.h"
@@ -242,10 +241,10 @@ void categorizeExpenses(Expenses *expenses, int numExpenses)
 
 void generateHTMLForAccount(Expenses *expenses, int numExpenses, int accountId, FILE *htmlFile)
 {
-    double totalFoodSGD, totalFoodUSD, totalFoodEUR;
-    double totalTransportSGD, totalTransportUSD, totalTransportEUR;
-    double totalShoppingSGD, totalShoppingUSD, totalShoppingEUR;
-    double totalOthersSGD, totalOthersUSD, totalOthersEUR;
+    double totalFoodSGD = 0 , totalFoodUSD=0, totalFoodEUR=0;
+    double totalTransportSGD=0, totalTransportUSD=0, totalTransportEUR=0;
+    double totalShoppingSGD=0, totalShoppingUSD=0, totalShoppingEUR=0;
+    double totalOthersSGD=0, totalOthersUSD=0, totalOthersEUR=0;
 
     int i;
 

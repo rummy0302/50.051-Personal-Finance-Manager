@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "FSM_output.h"
+#include "FSMoutput.h"
 #include "HTML_output/Page2-UserBarGraph.h"
 #include "HTML_output/Page3-AccOverallExpenses.h"
 #include "HTML_output/Page4-AccYearlyExpenses.h"
@@ -61,42 +61,51 @@ int isYearInList(int *years, int numYears, int year)
 
 void initOutputFSM(OutputFSM *OutputFsm)
 {
+    int i;
+    int accountsError;
+    int expensesError;
+    long accountsexpensesfileSize;
+    long expensesfileSize;
+    char *accountsjsonContent;
+    char *expensesjsonContent;
+    const char *accountsfilename;
+    const char *expensesfilename;
+    FILE *expenses_file;
+    FILE *accounts_file;
     OutputFsm->currentState = CHECK_USERID;
     OutputFsm->userID = -1;
     OutputFsm->accountID = -1;
 
-    int i;
-
-    const char *accountsfilename = "ParserAccounts/Accounts.json";
-    const char *expensesfilename = "ParserExpenses/Expenses.json";
-    FILE *accounts_file = fopen(accountsfilename, "r");
+    accountsfilename = "ParserAccounts/Accounts.json";
+    expensesfilename = "ParserExpenses/Expenses.json";
+    accounts_file = fopen(accountsfilename, "r");
 
     fseek(accounts_file, 0L, SEEK_END);
-    long accountsexpensesfileSize = ftell(accounts_file);
+    accountsexpensesfileSize = ftell(accounts_file);
     rewind(accounts_file);
 
-    char *accountsjsonContent = (char *)malloc(accountsexpensesfileSize + 1);
+    accountsjsonContent = (char *)malloc(accountsexpensesfileSize + 1);
 
-    size_t accountsbytesRead = fread(accountsjsonContent, 1, accountsexpensesfileSize, accounts_file);
+    fread(accountsjsonContent, 1, accountsexpensesfileSize, accounts_file);
 
     accountsjsonContent[accountsexpensesfileSize] = '\0';
 
     fclose(accounts_file);
     memset(accounts, 0, sizeof(accounts));
 
-    parse_accountsjson(accountsjsonContent, accounts, &num_accounts);
+    parse_accountsjson(accountsjsonContent, accounts, &num_accounts, &accountsError);
 
     free(accountsjsonContent);
 
-    FILE *expenses_file = fopen(expensesfilename, "r");
+    expenses_file = fopen(expensesfilename, "r");
 
     fseek(expenses_file, 0L, SEEK_END);
-    long expensesfileSize = ftell(expenses_file);
+    expensesfileSize = ftell(expenses_file);
     rewind(expenses_file);
 
-    char *expensesjsonContent = (char *)malloc(expensesfileSize + 1);
+    expensesjsonContent = (char *)malloc(expensesfileSize + 1);
 
-    size_t expensesbytesRead = fread(expensesjsonContent, 1, expensesfileSize, expenses_file);
+    fread(expensesjsonContent, 1, expensesfileSize, expenses_file);
 
     expensesjsonContent[expensesfileSize] = '\0';
 
@@ -104,7 +113,7 @@ void initOutputFSM(OutputFSM *OutputFsm)
 
     memset(expenses, 0, sizeof(expenses));
 
-    parse_expensesjson(expensesjsonContent, expenses, &num_expenses);
+    parse_expensesjson(expensesjsonContent, expenses, &num_expenses, &expensesError);
 
     free(expensesjsonContent);
 

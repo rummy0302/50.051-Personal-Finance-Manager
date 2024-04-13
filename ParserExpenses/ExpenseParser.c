@@ -2,158 +2,415 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
 #include "ExpenseParser.h"
 
-void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses)
+#define MAX_EXPENSES 400 /* Maximum number of expenses to store */
+
+void parse_expensesjson(const char *json, Expenses expenses[], int *num_expenses, int *error)
 {
     const char *ptr = json;
+    int lineNumber = 1;
+    const char *current_pos;
+    const char *next_pos = NULL;
+    char *expected_key;
+    float amount_spent = 0;
+    int result;
 
-    // Skip leading whitespace
+    /* Skip leading whitespace */
     while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
     {
         ptr++;
     }
 
-    // Check if JSON starts with [
+    /* Check if JSON starts with [ */
     if (*ptr != '[')
     {
-        printf("Invalid JSON\n");
+        *error = 1;
+        printf("Error: Invalid JSON format. File does not contain starting [ at line number: %d.\n", lineNumber);
         return;
     }
 
-    ptr++; // Skip [
+    ptr++; /* / Skip [ */
 
-    // Parse array elements
+    /* Parse array elements */
     while (*ptr != '\0' && *ptr != ']' && *num_expenses < MAX_EXPENSES)
     {
-        // Parse expense object
+        /* Parse expense object */
         Expenses *expense = &expenses[*num_expenses];
 
-        // Parse account_id
-        while (*ptr != ':')
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r' || *ptr == ',')
         {
             ptr++;
         }
-        ptr++; // Skip :
 
-        // Skip whitespace
+        /* Check if each JSON object starts with { */
+        if (*ptr != '{')
+        {
+            *error = 1;
+            printf("Error: Invalid JSON. JSON object does not start with starting { at line number: %d. \n", lineNumber);
+            return;
+        }
+
+        ptr++; /* Skip { */
+        lineNumber++;
+
+        /* Skip whitespace */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse numeric value
+        lineNumber++;
+
+        current_pos = ptr;
+        expected_key = "\"account_id\"";
+        if (!isValidExpenseKey(current_pos, &next_pos, expected_key))
+        {
+            *error = 1;
+            printf("Error in %s key format in line number: %d\n", expected_key, lineNumber);
+            return;
+        }
+        ptr = next_pos;
+
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
+        /* Parse account_id */
+        while (*ptr != ':')
+        {
+            ptr++;
+        }
+        ptr++; /* Skip : */
+
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
+        /* Check format of account id: */
+        if (!isValidAccountID(atoi(ptr)))
+        {
+            *error = 1;
+            printf("\n");
+            printf("Error in Expenses.json : Invalid account_id format at line number: %d.\n", lineNumber);
+            printf("Please ensure that the account_id is of type int and is within the range of 1-100.\n");
+            printf("\n");
+            return;
+        }
+
+        /* Parse numeric value */
         expense->account_id = atoi(ptr);
 
-        // Move ptr to next token
+        /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Parse date
-        while (*ptr != ':')
+        /* Check if the next character is a comma, indicating the start of the next key-value pair */
+        if (*ptr == ',')
         {
             ptr++;
         }
-        ptr++; // Skip :
 
-        // Skip whitespace
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+        lineNumber++;
+
+        current_pos = ptr;
+        expected_key = "\"date\"";
+        if (!isValidExpenseKey(current_pos, &next_pos, expected_key))
+        {
+            *error = 1;
+            printf("Error in %s key format in line number: %d\n", expected_key, lineNumber);
+            return;
+        }
+        ptr = next_pos;
+
+        /* Skip whitespace */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse string value
+        /* Check if the next character is ':' */
+        if (*ptr != ':')
+        {
+            *error = 1;
+            printf("Error: Invalid JSON format. File does not contain : between key and value at line number: %d.\n", lineNumber);
+            return;
+        }
+
+        /* Move ptr to the next character after ':' */
+        ptr++;
+
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
+        /* Parse string value */
         sscanf(ptr, "\"%[^\"]\"", expense->date);
+        if (!isValidDate(expense->date))
+        {
+            *error = 1;
+            printf("\n");
+            printf("Error in Expenses.json : Invalid date format in line number: %d.\n", lineNumber);
+            printf("Please ensure that the date is a string and follows the format of YYYY-MM-DD. \n");
+            printf("\n");
+            return;
+        }
 
-        // Move ptr to next token
+        /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Parse description
-        while (*ptr != ':')
+        /* Check if the next character is a comma, indicating the start of the next key-value pair */
+        if (*ptr == ',')
         {
             ptr++;
         }
-        ptr++; // Skip :
 
-        // Skip whitespace
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+        lineNumber++;
+
+        current_pos = ptr;
+        expected_key = "\"description\"";
+        if (!isValidExpenseKey(current_pos, &next_pos, expected_key))
+        {
+            *error = 1;
+            printf("Error in %s key format in line number: %d\n", expected_key, lineNumber);
+            return;
+        }
+        ptr = next_pos;
+
+        /* Skip whitespace */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse string value
-        sscanf(ptr, "\"%[^\"]\"", expense->description);
-
-        // Move ptr to next token
-        while (*ptr != ',' && *ptr != ']')
+        /* Check if the next character is ':' */
+        if (*ptr != ':')
         {
-            ptr++;
+            *error = 1;
+            printf("Error: Invalid JSON format. File does not contain : between key and value at line number: %d.\n", lineNumber);
+            return;
         }
 
-        // Parse currency
-        while (*ptr != ':')
-        {
-            ptr++;
-        }
-        ptr++; // Skip :
+        /* Move ptr to the next character after ':' */
+        ptr++;
 
-        // Skip whitespace
+        /* Skip whitespace*/
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse string value
-        sscanf(ptr, "\"%[^\"]\"", expense->currency);
+        /* Parse string value */
+        result = sscanf(ptr, "\"%[^\"]\"", expense->description);
 
-        // Move ptr to next token
+        if (result == 1)
+        {
+            if (!isValidDescription(expense->description))
+            {
+                *error = 1;
+                printf("\n");
+                printf("Error in Expenses.json : Invalid description format in line number: %d.\n", lineNumber);
+                printf("Please ensure that the description is a not a empty string.\n");
+                printf("\n");
+                return;
+            }
+        }
+
+        else
+        {
+            *error = 1;
+            printf("\n");
+            printf("Error in Expenses.json : Invalid description format in line number: %d.\n", lineNumber);
+            printf("Please ensure that the description is a string.\n");
+            printf("\n");
+            return;
+        }
+
+        /* Move ptr to next token */
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Parse amount_spent
-        while (*ptr != ':')
+        /* Check if the next character is a comma, indicating the start of the next key-value pair */
+        if (*ptr == ',')
         {
             ptr++;
         }
-        ptr++; // Skip :
 
-        // Skip whitespace
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+        lineNumber++;
+
+        current_pos = ptr;
+        expected_key = "\"currency\"";
+        if (!isValidExpenseKey(current_pos, &next_pos, expected_key))
+        {
+            *error = 1;
+            printf("Error in %s key format in line number: %d\n", expected_key, lineNumber);
+            return;
+        }
+        ptr = next_pos;
+
+        /* Skip whitespace */
         while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
         {
             ptr++;
         }
 
-        // Parse numeric value
-        sscanf(ptr, "%f", &expense->amount_spent);
+        /* Check if the next character is ':' */
+        if (*ptr != ':')
+        {
+            *error = 1;
+            printf("Error: Invalid JSON format. File does not contain : between key and value at line number: %d.\n", lineNumber);
+            return;
+        }
 
-        // Move ptr to next token
+        /* Move ptr to the next character after ':' */
+        ptr++;
+
+        /* Skip whitespace*/
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
+        /* Parse string value*/
+        result = sscanf(ptr, "\"%[^\"]\"", expense->currency);
+
+        if (result == 1)
+        {
+            if (!isValidCurrency(expenses->currency))
+            {
+                *error = 1;
+                printf("\n");
+                printf("Error in Expenses.json : Invalid currency format in line number: %d.\n", lineNumber);
+                printf("Please ensure that the currency is not an empty string. \n");
+                printf("\n");
+                return;
+            }
+        }
+
+        else
+        {
+            *error = 1;
+            printf("\n");
+            printf("Error in Expenses.json : Invalid currency format in line number: %d.\n", lineNumber);
+            printf("Please ensure that the currency is a 3-letter string. \n");
+            printf("\n");
+            return;
+        }
+
+        /* Move ptr to next token*/
         while (*ptr != ',' && *ptr != ']')
         {
             ptr++;
         }
 
-        // Increment the number of expenses parsed
+        /* Check if the next character is a comma, indicating the start of the next key-value pair */
+        if (*ptr == ',')
+        {
+            ptr++;
+        }
+
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+        lineNumber++;
+
+        current_pos = ptr;
+        expected_key = "\"amount_spent\"";
+        if (!isValidExpenseKey(current_pos, &next_pos, expected_key))
+        {
+            *error = 1;
+            printf("Error in %s key format in line number: %d\n", expected_key, lineNumber);
+            return;
+        }
+        ptr = next_pos;
+
+        /* Skip whitespace */
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
+        /* Check if the next character is ':' */
+        if (*ptr != ':')
+        {
+            *error = 1;
+            printf("Error: Invalid JSON format. File does not contain : between key and value at line number: %d.\n", lineNumber);
+            return;
+        }
+
+        /* Move ptr to the next character after ':' */
+        ptr++;
+
+        while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n' || *ptr == '\r')
+        {
+            ptr++;
+        }
+
+        sscanf(ptr, "%f", &amount_spent);
+
+        if (!isValidAmountSpent(amount_spent))
+        {
+            printf("\n");
+            printf("Error in Expenses.json : Invalid amount_spent format in line number: %d.\n", lineNumber + 1);
+            printf("Please ensure that the amount_spent is a float or an integer value.\n");
+            printf("\n");
+        }
+
+        expense->amount_spent = amount_spent;
+
+        /* Move ptr to next token */
+        while (*ptr != ',' && *ptr != ']')
+        {
+            ptr++;
+        }
+
+        /* Increment the number of expenses parsed */
         (*num_expenses)++;
     }
 }
 
-bool isValidAccountID(const int account_id)
+int isValidAccountID(const int account_id)
 {
-    // Check if the accountID within the range and if it is an integer
-    if (account_id < 1 || account_id > 100)
-        return false;
 
-    return true;
+    if (account_id < 1 || account_id > 100)
+        return 0;
+
+    return 1;
 }
 
-bool isValidDate(const char *date)
+int isValidDate(const char *date)
 {
     int year, month, day;
     if (sscanf(date, "%d-%d-%d", &year, &month, &day) != 3)
@@ -165,115 +422,67 @@ bool isValidDate(const char *date)
     return 1;
 }
 
-bool isValidDescription(const char *description)
+int isValidDescription(const char *description)
 {
-    // Check if description is not empty or it is in the wrong format
-    if (description[0] == '\0')
-        return false;
-    return true;
-}
+    int i;
+    /* Check if description is an empty string */
 
-bool isValidCurrency(const char *currency)
-{
-    // Check if the currency is empty or is not 3 digit
-
-    if (strlen(currency) != 3)
-        return false;
-
-    return true;
-}
-
-bool isValidAmountSpent(const float amount_spend)
-{
-    // Check if the currency is empty or is not 3 digit
-
-    if (amount_spend == 0.00)
-        return false;
-
-    return true;
-}
-
-bool validateExpenses(Expenses expenses[], int num_expenses)
-
-{
-    int lineNumber;
-    lineNumber = 1;
-    bool isAllValid = true;
-    for (int i = 0; i < num_expenses; i++)
+    for (i = 0; description[i] != '\0'; i++)
     {
-        bool valid = true;
-        lineNumber++;
-
-        if (!isValidAccountID(expenses[i].account_id))
+        if (!isspace((unsigned char)description[i]))
         {
 
-            printf("\n");
-            printf("Error in Expenses.json : Invalid account_id format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
-            printf("Please ensure that the account_id is of type int and is within the range of 1-100.\n");
-            printf("\n");
-            valid = false;
-            isAllValid = false;
-        }
-        lineNumber++;
-
-        if (!isValidDate(expenses[i].date))
-        {
-            printf("\n");
-            printf("Error in Expenses.json : Invalid date format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
-            printf("Please ensure that the date is a string and follows the format of YYYY-MM-DD. \n");
-            printf("\n");
-            valid = false;
-            isAllValid = false;
-        }
-
-        lineNumber++;
-
-        if (!isValidDescription(expenses[i].description))
-        {
-            printf("\n");
-            printf("Error in Expenses.json : Invalid description format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
-            printf("Please ensure that the description is a string.\n");
-            printf("\n");
-            valid = false;
-            isAllValid = false;
-        }
-        lineNumber++;
-
-        if (!isValidCurrency(expenses[i].currency))
-        {
-            printf("\n");
-            printf("Error in Expenses.json : Invalid currency format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
-            printf("Please ensure that the currency is a 3-letter string. \n");
-            printf("\n");
-            valid = false;
-            isAllValid = false;
-        }
-        lineNumber++;
-
-        if (!isValidAmountSpent(expenses[i].amount_spent))
-        {
-            printf("\n");
-            printf("Error in Expenses.json : Invalid amount_spent format at entry number: %d and line number: %d.\n", i + 1, lineNumber + 1);
-            printf("Please ensure that the amount_spent is a float or an integer value.\n");
-            printf("\n");
-            valid = false;
-            isAllValid = false;
-        }
-        lineNumber++;
-
-        if (valid)
-        {
-            // printf("Expense %d is valid.\n", i + 1);
-        }
-        else
-        {
-            printf("Expense %d has validation errors.\n", i + 1);
+            return 1;
         }
     }
-    return isAllValid;
+
+    return 0;
 }
 
-/* int main()
+int isValidCurrency(const char *currency)
+{
+
+    if (strlen(currency) != 3)
+        return 0;
+
+    return 1;
+}
+
+int isValidAmountSpent(const float amount_spend)
+{
+
+    if (amount_spend == 0.00)
+        return 0;
+
+    return 1;
+}
+
+int isValidExpenseKey(const char *current_pos, const char **next_pos, char *expected_key)
+{
+    size_t key_len;
+    /* Skip leading whitespace */
+    while (*current_pos == ' ' || *current_pos == '\t' || *current_pos == '\n' || *current_pos == '\r')
+    {
+        current_pos++;
+    }
+
+    /* Check if the JSON starts with the expected key */
+    key_len = strlen(expected_key); /* To account for the last character */
+
+    if (strncmp(current_pos, expected_key, key_len) != 0)
+    {
+        return 0;
+    }
+
+    /* Move ptr to the end of the key */
+    current_pos += key_len;
+
+    *next_pos = current_pos;
+    return 1;
+}
+
+/*
+int main()
 {
     const char *filename = "Expenses.json";
     FILE *expenses_file = fopen(filename, "r");
@@ -289,7 +498,7 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
     rewind(expenses_file);
 
     // Allocate memory for JSON content
-    char *jsonContent = (char *)malloc(fileSize + 1); // +1 for null terminator
+    char *jsonContent = (char *)malloc(fileSize + 1);
     if (jsonContent == NULL)
     {
         printf("Error: Unable to allocate memory\n");
@@ -299,13 +508,6 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
 
     // Read the JSON content into the allocated memory
     size_t bytesRead = fread(jsonContent, 1, fileSize, expenses_file);
-    // if (bytesRead != fileSize)
-    // {
-    //     printf("Error: Failed to read JSON content\n");
-    //     free(jsonContent);
-    //     fclose(expenses_file);
-    //     return 1;
-    // }
 
     // Null-terminate the JSON content
     jsonContent[fileSize] = '\0';
@@ -319,8 +521,9 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
 
     // Parse the JSON content
     memset(expenses, 0, sizeof(expenses));
+    int error = 0;
 
-    parse_expensesjson(jsonContent, expenses, &num_expenses);
+    parse_expensesjson(jsonContent, expenses, &num_expenses, &error);
 
     // Access the parsed expenses
     for (int i = 0; i < num_expenses; i++)
@@ -336,8 +539,6 @@ bool validateExpenses(Expenses expenses[], int num_expenses)
 
     // Free the allocated memory
     free(jsonContent);
-
-    validateExpenses(expenses, num_expenses);
 
     return 0;
 } */

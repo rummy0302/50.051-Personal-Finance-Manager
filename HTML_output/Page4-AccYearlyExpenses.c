@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "cJSON.h"
 #include "Page4-AccYearlyExpenses.h"
 #include "../ParserExpenses/ExpenseParser.h"
 #include "../ParserAccounts/AccountsParser.h"
@@ -293,7 +292,7 @@ void categorizeExpensesByYear(Expenses *expenses, int numExpenses, int year)
                 break;
             }
         }
-        }
+    }
 }
 
 void generateHTMLForAccountYear(Expenses *expenses, int numExpenses, int accountId, FILE *htmlFile, int year)

@@ -8,8 +8,8 @@
 typedef enum
 {
     INITIAL_STATE,
-    Validate_ACCOUNT,
-    Validate_EXPENSES,
+    PARSE_ACCOUNT,
+    PARSE_EXPENSES,
     COMPLETED,
     ERROR
 } InputState;
