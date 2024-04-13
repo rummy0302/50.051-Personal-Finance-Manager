@@ -161,27 +161,6 @@ void printAllExpenseTotals(int userIdInput, Expenses *expenses, int numExpenses,
         }
     }
 
-    /* For each user, print the different accounts held and their total expense in the deafult currency SGD (after currency conversion for USD and EUR) :
-
-        Comment out - not showing the printing information when running output FSM*/
-
-    /*for (i = 0; i < numUniqueUsers; i++)
-    {
-        printf("User ID: %d\n\n", uniqueUsers[i]);
-
-        for (j = 0; j < accountsPerUser[i]; j++)
-        {
-            int accountId = user_accounts[i][j];
-            totalExpenseInSGD = expensetotalsSGD[accountId].totalExpenseInSGD;
-
-            if ((totalExpenseInSGD > 0))
-            {
-                printExpenseTotal(accountId, totalExpenseInSGD);
-            }
-        }
-        printf("--------------------------------\n");
-    }*/
-
     /* Code to write the HTML page and render the corresponding expense graphs : */
 
     /* Write HTML header */
