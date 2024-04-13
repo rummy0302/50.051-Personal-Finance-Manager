@@ -20,6 +20,7 @@ This will compile the source files and link the object files to create the two e
 Running the Executables
 ------------
 After successful compilation, you can run the executables directly from the command line:
+
 For FSM_output:
 ```
 ./FSM_output
